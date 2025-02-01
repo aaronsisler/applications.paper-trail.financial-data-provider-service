@@ -41,13 +41,13 @@
     <build>
         <plugins>
             <!-- Gives the actuator/info API build information -->
-            <!-- Version: Parent Pom -->
+            <!-- Version: Parent POM PIM -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <!-- Maintains strict Code Styles -->
-            <!-- Version: Explicit -->
+            <!-- Version: Parent POM PIM -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
