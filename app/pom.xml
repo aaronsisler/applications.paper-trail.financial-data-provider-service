@@ -9,16 +9,34 @@
     </parent>
 
     <artifactId>financial-data-provider-service</artifactId>
-    <version>0.1.0</version>
-    <name>financial-data-provider-service</name>
+    <version>0.2.0</version>
+    <name>Financial Data Provider Service</name>
     <packaging>jar</packaging>
 
     <properties>
+        <start-class>com.ebsolutions.papertrail.financialdataproviderservice.Application</start-class>
 
+        <!-- Dependencies -->
+        <junit-bom.version>5.11.4</junit-bom.version>
+        <cucumber-bom.version>7.20.1</cucumber-bom.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-bom</artifactId>
+                <version>${cucumber-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -36,6 +54,46 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
+        <!-- Testing framework for starting Spring context and MockMVC -->
+        <!-- Version: Spring Parent -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Needed for running tests in Junit -->
+        <!-- Version: JUnit BOM -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Testing linkage between Cucumber and Spring context -->
+        <!-- Version: Cucumber BOM -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Testing linkage between Cucumber and Java -->
+        <!-- Version: Cucumber BOM -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Testing linkage between Cucumber and JUnit -->
+        <!-- Version: Cucumber BOM -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -51,6 +109,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <!-- Used for running JUnit tests with Cucumber features -->
+            <!-- Version: Parent POM PIM -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

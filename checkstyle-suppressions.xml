@@ -3,5 +3,11 @@
         "https://checkstyle.org/dtds/suppressions_1_0.dtd">
 
 <suppressions>
+    <!-- Suppressing Javadoc since this application is not that large overall -->
     <suppress checks="Javadoc" files="."/>
+    <!-- This will suppress the auto generated method names coming from Cucumber Feature files -->
+    <!-- All files must end in Steps.java -->
+    <suppress checks="MethodName" files="Steps.java"/>
+    <!-- This will suppress the warning on the Cucumber configuration file since the package name is so long-->
+    <suppress checks="LineLength" files="ApplicationFeatures.java"/>
 </suppressions>
