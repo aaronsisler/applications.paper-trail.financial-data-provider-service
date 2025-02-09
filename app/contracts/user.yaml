@@ -50,6 +50,12 @@ components:
     User:
       properties:
         userId:
+          type: integer
+        username:
+          type: string
+        firstName:
+          type: string
+        lastName:
           type: string
   parameters:
     UserId:
