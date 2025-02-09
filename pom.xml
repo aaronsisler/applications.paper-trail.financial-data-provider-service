@@ -25,6 +25,7 @@
         <!-- Versions: Plugins -->
         <checkstyle-maven-plugin.version>3.5.0</checkstyle-maven-plugin.version>
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
+        <openapi-generator-maven-plugin.version>7.11.0</openapi-generator-maven-plugin.version>
         <spring-boot-maven-plugin.version>3.4.2</spring-boot-maven-plugin.version>
     </properties>
 
@@ -60,6 +61,7 @@
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>${checkstyle-maven-plugin.version}</version>
                     <configuration>
+                        <excludeGeneratedSources>true</excludeGeneratedSources>
                         <consoleOutput>true</consoleOutput>
                         <violationSeverity>warning</violationSeverity>
                         <includeTestSourceDirectory>true</includeTestSourceDirectory>
@@ -76,6 +78,26 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+                <!-- Generates Java classes from OpenAPI contracts -->
+                <!-- Version: Explicit -->
+                <plugin>
+                    <groupId>org.openapitools</groupId>
+                    <artifactId>openapi-generator-maven-plugin</artifactId>
+                    <version>${openapi-generator-maven-plugin.version}</version>
+                    <configuration>
+                        <modelPackage>com.ebsolutions.papertrail.financialdataproviderservice.model</modelPackage>
+                        <generatorName>spring</generatorName>
+                        <generateApis>false</generateApis>
+                        <generateSupportingFiles>false</generateSupportingFiles>
+                        <configOptions>
+                            <serializableModel>true</serializableModel>
+                            <useSpringBoot3>true</useSpringBoot3>
+                            <additionalModelTypeAnnotations>
+                                @lombok.Builder
+                            </additionalModelTypeAnnotations>
+                        </configOptions>
+                    </configuration>
                 </plugin>
                 <!-- Used for running JUnit tests with Cucumber features -->
                 <!-- Version: Explicit -->
