@@ -30,8 +30,8 @@ public class UserSteps {
 
   }
 
-  @Then("the correct users response is returned")
-  public void theCorrectUsersResponseIsReturned() {
+  @Then("the correct empty users response is returned")
+  public void theCorrectEmptyUsersResponseIsReturned() {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
     Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), mockHttpServletResponse.getStatus());
   }

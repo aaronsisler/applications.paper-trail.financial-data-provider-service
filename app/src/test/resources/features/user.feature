@@ -4,4 +4,4 @@ Feature: User
     Given application is up
     And no users exist
     When the get all users endpoint is invoked
-    Then the correct users response is returned
+    Then the correct empty users response is returned

@@ -11,7 +11,7 @@
 
     <groupId>com.ebsolutions.papertrail</groupId>
     <artifactId>financial-data-provider-service-parent</artifactId>
-    <version>0.1.0</version>
+    <version>0.3.0</version>
     <name>financial-data-provider-service-parent</name>
     <packaging>pom</packaging>
 
@@ -100,14 +100,14 @@
                         </configOptions>
                     </configuration>
                 </plugin>
-                <!-- Used for running JUnit tests with Cucumber features -->
+                <!-- Used for running JUnit tests that link to Cucumber feature files -->
                 <!-- Version: Explicit -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
                 </plugin>
-                <!-- Used for running finding the Cucumber features -->
+                <!-- Used for running finding the Cucumber config files that find feature files -->
                 <!-- Version: Explicit -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
