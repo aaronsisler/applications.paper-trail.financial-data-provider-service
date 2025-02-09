@@ -49,7 +49,7 @@ public class ActuatorSteps {
     DocumentContext jsonBody = JsonPath.parse(content);
 
     Assertions.assertEquals("com.ebsolutions.papertrail", jsonBody.read("$.build.group"));
-    Assertions.assertEquals("financial-data-provider-servicea", jsonBody.read("$.build.artifact"));
+    Assertions.assertEquals("financial-data-provider-service", jsonBody.read("$.build.artifact"));
     Assertions.assertEquals("Financial Data Provider Service", jsonBody.read("$.build.name"));
     Assertions.assertNotNull(jsonBody.read("$.build.version"));
     Assertions.assertNotNull(jsonBody.read("$.build.time"));

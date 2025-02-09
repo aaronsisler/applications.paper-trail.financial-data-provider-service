@@ -24,6 +24,7 @@
 
         <!-- Versions: Plugins -->
         <checkstyle-maven-plugin.version>3.5.0</checkstyle-maven-plugin.version>
+        <maven-failsafe-plugin.version>3.5.2</maven-failsafe-plugin.version>
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <openapi-generator-maven-plugin.version>7.11.0</openapi-generator-maven-plugin.version>
         <spring-boot-maven-plugin.version>3.4.2</spring-boot-maven-plugin.version>
@@ -105,6 +106,19 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
+                </plugin>
+                <!-- Used for running finding the Cucumber features -->
+                <!-- Version: Explicit -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${maven-failsafe-plugin.version}</version>
+                    <configuration>
+                        <testFailureIgnore>true</testFailureIgnore>
+                        <includes>
+                            <include>**/*Features.java</include>
+                        </includes>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
