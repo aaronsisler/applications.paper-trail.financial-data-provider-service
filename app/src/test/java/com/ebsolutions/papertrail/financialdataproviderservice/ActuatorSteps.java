@@ -24,7 +24,7 @@ public class ActuatorSteps {
   @Autowired
   protected MockMvc mockMvc;
 
-  MvcResult result;
+  protected MvcResult result;
 
   @Given("application is up")
   public void applicationIsUp() throws Exception {
@@ -39,8 +39,8 @@ public class ActuatorSteps {
     result = mockMvc.perform(get(Constants.INFO_CHECK_URL)).andReturn();
   }
 
-  @Then("the correct response is returned")
-  public void theCorrectResponseIsReturned() throws UnsupportedEncodingException {
+  @Then("the correct info response is returned")
+  public void theCorrectInfoResponseIsReturned() throws UnsupportedEncodingException {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
     Assertions.assertEquals(HttpStatus.OK.value(), mockHttpServletResponse.getStatus());

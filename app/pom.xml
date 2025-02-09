@@ -5,20 +5,24 @@
     <parent>
         <groupId>com.ebsolutions.papertrail</groupId>
         <artifactId>financial-data-provider-service-parent</artifactId>
-        <version>0.1.0</version>
+        <version>0.3.0</version>
     </parent>
 
     <artifactId>financial-data-provider-service</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <name>Financial Data Provider Service</name>
     <packaging>jar</packaging>
 
     <properties>
         <start-class>com.ebsolutions.papertrail.financialdataproviderservice.Application</start-class>
 
+        <!-- Versions: Dependencies -->
+        <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.8.4</springdoc-openapi-starter-webmvc-ui.version>
+
         <!-- Dependencies -->
-        <junit-bom.version>5.11.4</junit-bom.version>
         <cucumber-bom.version>7.20.1</cucumber-bom.version>
+        <junit-bom.version>5.11.4</junit-bom.version>
     </properties>
 
     <dependencyManagement>
@@ -53,6 +57,29 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Used for POJO annotations within project -->
+        <!-- Version: Spring Parent -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- Used for Swagger UI and Open API annotations -->
+        <!-- Version: Explicit -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+        </dependency>
+
+        <!-- Used for the validation annotations -->
+        <!-- Version: Explicit -->
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>${jackson-databind-nullable.version}</version>
         </dependency>
 
         <!-- Testing framework for starting Spring context and MockMVC -->
@@ -110,11 +137,34 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
             </plugin>
+            <!-- Generates Java classes from OpenAPI contracts -->
+            <!-- Version: Parent POM PIM -->
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>models-user</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${pom.basedir}/contracts/user.yaml</inputSpec>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Used for running JUnit tests with Cucumber features -->
             <!-- Version: Parent POM PIM -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <!-- Used for running finding the Cucumber features -->
+            <!-- Version: Parent POM PIM -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

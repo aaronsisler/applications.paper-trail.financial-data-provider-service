@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.3.0] Base User Controller
+
+### Added
+
+- User Controller GET ALL with empty list response
+
+### Fixed
+
+- Added in the Maven Failsafe plugin that runs Cucumber features from CLI
+
 ## [0.2.0] Base Repo with base Cucumber test
 
 ### Added
