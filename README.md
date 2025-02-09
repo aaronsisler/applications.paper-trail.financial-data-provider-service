@@ -2,6 +2,9 @@
 
 ## TODOs
 
+Might need this
+chmod +x your/script.sh
+
 ## Definition of Done
 
 <details>
