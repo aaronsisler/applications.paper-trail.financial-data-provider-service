@@ -9,7 +9,22 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class UserRepository {
-  public List<User> readAll() {
-    return Collections.emptyList();
+  private final UserDao userDao;
+
+  public List<User> getAll() {
+    List<UserDto> userDtos = userDao.readAll();
+
+    if (userDtos.isEmpty()) {
+      return Collections.emptyList();
+    }
+
+    return userDtos.stream().map(userDto ->
+            User.builder()
+                .userId(userDto.getUserId())
+                .username(userDto.getUsername())
+                .firstName(userDto.getFirstName())
+                .lastName(userDto.getLastName())
+                .build())
+        .toList();
   }
 }

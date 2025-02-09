@@ -22,7 +22,7 @@ public class UserController {
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> getAll() {
     try {
-      List<User> users = userRepository.readAll();
+      List<User> users = userRepository.getAll();
 
       return !users.isEmpty() ? ResponseEntity.ok(users) : ResponseEntity.noContent().build();
     } catch (DataProcessingException dpe) {
