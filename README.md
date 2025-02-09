@@ -2,8 +2,7 @@
 
 ## TODOs
 
-Might need this
-chmod +x your/script.sh
+- Figure out the @Component for UserDao etc.
 
 ## Definition of Done
 
