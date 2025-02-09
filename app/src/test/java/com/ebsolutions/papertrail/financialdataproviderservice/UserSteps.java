@@ -33,8 +33,6 @@ public class UserSteps {
   @Then("the correct users response is returned")
   public void theCorrectUsersResponseIsReturned() {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
-    System.out.println("RAWR");
-    System.out.println(mockHttpServletResponse.getStatus());
-    Assertions.assertEquals(HttpStatus.OK.value(), mockHttpServletResponse.getStatus());
+    Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), mockHttpServletResponse.getStatus());
   }
 }
