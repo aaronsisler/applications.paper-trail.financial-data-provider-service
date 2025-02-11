@@ -82,6 +82,13 @@
             <version>${jackson-databind-nullable.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.5</version>
+        </dependency>
+
+
         <!-- Testing framework for starting Spring context and MockMVC -->
         <!-- Version: Spring Parent -->
         <dependency>
