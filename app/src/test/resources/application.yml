@@ -16,10 +16,11 @@ spring:
   config:
     activate:
       on-profile: local, default
-  datasource:
-    url: jdbc:postgresql://localhost:5432/paper_trail
-    username: admin
-    password: root
+#  datasource:
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
+#    username: admin
+#    password: root
 #    jpa:
 #      hibernate:
 #        ddl-auto: validate

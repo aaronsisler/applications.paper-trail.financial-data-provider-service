@@ -6,10 +6,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ServerError;
-import com.ebsolutions.papertrail.financialdataproviderservice.model.User;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
-import com.ebsolutions.papertrail.financialdataproviderservice.user.UserDao;
-import com.ebsolutions.papertrail.financialdataproviderservice.user.UserDto;
+import com.ebsolutions.papertrail.financialdataproviderservice.user.User;
+import com.ebsolutions.papertrail.financialdataproviderservice.user.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -26,40 +25,40 @@ import org.springframework.test.web.servlet.MvcResult;
 
 @RequiredArgsConstructor
 public class UserSteps extends BaseTest {
-  protected final UserDao userDao;
+  protected final UserRepository userRepository;
 
   protected MvcResult result;
-  protected List<UserDto> userDtos = new ArrayList<>();
-  private UserDto userDtoOne;
-  private UserDto userDtoTwo;
+  protected List<User> users = new ArrayList<>();
+  private User expectedUserOne;
+  private User expectedUserTwo;
 
   @And("two users exist in the database")
   public void twoUsersExistInTheDatabase() {
-    userDtoOne =
-        UserDto.builder()
+    expectedUserOne =
+        User.builder()
             .userId(1)
             .username("first_user")
             .firstName("first")
             .lastName("user")
             .build();
 
-    userDtoTwo =
-        UserDto.builder()
+    expectedUserTwo =
+        User.builder()
             .userId(2)
             .username("second_user")
             .firstName("second")
             .lastName("user")
             .build();
 
-    userDtos.add(userDtoOne);
-    userDtos.add(userDtoTwo);
+    users.add(expectedUserOne);
+    users.add(expectedUserTwo);
 
-    when(userDao.readAll()).thenReturn(userDtos);
+    when(userRepository.findAll()).thenReturn(users);
   }
 
   @And("no users exist")
   public void noUsersExist() {
-    when(userDao.readAll()).thenReturn(Collections.emptyList());
+    when(userRepository.findAll()).thenReturn(Collections.emptyList());
   }
 
   @When("the get all users endpoint is invoked")
@@ -84,10 +83,10 @@ public class UserSteps extends BaseTest {
     List<User> users = objectMapper.readerForListOf(User.class).readValue(content);
 
     User userOne = users.getFirst();
-    assertUserDtoAgainstUser(userDtoOne, userOne);
+    assertUserDtoAgainstUser(expectedUserOne, userOne);
 
     User userTwo = users.getLast();
-    assertUserDtoAgainstUser(userDtoTwo, userTwo);
+    assertUserDtoAgainstUser(expectedUserTwo, userTwo);
   }
 
   @And("the connection to the database fails")
@@ -95,7 +94,7 @@ public class UserSteps extends BaseTest {
     DataProcessingException dataProcessingException =
         new DataProcessingException("Generic Exception Message!");
 
-    when(userDao.readAll()).thenThrow(dataProcessingException);
+    when(userRepository.findAll()).thenThrow(dataProcessingException);
   }
 
   @Then("the correct failure response is returned")
@@ -112,10 +111,10 @@ public class UserSteps extends BaseTest {
     Assertions.assertEquals("Generic Exception Message!", serverError.getMessage());
   }
 
-  private void assertUserDtoAgainstUser(UserDto userDto, User user) {
-    Assertions.assertEquals(userDto.getUserId(), user.getUserId());
-    Assertions.assertEquals(userDto.getUsername(), user.getUsername());
-    Assertions.assertEquals(userDto.getFirstName(), user.getFirstName());
-    Assertions.assertEquals(userDto.getLastName(), user.getLastName());
+  private void assertUserDtoAgainstUser(User expectedUser, User actualUser) {
+    Assertions.assertEquals(expectedUser.getUserId(), actualUser.getUserId());
+    Assertions.assertEquals(expectedUser.getUsername(), actualUser.getUsername());
+    Assertions.assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
+    Assertions.assertEquals(expectedUser.getLastName(), actualUser.getLastName());
   }
 }

@@ -1,6 +1,5 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.user;
 
-import com.ebsolutions.papertrail.financialdataproviderservice.model.User;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -20,7 +19,7 @@ public class UserController {
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> getAll() {
-    List<User> users = userRepository.getAll();
+    List<User> users = userRepository.findAll();
 
     return !users.isEmpty() ? ResponseEntity.ok(users) : ResponseEntity.noContent().build();
   }

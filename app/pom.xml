@@ -28,6 +28,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <!--            <dependency>-->
+            <!--                <groupId>org.hibernate</groupId>-->
+            <!--                <artifactId>hibernate-core</artifactId>-->
+            <!--                <version>6.6.7.Final</version>-->
+            <!--                <type>pom</type>-->
+            <!--            </dependency>-->
+
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
@@ -60,6 +67,25 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- Used for application driver connection to the Postgres database -->
+        <!-- Version: Explicit -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <!--            <version>${postgresql-driver.version}</version>-->
+        </dependency>
+
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+            <version>2.2</version>
+        </dependency>
+
         <!-- Used for POJO annotations within project -->
         <!-- Version: Spring Parent -->
         <dependency>
@@ -81,15 +107,6 @@
             <groupId>org.openapitools</groupId>
             <artifactId>jackson-databind-nullable</artifactId>
             <version>${jackson-databind-nullable.version}</version>
-        </dependency>
-
-
-        <!-- Used for application driver connection to the Postgres database -->
-        <!-- Version: Explicit -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgresql-driver.version}</version>
         </dependency>
 
 
