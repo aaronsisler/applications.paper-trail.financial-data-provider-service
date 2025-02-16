@@ -1,0 +1,16 @@
+openapi: "3.0.2"
+info:
+  title: Common API
+  version: "1.0"
+servers:
+  - url: http://localhost/
+paths: { }
+components:
+  schemas:
+    ServerError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Something went wrong"
+

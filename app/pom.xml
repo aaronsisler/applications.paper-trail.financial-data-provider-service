@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -9,7 +9,7 @@
     </parent>
 
     <artifactId>financial-data-provider-service</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
     <name>Financial Data Provider Service</name>
     <packaging>jar</packaging>
 
@@ -18,6 +18,7 @@
 
         <!-- Versions: Dependencies -->
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+        <postgresql-driver.version>42.7.5</postgresql-driver.version>
         <springdoc-openapi-starter-webmvc-ui.version>2.8.4</springdoc-openapi-starter-webmvc-ui.version>
 
         <!-- Dependencies -->
@@ -82,6 +83,16 @@
             <version>${jackson-databind-nullable.version}</version>
         </dependency>
 
+
+        <!-- Used for application driver connection to the Postgres database -->
+        <!-- Version: Explicit -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql-driver.version}</version>
+        </dependency>
+
+
         <!-- Testing framework for starting Spring context and MockMVC -->
         <!-- Version: Spring Parent -->
         <dependency>
@@ -143,6 +154,15 @@
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
                 <executions>
+                    <execution>
+                        <id>models-common</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${pom.basedir}/contracts/common.yaml</inputSpec>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>models-user</id>
                         <goals>

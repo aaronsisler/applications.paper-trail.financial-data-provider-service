@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.4.0] User Features
+
+### Added
+
+- Greater understanding of mocking the User DAO using Mockito
+
 ## [0.3.0] Base User Controller
 
 ### Added
