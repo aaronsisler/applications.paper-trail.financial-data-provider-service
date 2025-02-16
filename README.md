@@ -2,8 +2,6 @@
 
 ## TODOs
 
-- Figure out the @Component for UserDao etc.
-
 ## Definition of Done
 
 <details>
