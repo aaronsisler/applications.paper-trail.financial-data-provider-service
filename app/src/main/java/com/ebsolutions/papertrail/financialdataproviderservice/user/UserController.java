@@ -1,6 +1,5 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.user;
 
-import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.User;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -21,13 +20,8 @@ public class UserController {
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> getAll() {
-    try {
-      List<User> users = userRepository.getAll();
+    List<User> users = userRepository.getAll();
 
-      return !users.isEmpty() ? ResponseEntity.ok(users) : ResponseEntity.noContent().build();
-    } catch (DataProcessingException dpe) {
-      return ResponseEntity.internalServerError().body(dpe.getMessage());
-    }
+    return !users.isEmpty() ? ResponseEntity.ok(users) : ResponseEntity.noContent().build();
   }
-
 }

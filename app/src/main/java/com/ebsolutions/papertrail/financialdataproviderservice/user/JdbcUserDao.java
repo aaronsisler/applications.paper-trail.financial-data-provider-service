@@ -10,12 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@Profile({"jbdc", "default"})
 public class JdbcUserDao implements UserDao {
 
   public List<UserDto> readAll() {
@@ -44,7 +42,7 @@ public class JdbcUserDao implements UserDao {
       return userDtos;
     } catch (SQLException e) {
       log.error("Something broke in the JDBC DAO", e);
-      throw new DataProcessingException("Something broke in the JDBC DAO");
+      throw new DataProcessingException("Something went wrong with the database");
     }
   }
 }

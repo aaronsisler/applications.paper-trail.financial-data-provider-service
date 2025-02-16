@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
+import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.java.en.Given;
@@ -14,16 +15,11 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.UnsupportedEncodingException;
 import org.junit.jupiter.api.Assertions;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-public class ActuatorSteps {
-  @Autowired
-  protected MockMvc mockMvc;
-
+public class ActuatorSteps extends BaseTest {
   protected MvcResult result;
 
   @Given("application is up")

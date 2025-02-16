@@ -95,6 +95,8 @@
                             <serializableModel>true</serializableModel>
                             <useSpringBoot3>true</useSpringBoot3>
                             <additionalModelTypeAnnotations>
+                                @lombok.RequiredArgsConstructor
+                                @lombok.AllArgsConstructor
                                 @lombok.Builder
                             </additionalModelTypeAnnotations>
                         </configOptions>
