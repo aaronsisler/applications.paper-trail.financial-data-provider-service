@@ -67,13 +67,23 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
+        <!-- Brings the opinionated Hibernate and Spring libs -->
+        <!-- Version: Spring Parent -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
+        <!-- This is used to create an in-memory database used during testing -->
+        <!-- Version: I am not sure... leaving the version for now to TO DO it -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- Used for application driver connection to the Postgres database -->
-        <!-- Version: Explicit -->
+        <!-- Version: I am not sure... leaving the version for now to TO DO it -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>

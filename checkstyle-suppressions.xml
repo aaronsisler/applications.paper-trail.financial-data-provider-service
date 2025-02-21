@@ -9,5 +9,5 @@
     <!-- All files must end in Steps.java -->
     <suppress checks="MethodName" files="Steps.java"/>
     <!-- This will suppress the warning on the Cucumber configuration file since the package name is so long-->
-    <suppress checks="LineLength" files="ApplicationFeatures.java"/>
+    <suppress checks="LineLength" files="Features.java"/>
 </suppressions>

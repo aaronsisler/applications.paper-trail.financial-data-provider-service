@@ -11,18 +11,26 @@ management:
 
 # Everything above these dashes will be applied to all profiles
 ---
-
 spring:
   config:
     activate:
       on-profile: local, default
-#  datasource:
-#    driver-class-name: org.h2.Driver
-#    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
-#    username: admin
-#    password: root
-#    jpa:
-#      hibernate:
-#        ddl-auto: validate
+  sql:
+    init:
+      mode: always
+  h2:
+    console:
+      enabled: true
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    jpa:
+      database-platform: org.hibernate.dialect.H2Dialect
 
 ---

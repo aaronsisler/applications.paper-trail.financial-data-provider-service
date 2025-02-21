@@ -7,7 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
-import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
+import com.ebsolutions.papertrail.financialdataproviderservice.tooling.FullIntegrationLayerBaseTest;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import io.cucumber.java.en.Given;
@@ -19,7 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 
-public class ActuatorSteps extends BaseTest {
+public class ActuatorSteps extends FullIntegrationLayerBaseTest {
   protected MvcResult result;
 
   @Given("application is up")
