@@ -29,9 +29,6 @@ public class UserNegativeSteps extends MockedIntegrationLayerBaseTest {
 
   @And("no users exist")
   public void noUsersExist() {
-    System.out.println("HERE AND");
-    System.out.println("HERE AND");
-    System.out.println("HERE AND");
     when(userRepository.findAll()).thenReturn(Collections.emptyList());
   }
 
@@ -46,7 +43,7 @@ public class UserNegativeSteps extends MockedIntegrationLayerBaseTest {
     DataProcessingException dataProcessingException =
         new DataProcessingException("Generic Exception Message!");
 
-//    when(userRepository.findAll()).thenThrow(dataProcessingException);
+    when(userRepository.findAll()).thenThrow(dataProcessingException);
   }
 
   @Then("the correct failure response is returned")
