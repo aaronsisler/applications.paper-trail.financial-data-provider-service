@@ -11,8 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @CucumberContextConfiguration
-@Import(BaseConfig.class)
-public class MockedIntegrationLayerBaseTest {
+@Import(MockedIntegrationConfig.class)
+public class BaseTest {
   protected final ObjectMapper objectMapper = new ObjectMapper();
 
   @Autowired

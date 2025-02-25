@@ -214,16 +214,27 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>integration-tests</id>
+                        <id>mocked-integration-tests</id>
                         <goals>
                             <goal>integration-test</goal>
                         </goals>
                         <configuration>
                             <systemPropertyVariables>
-                                <spring.profiles.active>mocked1</spring.profiles.active>
+                                <spring.profiles.active>mocked</spring.profiles.active>
                             </systemPropertyVariables>
                             <includes>
                                 <include>**/MockedIntegrationFeatures.java</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>full-integration-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/FullIntegrationFeatures.java</include>
                             </includes>
                         </configuration>
                     </execution>

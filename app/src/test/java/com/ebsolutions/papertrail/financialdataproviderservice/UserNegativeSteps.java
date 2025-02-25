@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ServerError;
-import com.ebsolutions.papertrail.financialdataproviderservice.tooling.MockedIntegrationLayerBaseTest;
+import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
 import com.ebsolutions.papertrail.financialdataproviderservice.user.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
@@ -21,7 +21,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 
 @RequiredArgsConstructor
-public class UserNegativeSteps extends MockedIntegrationLayerBaseTest {
+public class UserNegativeSteps extends BaseTest {
 
   protected final UserRepository userRepository;
 

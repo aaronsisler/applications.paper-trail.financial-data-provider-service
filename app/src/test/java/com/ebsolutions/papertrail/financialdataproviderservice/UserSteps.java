@@ -1,29 +1,22 @@
 package com.ebsolutions.papertrail.financialdataproviderservice;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
-import com.ebsolutions.papertrail.financialdataproviderservice.tooling.MockedIntegrationLayerBaseTest;
+import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
 import com.ebsolutions.papertrail.financialdataproviderservice.user.User;
-import com.ebsolutions.papertrail.financialdataproviderservice.user.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 
-@RequiredArgsConstructor
-public class UserSteps extends MockedIntegrationLayerBaseTest {
-  protected final UserRepository userRepository;
-
+public class UserSteps extends BaseTest {
 
   private MvcResult result;
   private User expectedUserOne;
@@ -46,8 +39,6 @@ public class UserSteps extends MockedIntegrationLayerBaseTest {
             .firstName("second")
             .lastName("user")
             .build();
-
-    when(userRepository.findAll()).thenReturn(Arrays.asList(expectedUserOne, expectedUserTwo));
   }
 
 

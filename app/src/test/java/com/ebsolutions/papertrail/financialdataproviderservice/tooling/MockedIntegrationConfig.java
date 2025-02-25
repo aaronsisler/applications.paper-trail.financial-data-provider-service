@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile;
 
 @TestConfiguration
 @Profile("mocked")
-public class BaseConfig {
+public class MockedIntegrationConfig {
   //  @MockitoBean
   @MockBean
   protected UserRepository userRepository;

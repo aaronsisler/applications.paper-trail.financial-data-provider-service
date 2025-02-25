@@ -18,9 +18,9 @@ import org.junit.platform.suite.api.Suite;
 @ConfigurationParameters({
     @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "json:target/cucumber/cucumber.json"),
     @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.ebsolutions.papertrail.financialdataproviderservice"),
-    @ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@MockIntegration"),
+    @ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "not @MockIntegration"),
     @ConfigurationParameter(key = PLUGIN_PUBLISH_QUIET_PROPERTY_NAME, value = "true"),
     @ConfigurationParameter(key = JUNIT_PLATFORM_NAMING_STRATEGY_PROPERTY_NAME, value = "long")
 })
-public class MockedIntegrationFeatures {
+public class FullIntegrationFeatures {
 }
