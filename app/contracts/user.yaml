@@ -20,6 +20,10 @@ paths:
 components:
   schemas:
     User:
+      #      required:
+      #        - username
+      #        - firstName
+      #        - lastName
       properties:
         userId:
           type: integer

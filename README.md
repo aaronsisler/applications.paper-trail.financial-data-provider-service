@@ -21,3 +21,11 @@
 - Update the [change log](./CHANGELOG.md)
 
 </details>
+
+## Op Docs
+
+| Endpoint |                                             |
+|---------:|:--------------------------------------------| 
+|   Health | http://localhost:8080/actuator/health       |
+|     Info | http://localhost:8080/actuator/info         |
+|  Swagger | http://localhost:8080/swagger-ui/index.html |

@@ -188,15 +188,15 @@
                             <inputSpec>${pom.basedir}/contracts/common.yaml</inputSpec>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>models-user</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${pom.basedir}/contracts/user.yaml</inputSpec>
-                        </configuration>
-                    </execution>
+                    <!--                    <execution>-->
+                    <!--                        <id>models-user</id>-->
+                    <!--                        <goals>-->
+                    <!--                            <goal>generate</goal>-->
+                    <!--                        </goals>-->
+                    <!--                        <configuration>-->
+                    <!--                            <inputSpec>${pom.basedir}/contracts/user.yaml</inputSpec>-->
+                    <!--                        </configuration>-->
+                    <!--                    </execution>-->
                 </executions>
             </plugin>
             <!-- Used for running JUnit tests that link to Cucumber feature files -->
