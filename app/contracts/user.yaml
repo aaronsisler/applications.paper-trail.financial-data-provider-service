@@ -6,25 +6,6 @@ servers:
   - url: http://localhost/
 paths:
   /users:
-    post:
-      operationId: createUsers
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              $ref: "#/components/schemas/User"
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                $ref: "#/components/schemas/User"
-        '5XX':
-          description: Server Error
     get:
       operationId: getUsers
       responses:
@@ -36,20 +17,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/User"
-  /users/{userId}:
-    parameters:
-      - $ref: "#/components/parameters/UserId"
-    get:
-      operationId: getUserById
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/User"
-        '5XX':
-          description: Server Error
 components:
   schemas:
     User:
@@ -62,10 +29,3 @@ components:
           type: string
         lastName:
           type: string
-  parameters:
-    UserId:
-      in: path
-      name: userId
-      required: true
-      schema:
-        type: string
