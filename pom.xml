@@ -109,7 +109,7 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
                 </plugin>
-                <!-- Used for running finding the Cucumber config files that find feature files -->
+                <!-- Used for running the Cucumber tests and finding feature files -->
                 <!-- Version: Explicit -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
