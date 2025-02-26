@@ -163,6 +163,10 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
             <!-- Gives the actuator/info API build information -->
             <!-- Version: Parent POM PIM -->
             <plugin>
