@@ -224,21 +224,11 @@
                         </goals>
                         <configuration>
                             <systemPropertyVariables>
+                                <!-- This triggers the correct config and keeps the H2 DB from spinning up -->
                                 <spring.profiles.active>mocked</spring.profiles.active>
                             </systemPropertyVariables>
                             <includes>
                                 <include>**/MockedIntegrationFeatures.java</include>
-                            </includes>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>full-integration-tests</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                        </goals>
-                        <configuration>
-                            <includes>
-                                <include>**/FullIntegrationFeatures.java</include>
                             </includes>
                         </configuration>
                     </execution>
