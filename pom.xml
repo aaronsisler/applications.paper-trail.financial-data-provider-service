@@ -11,7 +11,7 @@
 
     <groupId>com.ebsolutions.papertrail</groupId>
     <artifactId>financial-data-provider-service-parent</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
     <name>financial-data-provider-service-parent</name>
     <packaging>pom</packaging>
 
@@ -33,6 +33,19 @@
     <build>
         <pluginManagement>
             <plugins>
+                <!-- Used to compile the sources of your project -->
+                <!-- Version: Explicit -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.14.0</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <!-- Using to suppress MockBean warnings -->
+                        <showWarnings>false</showWarnings>
+                    </configuration>
+                </plugin>
                 <!-- Gives the actuator/info API build information -->
                 <!-- Version: Explicit -->
                 <plugin>
@@ -100,19 +113,6 @@
                                 @lombok.Builder
                             </additionalModelTypeAnnotations>
                         </configOptions>
-                    </configuration>
-                </plugin>
-                <!-- Used to compile the sources of your project -->
-                <!-- Version: Explicit -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.14.0</version>
-                    <configuration>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                        <!-- Using to suppress MockBean warnings -->
-                        <showWarnings>false</showWarnings>
                     </configuration>
                 </plugin>
                 <!-- Used for running JUnit tests that link to Cucumber feature files -->

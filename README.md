@@ -2,9 +2,6 @@
 
 ## TODOs
 
-- Can you split out the Configuration so it is "imported" at the top?
-- Can we split the real test into a separate package or file?
-
 ## Definition of Done
 
 <details>

@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.ebsolutions.papertrail</groupId>
         <artifactId>financial-data-provider-service-parent</artifactId>
-        <version>0.3.0</version>
+        <version>0.4.0</version>
     </parent>
 
     <artifactId>financial-data-provider-service</artifactId>
@@ -21,20 +21,16 @@
         <postgresql-driver.version>42.7.5</postgresql-driver.version>
         <springdoc-openapi-starter-webmvc-ui.version>2.8.4</springdoc-openapi-starter-webmvc-ui.version>
 
-        <!-- Dependencies -->
+        <!-- Versions: Testing Dependencies -->
         <cucumber-bom.version>7.20.1</cucumber-bom.version>
+        <h2.version>2.3.232</h2.version>
         <junit-bom.version>5.11.4</junit-bom.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <!--            <dependency>-->
-            <!--                <groupId>org.hibernate</groupId>-->
-            <!--                <artifactId>hibernate-core</artifactId>-->
-            <!--                <version>6.6.7.Final</version>-->
-            <!--                <type>pom</type>-->
-            <!--            </dependency>-->
-
+            <!-- Used for JUnit and Mockito testing libs-->
+            <!-- Version: Explicit -->
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
@@ -42,6 +38,8 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- Used for Cucumber BDD testing libs-->
+            <!-- Version: Explicit -->
             <dependency>
                 <groupId>io.cucumber</groupId>
                 <artifactId>cucumber-bom</artifactId>
@@ -74,26 +72,12 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- This is used to create an in-memory database used during testing -->
-        <!-- Version: I am not sure... leaving the version for now to TO DO it -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
         <!-- Used for application driver connection to the Postgres database -->
-        <!-- Version: I am not sure... leaving the version for now to TO DO it -->
+        <!-- Version: Explicit -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <!--            <version>${postgresql-driver.version}</version>-->
-        </dependency>
-
-        <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>javax.persistence-api</artifactId>
-            <version>2.2</version>
+            <version>${postgresql-driver.version}</version>
         </dependency>
 
         <!-- Used for POJO annotations within project -->
@@ -118,7 +102,6 @@
             <artifactId>jackson-databind-nullable</artifactId>
             <version>${jackson-databind-nullable.version}</version>
         </dependency>
-
 
         <!-- Testing framework for starting Spring context and MockMVC -->
         <!-- Version: Spring Parent -->
@@ -159,10 +142,21 @@
             <artifactId>cucumber-junit-platform-engine</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- This is used to create an in-memory database used during testing -->
+        <!-- Version: Explicit -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>${h2.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <!-- Used to compile the sources of your project -->
+            <!-- Version: Parent POM PIM -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
