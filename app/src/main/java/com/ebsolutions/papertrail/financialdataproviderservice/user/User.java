@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,10 +23,16 @@ public class User {
   @Id
   @Schema(description = "User Id", example = "1")
   private int userId;
+
+  @NotBlank
   @Schema(description = "Username", example = "johnny_appleseed_42")
   private String username;
+
+  @NotBlank
   @Schema(description = "First Name", example = "Johnny")
   private String firstName;
+
+  @NotBlank
   @Schema(description = "Last Name", example = "Appleseed")
   private String lastName;
 }
