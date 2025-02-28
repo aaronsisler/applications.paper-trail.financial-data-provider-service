@@ -20,8 +20,5 @@ spring:
     url: jdbc:postgresql://localhost:5432/paper_trail
     username: admin
     password: root
-#    jpa:
-#      hibernate:
-#        ddl-auto: validate
 
 ---

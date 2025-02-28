@@ -7,8 +7,8 @@ import org.springframework.context.annotation.Profile;
 
 @TestConfiguration
 @Profile("mocked")
+@SuppressWarnings("removal")
 public class MockedIntegrationConfig {
-  //  @MockitoBean
   @MockBean
   protected UserRepository userRepository;
 }
