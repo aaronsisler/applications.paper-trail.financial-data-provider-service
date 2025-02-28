@@ -16,4 +16,9 @@ spring:
   config:
     activate:
       on-profile: local, default
+  datasource:
+    url: jdbc:postgresql://localhost:5432/paper_trail
+    username: admin
+    password: root
+
 ---

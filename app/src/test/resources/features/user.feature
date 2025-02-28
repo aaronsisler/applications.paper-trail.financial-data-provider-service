@@ -5,7 +5,7 @@ Feature: User
     And two users exist in the database
     When the get all users endpoint is invoked
     Then the correct users are returned
-#
+
   Scenario: Users endpoint returns correctly when no users present
     Given application is up
     And no users exist
