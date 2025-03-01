@@ -7,8 +7,11 @@ servers:
 paths: { }
 components:
   schemas:
-    ServerError:
+    ErrorResponse:
       type: object
+      #      Commenting this since there is a constructor issue at compile time
+      #      required:
+      #        - message
       properties:
         message:
           type: string

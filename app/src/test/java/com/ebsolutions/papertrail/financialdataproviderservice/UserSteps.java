@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
-import com.ebsolutions.papertrail.financialdataproviderservice.model.ServerError;
+import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
 import com.ebsolutions.papertrail.financialdataproviderservice.user.User;
 import com.ebsolutions.papertrail.financialdataproviderservice.user.UserRepository;
@@ -104,8 +104,8 @@ public class UserSteps extends BaseTest {
 
     String content = mockHttpServletResponse.getContentAsString();
 
-    ServerError serverError = objectMapper.readValue(content, ServerError.class);
-    Assertions.assertEquals("Generic Exception Message!", serverError.getMessage());
+    ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
+    Assertions.assertEquals("Generic Exception Message!", errorResponse.getMessage());
   }
 
 

@@ -106,10 +106,14 @@
                         <generateSupportingFiles>false</generateSupportingFiles>
                         <configOptions>
                             <serializableModel>true</serializableModel>
+                            <!-- This also enabled useJakartaEe-->
                             <useSpringBoot3>true</useSpringBoot3>
                             <additionalModelTypeAnnotations>
-                                @lombok.RequiredArgsConstructor
+                                <!-- Needed for Object Mapper to convert from string to POJO -->
                                 @lombok.AllArgsConstructor
+                                <!-- Needed for Object Mapper to convert from string to POJO -->
+                                @lombok.NoArgsConstructor
+                                <!-- Helpful builder method -->
                                 @lombok.Builder
                             </additionalModelTypeAnnotations>
                         </configOptions>
