@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.5.0] User: Create All
+
+### Added
+
+- User POST / CREATE ALL with full Cucumber test suite
+
+### Changed
+
+- Tweaked how we are using Open API given the Spring JPA Entity
+
 ## [0.4.0] User Features
 
 ### Added
