@@ -8,15 +8,18 @@ import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
+import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
 import com.ebsolutions.papertrail.financialdataproviderservice.user.User;
 import com.ebsolutions.papertrail.financialdataproviderservice.user.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
@@ -32,22 +35,19 @@ public class UserCreateAllSteps extends BaseTest {
 
   private String requestContent;
   private MvcResult result;
-  private User inputUserOne;
-  private User inputUserTwo;
   private User expectedUserOne;
   private User expectedUserTwo;
 
   @And("two valid users are part of the request body for the create all users endpoint")
   public void twoValidUsersArePartOfTheRequestBodyForTheCreateAllUsersEndpoint()
       throws JsonProcessingException {
-    inputUserOne =
-        User.builder()
-            .username("first_user")
-            .firstName("first")
-            .lastName("user")
-            .build();
+    User inputUserOne = User.builder()
+        .username("first_user")
+        .firstName("first")
+        .lastName("user")
+        .build();
 
-    inputUserTwo = User.builder()
+    User inputUserTwo = User.builder()
         .username("second_user")
         .firstName("second")
         .lastName("user")
@@ -72,6 +72,23 @@ public class UserCreateAllSteps extends BaseTest {
         objectMapper.writeValueAsString(Arrays.asList(inputUserOne, inputUserTwo));
 
     when(userRepository.saveAll(any())).thenReturn(Arrays.asList(expectedUserOne, expectedUserTwo));
+  }
+
+  @And("the user in the request body has an invalid input")
+  public void theUserInTheRequestBodyHasAnInvalidInput(DataTable dataTable)
+      throws JsonProcessingException {
+    int userId = dataTable.column(0).getFirst() == null ? 0 :
+        Integer.parseInt(dataTable.column(0).getFirst());
+
+    User inputUserOne = User.builder()
+        .userId(userId)
+        .username(isEmptyString(dataTable.column(1).getFirst()))
+        .firstName(isEmptyString(dataTable.column(2).getFirst()))
+        .lastName(isEmptyString(dataTable.column(3).getFirst()))
+        .build();
+
+    requestContent =
+        objectMapper.writeValueAsString(Collections.singletonList(inputUserOne));
   }
 
   @And("no users are part of the request body")
@@ -144,6 +161,21 @@ public class UserCreateAllSteps extends BaseTest {
     Mockito.verifyNoInteractions(userRepository);
   }
 
+  @Then("the correct failure response and message is returned from the create all users endpoint")
+  public void theCorrectFailureResponseAndMessageIsReturnedFromTheCreateAllUsersEndpoint(
+      DataTable dataTable) throws UnsupportedEncodingException, JsonProcessingException {
+
+    MockHttpServletResponse mockHttpServletResponse = result.getResponse();
+
+    Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(),
+        mockHttpServletResponse.getStatus());
+
+    String content = mockHttpServletResponse.getContentAsString();
+
+    ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
+    Assertions.assertEquals(dataTable.row(0).getFirst(), errorResponse.getMessages().getFirst());
+  }
+
 
   private void assertUserDtoAgainstUser(User expectedUser, User actualUser) {
     Assertions.assertEquals(expectedUser.getUserId(), actualUser.getUserId());
@@ -152,5 +184,7 @@ public class UserCreateAllSteps extends BaseTest {
     Assertions.assertEquals(expectedUser.getLastName(), actualUser.getLastName());
   }
 
-
+  private String isEmptyString(String value) {
+    return TestConstants.EMPTY_STRING_ENUM.equals(value) ? TestConstants.EMPTY_STRING : value;
+  }
 }

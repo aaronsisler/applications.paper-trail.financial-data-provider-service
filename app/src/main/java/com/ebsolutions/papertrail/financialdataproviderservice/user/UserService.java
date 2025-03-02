@@ -40,10 +40,8 @@ public class UserService {
 
       return userRepository.saveAll(users);
     } catch (DataConstraintException dataConstraintException) {
-      System.out.println(dataConstraintException.getMessages());
       throw dataConstraintException;
     } catch (Exception exception) {
-      log.error("Error saving", exception);
       throw new DataProcessingException("Something went wrong while saving all users");
     }
   }
