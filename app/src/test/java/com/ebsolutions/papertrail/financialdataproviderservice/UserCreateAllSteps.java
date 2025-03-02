@@ -1,5 +1,6 @@
 package com.ebsolutions.papertrail.financialdataproviderservice;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -15,10 +16,11 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
+import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -30,23 +32,58 @@ public class UserCreateAllSteps extends BaseTest {
 
   private String requestContent;
   private MvcResult result;
+  private User inputUserOne;
+  private User inputUserTwo;
   private User expectedUserOne;
   private User expectedUserTwo;
 
   @And("two valid users are part of the request body for the create all users endpoint")
-  public void twoValidUsersArePartOfTheRequestBodyForTheCreateAllUsersEndpoint() {
-    requestContent = new ArrayList<>().toString();
+  public void twoValidUsersArePartOfTheRequestBodyForTheCreateAllUsersEndpoint()
+      throws JsonProcessingException {
+    inputUserOne =
+        User.builder()
+            .username("first_user")
+            .firstName("first")
+            .lastName("user")
+            .build();
+
+    inputUserTwo = User.builder()
+        .username("second_user")
+        .firstName("second")
+        .lastName("user")
+        .build();
+
+    expectedUserOne =
+        User.builder()
+            .userId(1)
+            .username("first_user")
+            .firstName("first")
+            .lastName("user")
+            .build();
+
+    expectedUserTwo = User.builder()
+        .userId(2)
+        .username("second_user")
+        .firstName("second")
+        .lastName("user")
+        .build();
+
+    requestContent =
+        objectMapper.writeValueAsString(Arrays.asList(inputUserOne, inputUserTwo));
+
+    when(userRepository.saveAll(any())).thenReturn(Arrays.asList(expectedUserOne, expectedUserTwo));
   }
 
   @And("no users are part of the request body")
   public void noUsersArePartOfTheRequestBody() {
+    requestContent = new ArrayList<>().toString();
   }
 
   @And("the connection to the database fails for the create all users endpoint")
   public void theConnectionToTheDatabaseFailsForTheCreateAllUsersEndpoint() {
     DataProcessingException dataProcessingException = new DataProcessingException();
 
-    when(userRepository.saveAll(Collections.emptyList())).thenThrow(dataProcessingException);
+    when(userRepository.saveAll(any())).thenThrow(dataProcessingException);
   }
 
   @When("the create all users endpoint is invoked")
@@ -56,11 +93,10 @@ public class UserCreateAllSteps extends BaseTest {
             .content(requestContent)
             .accept(MediaType.APPLICATION_JSON))
         .andReturn();
-    System.out.println(result);
   }
 
-  @Then("the newly created users are returned")
-  public void theCorrectUsersAreReturned()
+  @Then("the newly created users are returned from the create all users endpoint")
+  public void theCorrectUsersAreReturnedFromTheCreateAllUserEndpoint()
       throws JsonProcessingException, UnsupportedEncodingException {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
@@ -91,12 +127,30 @@ public class UserCreateAllSteps extends BaseTest {
         errorResponse.getMessages().getFirst());
   }
 
+  @Then("the correct bad request response is returned from the create all users endpoint")
+  public void theCorrectBadRequestResponseIsReturnedFromTheCreateAllUsersEndpoint()
+      throws UnsupportedEncodingException, JsonProcessingException {
+    MockHttpServletResponse mockHttpServletResponse = result.getResponse();
+
+    Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(),
+        mockHttpServletResponse.getStatus());
+
+    String content = mockHttpServletResponse.getContentAsString();
+
+    ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
+    Assertions.assertEquals("Users cannot be empty",
+        errorResponse.getMessages().getFirst());
+
+    Mockito.verifyNoInteractions(userRepository);
+  }
+
 
   private void assertUserDtoAgainstUser(User expectedUser, User actualUser) {
-    // Figure out how to check the ordering and/or values
-    //    Assertions.assert NotNull(actualUser.getUserId());
+    Assertions.assertEquals(expectedUser.getUserId(), actualUser.getUserId());
     Assertions.assertEquals(expectedUser.getUsername(), actualUser.getUsername());
     Assertions.assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
     Assertions.assertEquals(expectedUser.getLastName(), actualUser.getLastName());
   }
+
+
 }

@@ -2,6 +2,7 @@ package com.ebsolutions.papertrail.financialdataproviderservice.user;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataConstraintException;
 import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,10 @@ public class UserService {
 
   public List<User> createAll(List<User> users) {
     try {
+      if (users.isEmpty()) {
+        throw new DataConstraintException(Collections.singletonList("Users cannot be empty"));
+      }
+
       if (!users.stream().filter(user -> user.getUserId() > 0).toList().isEmpty()) {
         List<String> existingUserErrorMessages =
             users.stream()

@@ -49,7 +49,7 @@ public class UserController {
               @Content(mediaType = "application/json",
                   array = @ArraySchema(schema = @Schema(implementation = User.class)))
           })})
-  public ResponseEntity<?> post(@RequestBody List<@Valid User> users) {
+  public ResponseEntity<?> post(@Valid @RequestBody List<@Valid User> users) {
     return ResponseEntity.ok(userService.createAll(users));
   }
 }
