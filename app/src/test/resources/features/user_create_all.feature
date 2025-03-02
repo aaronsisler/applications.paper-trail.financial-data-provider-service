@@ -20,7 +20,7 @@ Feature: User: Create All
 
   Scenario: Create All Users endpoint is not able to connect to the database
     Given application is up
-    And two valid users are part of the request body
+    And two valid users are part of the request body for the create all users endpoint
     And the connection to the database fails for the create all users endpoint
     When the create all users endpoint is invoked
     Then the correct failure response is returned from the create all users endpoint
