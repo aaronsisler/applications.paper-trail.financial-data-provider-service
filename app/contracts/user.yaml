@@ -53,3 +53,4 @@ components:
           minLength: 1
         lastName:
           type: string
+          minLength: 1
