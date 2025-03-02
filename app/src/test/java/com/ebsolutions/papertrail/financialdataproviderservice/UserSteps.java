@@ -59,8 +59,7 @@ public class UserSteps extends BaseTest {
 
   @And("the connection to the database fails")
   public void theConnectionToTheDatabaseFails() {
-    DataProcessingException dataProcessingException =
-        new DataProcessingException("Generic Exception Message!");
+    DataProcessingException dataProcessingException = new DataProcessingException();
 
     when(userRepository.findAll()).thenThrow(dataProcessingException);
   }
@@ -105,7 +104,8 @@ public class UserSteps extends BaseTest {
     String content = mockHttpServletResponse.getContentAsString();
 
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
-    Assertions.assertEquals("Generic Exception Message!", errorResponse.getMessage());
+    Assertions.assertEquals("Something went wrong while getting all users",
+        errorResponse.getMessages().getFirst());
   }
 
 

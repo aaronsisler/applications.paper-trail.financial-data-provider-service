@@ -13,7 +13,9 @@ components:
       #      required:
       #        - message
       properties:
-        message:
-          type: string
-          example: "Something went wrong"
+        messages:
+          type: array
+          items:
+            type: string
+            example: "Something went wrong"
 

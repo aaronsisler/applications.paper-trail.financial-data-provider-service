@@ -9,8 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,26 +23,31 @@ import lombok.NoArgsConstructor;
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonProperty("userId")
   @Schema(description = "User Id", example = "1")
   private int userId;
 
   @NotBlank(message = "username is mandatory")
-  private String username;
-
-  @Schema(description = "First Name", example = "Johnny")
-  private String firstName;
-  @NotBlank
-  @Schema(description = "Last Name", example = "Appleseed")
-  private String lastName;
-
-  @NotNull
-  @Size(min = 1)
   @JsonProperty("username")
   @Schema(name = "username",
       requiredMode = Schema.RequiredMode.REQUIRED,
       description = "Username",
       example = "johnny_appleseed_42")
-  public String username() {
-    return username;
-  }
+  private String username;
+
+  @NotBlank(message = "firstName is mandatory")
+  @JsonProperty("firstName")
+  @Schema(name = "firstName",
+      requiredMode = Schema.RequiredMode.REQUIRED,
+      description = "First Name",
+      example = "Johnny")
+  private String firstName;
+
+  @NotBlank(message = "lastName is mandatory")
+  @JsonProperty("lastName")
+  @Schema(name = "lastName",
+      requiredMode = Schema.RequiredMode.REQUIRED,
+      description = "Last Name",
+      example = "Appleseed")
+  private String lastName;
 }

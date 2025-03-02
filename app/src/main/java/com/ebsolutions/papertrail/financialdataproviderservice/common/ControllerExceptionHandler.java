@@ -1,5 +1,6 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.common;
 
+import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataConstraintException;
 import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -8,6 +9,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +29,7 @@ public class ControllerExceptionHandler {
                   schema = @Schema(implementation = ErrorResponse.class))
           }),
   })
-  public ResponseEntity<ErrorResponse> handle(
+  public ResponseEntity<ErrorResponse> handleMissingFields(
       ConstraintViolationException constraintViolationException) {
     Set<ConstraintViolation<?>> violations = constraintViolationException.getConstraintViolations();
 
@@ -33,22 +37,44 @@ public class ControllerExceptionHandler {
       return ResponseEntity.badRequest()
           .body(
               ErrorResponse.builder()
-                  .message("ConstraintViolationException occurred")
+                  .messages(
+                      Collections.singletonList("ConstraintViolationException occurred"))
                   .build()
           );
     }
 
-    StringBuilder builder = new StringBuilder();
+    List<String> messages = new ArrayList<>();
 
-    violations.forEach(violation -> builder
-        .append(violation.getPropertyPath())
-        .append(" ")
-        .append(violation.getMessage()));
+    violations.forEach(violation ->
+        messages.add(
+            violation.getPropertyPath().toString()
+                .concat("::")
+                .concat(violation.getMessage()))
+    );
 
     return ResponseEntity.badRequest()
         .body(
             ErrorResponse.builder()
-                .message(builder.toString())
+                .messages(messages)
+                .build()
+        );
+  }
+
+  @ExceptionHandler(DataConstraintException.class)
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "400",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorResponse.class))
+          }),
+  })
+  public ResponseEntity<ErrorResponse> handleDataConstraints(
+      DataConstraintException dataConstraintException) {
+
+    return ResponseEntity.badRequest()
+        .body(
+            ErrorResponse.builder()
+                .messages(dataConstraintException.getMessages())
                 .build()
         );
   }
@@ -61,9 +87,11 @@ public class ControllerExceptionHandler {
                   schema = @Schema(implementation = ErrorResponse.class))
           }),
   })
-  public ResponseEntity<?> handleServerError(
+  public ResponseEntity<?> handleDataProcessingServerError(
       DataProcessingException dataProcessingException) {
     return ResponseEntity.internalServerError()
-        .body(ErrorResponse.builder().message(dataProcessingException.getMessage()).build());
+        .body(ErrorResponse.builder()
+            .messages(Collections.singletonList(dataProcessingException.getMessage()))
+            .build());
   }
 }

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RequestMapping("users")
 public class UserController {
-  private final UserRepository userRepository;
+  private final UserService userService;
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(summary = "Get all users")
@@ -36,13 +36,13 @@ public class UserController {
           }),
       @ApiResponse(responseCode = "204", content = @Content(schema = @Schema(hidden = true)))})
   public ResponseEntity<?> getAll() {
-    List<User> users = userRepository.findAll();
+    List<User> users = userService.getAll();
 
     return !users.isEmpty() ? ResponseEntity.ok(users) : ResponseEntity.noContent().build();
   }
 
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  @Operation(summary = "Get all users")
+  @Operation(summary = "Create users")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200",
           content = {
@@ -50,11 +50,6 @@ public class UserController {
                   array = @ArraySchema(schema = @Schema(implementation = User.class)))
           })})
   public ResponseEntity<?> post(@RequestBody List<@Valid User> users) {
-    try {
-      return ResponseEntity.ok(userRepository.saveAll(users));
-    } catch (Exception exception) {
-      System.out.println(exception.getMessage());
-      return ResponseEntity.badRequest().body(exception);
-    }
+    return ResponseEntity.ok(userService.createAll(users));
   }
 }
