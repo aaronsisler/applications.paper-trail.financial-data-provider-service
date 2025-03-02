@@ -5,7 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
-import com.ebsolutions.papertrail.financialdataproviderservice.model.ServerError;
+import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
 import com.ebsolutions.papertrail.financialdataproviderservice.user.User;
 import com.ebsolutions.papertrail.financialdataproviderservice.user.UserRepository;
@@ -24,7 +24,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 
 @RequiredArgsConstructor
-public class UserSteps extends BaseTest {
+public class UserGetAllSteps extends BaseTest {
   protected final UserRepository userRepository;
 
   private MvcResult result;
@@ -59,8 +59,7 @@ public class UserSteps extends BaseTest {
 
   @And("the connection to the database fails")
   public void theConnectionToTheDatabaseFails() {
-    DataProcessingException dataProcessingException =
-        new DataProcessingException("Generic Exception Message!");
+    DataProcessingException dataProcessingException = new DataProcessingException();
 
     when(userRepository.findAll()).thenThrow(dataProcessingException);
   }
@@ -93,9 +92,8 @@ public class UserSteps extends BaseTest {
     Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), mockHttpServletResponse.getStatus());
   }
 
-
-  @Then("the correct failure response is returned")
-  public void theCorrectFailureResponseIsReturned()
+  @Then("the correct failure response is returned from the get all users endpoint")
+  public void theCorrectFailureResponseIsReturnedFromTheGetAllUsersEndpoint()
       throws UnsupportedEncodingException, JsonProcessingException {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
@@ -104,10 +102,10 @@ public class UserSteps extends BaseTest {
 
     String content = mockHttpServletResponse.getContentAsString();
 
-    ServerError serverError = objectMapper.readValue(content, ServerError.class);
-    Assertions.assertEquals("Generic Exception Message!", serverError.getMessage());
+    ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
+    Assertions.assertEquals("Something went wrong while getting all users",
+        errorResponse.getMessages().getFirst());
   }
-
 
   private void assertUserDtoAgainstUser(User expectedUser, User actualUser) {
     Assertions.assertEquals(expectedUser.getUserId(), actualUser.getUserId());
@@ -115,4 +113,5 @@ public class UserSteps extends BaseTest {
     Assertions.assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
     Assertions.assertEquals(expectedUser.getLastName(), actualUser.getLastName());
   }
+
 }

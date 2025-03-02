@@ -11,7 +11,7 @@
 
     <groupId>com.ebsolutions.papertrail</groupId>
     <artifactId>financial-data-provider-service-parent</artifactId>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
     <name>financial-data-provider-service-parent</name>
     <packaging>pom</packaging>
 
@@ -106,10 +106,14 @@
                         <generateSupportingFiles>false</generateSupportingFiles>
                         <configOptions>
                             <serializableModel>true</serializableModel>
+                            <!-- This also enabled useJakartaEe-->
                             <useSpringBoot3>true</useSpringBoot3>
                             <additionalModelTypeAnnotations>
-                                @lombok.RequiredArgsConstructor
+                                <!-- Needed for Object Mapper to convert from string to POJO -->
                                 @lombok.AllArgsConstructor
+                                <!-- Needed for Object Mapper to convert from string to POJO -->
+                                @lombok.NoArgsConstructor
+                                <!-- Helpful builder method -->
                                 @lombok.Builder
                             </additionalModelTypeAnnotations>
                         </configOptions>

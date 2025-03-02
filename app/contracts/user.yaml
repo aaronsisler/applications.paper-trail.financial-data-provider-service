@@ -17,9 +17,27 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/User"
+    post:
+      operationId: createUsers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/User"
 components:
   schemas:
     User:
+      type: object
       required:
         - username
         - firstName
@@ -29,7 +47,10 @@ components:
           type: integer
         username:
           type: string
+          minLength: 1
         firstName:
           type: string
+          minLength: 1
         lastName:
           type: string
+          minLength: 1
