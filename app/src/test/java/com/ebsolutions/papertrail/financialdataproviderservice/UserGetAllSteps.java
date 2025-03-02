@@ -24,7 +24,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 
 @RequiredArgsConstructor
-public class UserSteps extends BaseTest {
+public class UserGetAllSteps extends BaseTest {
   protected final UserRepository userRepository;
 
   private MvcResult result;
@@ -92,9 +92,8 @@ public class UserSteps extends BaseTest {
     Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), mockHttpServletResponse.getStatus());
   }
 
-
-  @Then("the correct failure response is returned")
-  public void theCorrectFailureResponseIsReturned()
+  @Then("the correct failure response is returned from the get all users endpoint")
+  public void theCorrectFailureResponseIsReturnedFromTheGetAllUsersEndpoint()
       throws UnsupportedEncodingException, JsonProcessingException {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
@@ -108,11 +107,11 @@ public class UserSteps extends BaseTest {
         errorResponse.getMessages().getFirst());
   }
 
-
   private void assertUserDtoAgainstUser(User expectedUser, User actualUser) {
     Assertions.assertEquals(expectedUser.getUserId(), actualUser.getUserId());
     Assertions.assertEquals(expectedUser.getUsername(), actualUser.getUsername());
     Assertions.assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
     Assertions.assertEquals(expectedUser.getLastName(), actualUser.getLastName());
   }
+
 }
