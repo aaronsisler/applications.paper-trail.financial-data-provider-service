@@ -34,6 +34,19 @@ paths:
               schema:
                 type: array
                 $ref: "#/components/schemas/User"
+  /users/{userId}:
+    parameters:
+      - $ref: "#/components/parameters/UserId"
+    put:
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        '5XX':
+          description: Server Error
 components:
   schemas:
     User:
@@ -54,3 +67,10 @@ components:
         lastName:
           type: string
           minLength: 1
+  parameters:
+    UserId:
+      in: path
+      name: userId
+      required: true
+      schema:
+        type: integer

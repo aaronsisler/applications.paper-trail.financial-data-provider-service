@@ -2,6 +2,9 @@
 
 ## TODOs
 
+- Updated POST to have "created" instead of "ok"
+- Check out what the "data" type is instead of "class" for User
+
 ## Definition of Done
 
 <details>
