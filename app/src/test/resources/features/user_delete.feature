@@ -12,6 +12,7 @@ Feature: User: Get All
     And the user id provided does not exist in the database
     When the delete user endpoint is invoked
     Then the correct response is returned from the delete user endpoint
+    And the correct user is deleted
 
   Scenario: Delete User endpoint is not able to connect to the database
     Given application is up

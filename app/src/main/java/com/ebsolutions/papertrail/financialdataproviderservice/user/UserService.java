@@ -81,7 +81,7 @@ public class UserService {
       throw dataConstraintException;
     } catch (Exception exception) {
       log.error("Error saving", exception);
-      throw new DataProcessingException("Something went wrong while saving the user");
+      throw new DataProcessingException("Something went wrong while deleting the user");
     }
   }
 }
