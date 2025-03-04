@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,5 +52,17 @@ public class UserController {
           })})
   public ResponseEntity<?> post(@Valid @RequestBody List<@Valid User> users) {
     return ResponseEntity.ok(userService.createAll(users));
+  }
+
+  @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  @Operation(summary = "Update user")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = User.class))
+          })})
+  public ResponseEntity<?> put(@RequestBody @Valid User user) {
+    return ResponseEntity.ok().body(userService.update(user));
   }
 }

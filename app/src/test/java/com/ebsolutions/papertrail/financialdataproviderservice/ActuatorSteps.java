@@ -23,14 +23,14 @@ public class ActuatorSteps extends BaseTest {
 
   @Given("application is up")
   public void applicationIsUp() throws Exception {
-    mockMvc.perform(get(Constants.HEALTH_CHECK_URL))
+    mockMvc.perform(get(Constants.HEALTH_CHECK_URI))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.status", is("UP")));
   }
 
   @When("the info endpoint is invoked")
   public void theInfoEndpointIsInvoked() throws Exception {
-    result = mockMvc.perform(get(Constants.INFO_CHECK_URL)).andReturn();
+    result = mockMvc.perform(get(Constants.INFO_CHECK_URI)).andReturn();
   }
 
   @Then("the correct info response is returned")

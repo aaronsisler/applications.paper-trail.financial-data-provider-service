@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataproviderservice;
+package com.ebsolutions.papertrail.financialdataproviderservice.user;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -7,8 +7,6 @@ import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
-import com.ebsolutions.papertrail.financialdataproviderservice.user.User;
-import com.ebsolutions.papertrail.financialdataproviderservice.user.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -66,7 +64,7 @@ public class UserGetAllSteps extends BaseTest {
 
   @When("the get all users endpoint is invoked")
   public void theGetAllUsersEndpointIsInvoked() throws Exception {
-    result = mockMvc.perform(get(Constants.USERS_URL)).andReturn();
+    result = mockMvc.perform(get(Constants.USERS_URI)).andReturn();
   }
 
   @Then("the correct users are returned")
@@ -80,10 +78,10 @@ public class UserGetAllSteps extends BaseTest {
     List<User> users = objectMapper.readerForListOf(User.class).readValue(content);
 
     User userOne = users.getFirst();
-    assertUserDtoAgainstUser(expectedUserOne, userOne);
+    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserOne, userOne);
 
     User userTwo = users.getLast();
-    assertUserDtoAgainstUser(expectedUserTwo, userTwo);
+    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserTwo, userTwo);
   }
 
   @Then("the correct empty users response is returned")
@@ -106,12 +104,4 @@ public class UserGetAllSteps extends BaseTest {
     Assertions.assertEquals("Something went wrong while getting all users",
         errorResponse.getMessages().getFirst());
   }
-
-  private void assertUserDtoAgainstUser(User expectedUser, User actualUser) {
-    Assertions.assertEquals(expectedUser.getUserId(), actualUser.getUserId());
-    Assertions.assertEquals(expectedUser.getUsername(), actualUser.getUsername());
-    Assertions.assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
-    Assertions.assertEquals(expectedUser.getLastName(), actualUser.getLastName());
-  }
-
 }

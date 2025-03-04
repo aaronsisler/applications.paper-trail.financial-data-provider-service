@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataproviderservice;
+package com.ebsolutions.papertrail.financialdataproviderservice.user;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -8,9 +8,6 @@ import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
-import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
-import com.ebsolutions.papertrail.financialdataproviderservice.user.User;
-import com.ebsolutions.papertrail.financialdataproviderservice.user.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -82,9 +79,9 @@ public class UserCreateAllSteps extends BaseTest {
 
     User inputUserOne = User.builder()
         .userId(userId)
-        .username(isEmptyString(dataTable.column(1).getFirst()))
-        .firstName(isEmptyString(dataTable.column(2).getFirst()))
-        .lastName(isEmptyString(dataTable.column(3).getFirst()))
+        .username(UserTestUtil.isEmptyString(dataTable.column(1).getFirst()))
+        .firstName(UserTestUtil.isEmptyString(dataTable.column(2).getFirst()))
+        .lastName(UserTestUtil.isEmptyString(dataTable.column(3).getFirst()))
         .build();
 
     requestContent =
@@ -105,7 +102,7 @@ public class UserCreateAllSteps extends BaseTest {
 
   @When("the create all users endpoint is invoked")
   public void theCreateAllUsersEndpointIsInvoked() throws Exception {
-    result = mockMvc.perform(post(Constants.USERS_URL)
+    result = mockMvc.perform(post(Constants.USERS_URI)
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestContent)
             .accept(MediaType.APPLICATION_JSON))
@@ -123,10 +120,10 @@ public class UserCreateAllSteps extends BaseTest {
     List<User> users = objectMapper.readerForListOf(User.class).readValue(content);
 
     User userOne = users.getFirst();
-    assertUserDtoAgainstUser(expectedUserOne, userOne);
+    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserOne, userOne);
 
     User userTwo = users.getLast();
-    assertUserDtoAgainstUser(expectedUserTwo, userTwo);
+    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserTwo, userTwo);
   }
 
   @Then("the correct failure response is returned from the create all users endpoint")
@@ -174,17 +171,5 @@ public class UserCreateAllSteps extends BaseTest {
 
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
     Assertions.assertEquals(dataTable.row(0).getFirst(), errorResponse.getMessages().getFirst());
-  }
-
-
-  private void assertUserDtoAgainstUser(User expectedUser, User actualUser) {
-    Assertions.assertEquals(expectedUser.getUserId(), actualUser.getUserId());
-    Assertions.assertEquals(expectedUser.getUsername(), actualUser.getUsername());
-    Assertions.assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
-    Assertions.assertEquals(expectedUser.getLastName(), actualUser.getLastName());
-  }
-
-  private String isEmptyString(String value) {
-    return TestConstants.EMPTY_STRING_ENUM.equals(value) ? TestConstants.EMPTY_STRING : value;
   }
 }

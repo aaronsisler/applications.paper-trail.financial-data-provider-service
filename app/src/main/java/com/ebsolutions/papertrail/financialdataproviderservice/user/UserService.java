@@ -46,44 +46,31 @@ public class UserService {
     }
   }
 
-  public List<User> updateAll(List<User> users) {
+  public User update(User user) {
     try {
-
-      if (!users.stream().map(user -> user.getUserId() == 0).toList().isEmpty()) {
+      if (user.getUserId() <= 0) {
         List<String> existingUserErrorMessages =
-            users.stream()
-                .map(user -> "User Id must be populated: ".concat(
-                    Integer.toString(user.getUserId())))
-                .toList();
+            Collections.singletonList("User Id must be positive and non-zero");
 
         throw new DataConstraintException(existingUserErrorMessages);
       }
 
-      List<User> foundUsers = userRepository
-          .findAllById(
-              users.stream().map(user -> (long) user.getUserId()).toList());
+      boolean doesUserExist = userRepository.findById((long) user.getUserId()).isPresent();
 
-      if (foundUsers.isEmpty() || foundUsers.size() < users.size()) {
-        List<User> missingUsers = users.stream()
-            .filter(user -> foundUsers.stream()
-                .noneMatch(foundUser -> foundUser.getUserId() == user.getUserId()))
-            .toList();
-
+      if (!doesUserExist) {
         List<String> existingUserErrorMessages =
-            foundUsers.stream()
-                .map(user -> "User Id does not exist: ".concat(Integer.toString(user.getUserId())))
-                .toList();
+            Collections.singletonList(
+                "User Id does not exist: ".concat(Integer.toString(user.getUserId())));
 
         throw new DataConstraintException(existingUserErrorMessages);
       }
 
-      return userRepository.saveAll(users);
+      return userRepository.save(user);
     } catch (DataConstraintException dataConstraintException) {
-      System.out.println(dataConstraintException.getMessages());
       throw dataConstraintException;
     } catch (Exception exception) {
       log.error("Error saving", exception);
-      throw new DataProcessingException("Something went wrong while saving all users");
+      throw new DataProcessingException("Something went wrong while saving the user");
     }
   }
 }
