@@ -9,6 +9,7 @@ import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -70,22 +71,22 @@ public class UserUpdateSteps extends BaseTest {
     when(userRepository.save(any())).thenThrow(dataProcessingException);
   }
 
-  //  @And("the user in the request body has an invalid input")
-  //  public void theUserInTheRequestBodyHasAnInvalidInput(DataTable dataTable)
-  //      throws JsonProcessingException {
-  //    int userId = dataTable.column(0).getFirst() == null ? 0 :
-  //        Integer.parseInt(dataTable.column(0).getFirst());
-  //
-  //    User inputUserOne = User.builder()
-  //        .userId(userId)
-  //        .username(UserTestUtil.isEmptyString(dataTable.column(1).getFirst()))
-  //        .firstName(UserTestUtil.isEmptyString(dataTable.column(2).getFirst()))
-  //        .lastName(UserTestUtil.isEmptyString(dataTable.column(3).getFirst()))
-  //        .build();
-  //
-  //    requestContent =
-  //        objectMapper.writeValueAsString(Collections.singletonList(inputUserOne));
-  //  }
+  @And("the user in the update user request body has an invalid input")
+  public void theUserInTheUpdateUserRequestBodyHasAnInvalidInput(DataTable dataTable)
+      throws JsonProcessingException {
+    int userId = dataTable.column(0).getFirst() == null ? 0 :
+        Integer.parseInt(dataTable.column(0).getFirst());
+
+    User inputUserOne = User.builder()
+        .userId(userId)
+        .username(UserTestUtil.isEmptyString(dataTable.column(1).getFirst()))
+        .firstName(UserTestUtil.isEmptyString(dataTable.column(2).getFirst()))
+        .lastName(UserTestUtil.isEmptyString(dataTable.column(3).getFirst()))
+        .build();
+
+    requestContent =
+        objectMapper.writeValueAsString(inputUserOne);
+  }
 
   @When("the update user endpoint is invoked")
   public void theUpdateUserEndpointIsInvoked() throws Exception {
@@ -96,23 +97,18 @@ public class UserUpdateSteps extends BaseTest {
         .andReturn();
   }
 
+  @Then("the updated user is returned from the update user endpoint")
+  public void theUpdatedUserIsReturnedFromTheUpdateUserEndpoint()
+      throws UnsupportedEncodingException, JsonProcessingException {
+    MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
-  //  @Then("the newly created users are returned from the create all users endpoint")
-  //  public void theCorrectUsersAreReturnedFromTheCreateAllUserEndpoint()
-  //      throws JsonProcessingException, UnsupportedEncodingException {
-  //    MockHttpServletResponse mockHttpServletResponse = result.getResponse();
-  //
-  //    Assertions.assertEquals(HttpStatus.OK.value(), mockHttpServletResponse.getStatus());
-  //
-  //    String content = mockHttpServletResponse.getContentAsString();
-  //    List<User> users = objectMapper.readerForListOf(User.class).readValue(content);
-  //
-  //    User userOne = users.getFirst();
-  //    assertUserDtoAgainstUser(expectedUserOne, userOne);
-  //
-  //    User userTwo = users.getLast();
-  //    assertUserDtoAgainstUser(expectedUserTwo, userTwo);
-  //  }
+    Assertions.assertEquals(HttpStatus.OK.value(), mockHttpServletResponse.getStatus());
+
+    String content = mockHttpServletResponse.getContentAsString();
+    User user = objectMapper.readValue(content, User.class);
+
+    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserOne, user);
+  }
 
   @Then("the correct failure response is returned from the update user endpoint")
   public void theCorrectFailureResponseIsReturnedFromTheUpdateUserEndpoint()
@@ -145,20 +141,19 @@ public class UserUpdateSteps extends BaseTest {
   }
 
 
-  //  @Then("the correct failure response and message is returned
-  //  from the create all users endpoint")
-  //  public void theCorrectFailureResponseAndMessageIsReturnedFromTheCreateAllUsersEndpoint(
-  //      DataTable dataTable) throws UnsupportedEncodingException, JsonProcessingException {
-  //
-  //    MockHttpServletResponse mockHttpServletResponse = result.getResponse();
-  //
-  //    Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(),
-  //        mockHttpServletResponse.getStatus());
-  //
-  //    String content = mockHttpServletResponse.getContentAsString();
-  //
-  //    ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
-  //    Assertions.assertEquals(dataTable.row(0).getFirst(), errorRespon
-  //    se.getMessages().getFirst());
-  //  }
+  @Then("the correct failure response and message is returned from the update user endpoint")
+  public void theCorrectFailureResponseAndMessageIsReturnedFromTheUpdateUserEndpoint(
+      DataTable dataTable) throws UnsupportedEncodingException, JsonProcessingException {
+
+    MockHttpServletResponse mockHttpServletResponse = result.getResponse();
+
+
+    Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(),
+        mockHttpServletResponse.getStatus());
+
+    String content = mockHttpServletResponse.getContentAsString();
+
+    ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
+    Assertions.assertEquals(dataTable.row(0).getFirst(), errorResponse.getMessages().getFirst());
+  }
 }

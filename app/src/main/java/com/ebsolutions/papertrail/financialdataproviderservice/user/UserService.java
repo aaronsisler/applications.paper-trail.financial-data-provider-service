@@ -48,20 +48,15 @@ public class UserService {
 
   public User update(User user) {
     try {
-      System.out.println("HERE!");
-      System.out.println(user);
-      if (user.getUserId() == 0) {
+      if (user.getUserId() <= 0) {
         List<String> existingUserErrorMessages =
-            Collections.singletonList("User Id must be populated and non-zero");
+            Collections.singletonList("User Id must be positive and non-zero");
 
         throw new DataConstraintException(existingUserErrorMessages);
       }
 
-      System.out.println("HERE!");
-      System.out.println(user);
       boolean doesUserExist = userRepository.findById((long) user.getUserId()).isPresent();
-      System.out.println("HERE!");
-      System.out.println(doesUserExist);
+
       if (!doesUserExist) {
         List<String> existingUserErrorMessages =
             Collections.singletonList(

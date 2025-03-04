@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Slf4j
 @ControllerAdvice
 public class ControllerExceptionHandler {
-  @ExceptionHandler(ConstraintViolationException.class)
   @ApiResponses(value = {
       @ApiResponse(responseCode = "400",
           content = {
@@ -29,6 +29,7 @@ public class ControllerExceptionHandler {
                   schema = @Schema(implementation = ErrorResponse.class))
           }),
   })
+  @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<ErrorResponse> handleMissingFields(
       ConstraintViolationException constraintViolationException) {
     Set<ConstraintViolation<?>> violations = constraintViolationException.getConstraintViolations();
@@ -38,7 +39,8 @@ public class ControllerExceptionHandler {
           .body(
               ErrorResponse.builder()
                   .messages(
-                      Collections.singletonList("ConstraintViolationException occurred"))
+                      Collections.singletonList(
+                          "A mandatory field is missing or something went wrong"))
                   .build()
           );
     }
@@ -51,6 +53,35 @@ public class ControllerExceptionHandler {
                 .concat("::")
                 .concat(violation.getMessage()))
     );
+
+    return ResponseEntity.badRequest()
+        .body(
+            ErrorResponse.builder()
+                .messages(messages)
+                .build()
+        );
+  }
+
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "400",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorResponse.class))
+          }),
+  })
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ErrorResponse> handleMissingFields(
+      MethodArgumentNotValidException methodArgumentNotValidException) {
+
+    List<String> messages;
+
+    if (methodArgumentNotValidException.getFieldError() != null
+        && methodArgumentNotValidException.getFieldError().getDefaultMessage() != null) {
+      messages = Collections.singletonList(
+          methodArgumentNotValidException.getFieldError().getDefaultMessage());
+    } else {
+      messages = Collections.singletonList("A mandatory field is missing");
+    }
 
     return ResponseEntity.badRequest()
         .body(
@@ -93,5 +124,13 @@ public class ControllerExceptionHandler {
         .body(ErrorResponse.builder()
             .messages(Collections.singletonList(dataProcessingException.getMessage()))
             .build());
+  }
+
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<?> handleException(
+      Exception exception) {
+    log.error("You need to see what exception was actually thrown");
+    log.error("Error", exception);
+    return ResponseEntity.internalServerError().body(exception);
   }
 }

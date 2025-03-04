@@ -63,7 +63,6 @@ public class UserController {
                   schema = @Schema(implementation = User.class))
           })})
   public ResponseEntity<?> put(@RequestBody @Valid User user) {
-
     return ResponseEntity.ok().body(userService.update(user));
   }
 }
