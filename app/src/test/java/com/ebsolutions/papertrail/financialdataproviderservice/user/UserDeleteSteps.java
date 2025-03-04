@@ -40,8 +40,13 @@ public class UserDeleteSteps extends BaseTest {
     when(userRepository.findAll()).thenReturn(Collections.singletonList(expectedUserOne));
   }
 
-  @And("user exist in the database")
-  public void userExistInTheDatabase() {
+  @And("the user id provided exists in the database")
+  public void theUserIdProvidedExistsInTheDatabase() {
+
+  }
+
+  @And("the user id provided does not exist in the database")
+  public void theUserIdProvidedDoesNotExistInTheDatabase() {
   }
 
   @And("the connection to the database fails for the delete user endpoint")
@@ -56,12 +61,12 @@ public class UserDeleteSteps extends BaseTest {
     result = mockMvc.perform(delete(Constants.USERS_URI)).andReturn();
   }
 
-  @Then("the correct user is deleted")
-  public void theCorrectUserIsDeleted() {
+  @Then("the correct response is returned from the delete user endpoint")
+  public void theCorrectResponseIsReturnedFromTheDeleteUserEndpoint() {
   }
 
-  @And("the correct response is returned from the delete user endpoint")
-  public void theCorrectResponseIsReturnedFromTheDeleteUserEndpoint() {
+  @And("the correct user is deleted")
+  public void theCorrectUserIsDeleted() {
   }
 
   @Then("the correct failure response is returned from the delete user endpoint")
