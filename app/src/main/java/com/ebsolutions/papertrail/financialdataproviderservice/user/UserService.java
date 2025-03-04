@@ -48,7 +48,8 @@ public class UserService {
 
   public User update(User user) {
     try {
-
+      System.out.println("HERE!");
+      System.out.println(user);
       if (user.getUserId() == 0) {
         List<String> existingUserErrorMessages =
             Collections.singletonList("User Id must be populated and non-zero");
@@ -56,8 +57,11 @@ public class UserService {
         throw new DataConstraintException(existingUserErrorMessages);
       }
 
-      boolean doesUserExist = userRepository.findById((long) user.getUserId()).isEmpty();
-
+      System.out.println("HERE!");
+      System.out.println(user);
+      boolean doesUserExist = userRepository.findById((long) user.getUserId()).isPresent();
+      System.out.println("HERE!");
+      System.out.println(doesUserExist);
       if (!doesUserExist) {
         List<String> existingUserErrorMessages =
             Collections.singletonList(
@@ -72,7 +76,7 @@ public class UserService {
       throw dataConstraintException;
     } catch (Exception exception) {
       log.error("Error saving", exception);
-      throw new DataProcessingException("Something went wrong while saving all users");
+      throw new DataProcessingException("Something went wrong while saving the user");
     }
   }
 }
