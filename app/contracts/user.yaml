@@ -34,10 +34,14 @@ paths:
               schema:
                 type: array
                 $ref: "#/components/schemas/User"
-  /users/{userId}:
-    parameters:
-      - $ref: "#/components/parameters/UserId"
     put:
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
       responses:
         200:
           description: OK

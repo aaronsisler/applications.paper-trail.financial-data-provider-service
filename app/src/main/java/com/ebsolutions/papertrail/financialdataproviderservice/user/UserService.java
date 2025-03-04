@@ -67,7 +67,6 @@ public class UserService {
 
       return userRepository.save(user);
     } catch (DataConstraintException dataConstraintException) {
-      System.out.println(dataConstraintException.getMessages());
       throw dataConstraintException;
     } catch (Exception exception) {
       log.error("Error saving", exception);

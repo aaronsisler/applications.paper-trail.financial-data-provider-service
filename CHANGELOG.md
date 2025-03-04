@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.6.0] User: Update
+
+### Added
+
+- User PUT / UPDATE with full test suite
+
 ## [0.5.0] User: Create All
 
 ### Added
