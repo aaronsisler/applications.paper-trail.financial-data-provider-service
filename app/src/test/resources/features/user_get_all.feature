@@ -14,6 +14,6 @@ Feature: User: Get All
 
   Scenario: Get All Users endpoint is not able to connect to the database
     Given application is up
-    And the connection to the database fails
+    And the connection to the database fails for the get all users endpoint
     When the get all users endpoint is invoked
     Then the correct failure response is returned from the get all users endpoint

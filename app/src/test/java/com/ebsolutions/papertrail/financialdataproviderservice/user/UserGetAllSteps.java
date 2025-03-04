@@ -55,8 +55,8 @@ public class UserGetAllSteps extends BaseTest {
     when(userRepository.findAll()).thenReturn(Collections.emptyList());
   }
 
-  @And("the connection to the database fails")
-  public void theConnectionToTheDatabaseFails() {
+  @And("the connection to the database fails for the get all users endpoint")
+  public void theConnectionToTheDatabaseFailsForTheGetAllUsersEndpoint() {
     DataProcessingException dataProcessingException = new DataProcessingException();
 
     when(userRepository.findAll()).thenThrow(dataProcessingException);
