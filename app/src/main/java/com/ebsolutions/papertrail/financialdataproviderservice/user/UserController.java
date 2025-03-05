@@ -12,7 +12,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -64,5 +66,20 @@ public class UserController {
           })})
   public ResponseEntity<?> put(@RequestBody @Valid User user) {
     return ResponseEntity.ok().body(userService.update(user));
+  }
+
+  @Operation(summary = "Update user")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = User.class))
+          })})
+  @DeleteMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> delete(@PathVariable @Valid Integer userId) {
+
+    userService.delete(userId);
+
+    return ResponseEntity.noContent().build();
   }
 }

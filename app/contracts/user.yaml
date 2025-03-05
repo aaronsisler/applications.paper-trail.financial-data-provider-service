@@ -17,6 +17,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/User"
+        204:
+          description: No content
     post:
       operationId: createUsers
       requestBody:
@@ -34,6 +36,18 @@ paths:
               schema:
                 type: array
                 $ref: "#/components/schemas/User"
+        4XX:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
     put:
       operationId: updateUser
       requestBody:
@@ -49,8 +63,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
-        '5XX':
+        4XX:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+        5XX:
           description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+  /users/{userId}:
+    delete:
+      operationId: deleteUser
+      responses:
+        204:
+          description: No content
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
 components:
   schemas:
     User:

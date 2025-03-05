@@ -73,4 +73,15 @@ public class UserService {
       throw new DataProcessingException("Something went wrong while saving the user");
     }
   }
+
+  public void delete(Integer userId) {
+    try {
+      userRepository.deleteById(userId.longValue());
+    } catch (DataConstraintException dataConstraintException) {
+      throw dataConstraintException;
+    } catch (Exception exception) {
+      log.error("Error saving", exception);
+      throw new DataProcessingException("Something went wrong while deleting the user");
+    }
+  }
 }

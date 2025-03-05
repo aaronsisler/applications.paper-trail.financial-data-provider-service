@@ -18,10 +18,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Slf4j
 @ControllerAdvice
 public class ControllerExceptionHandler {
+  /**
+   * @param constraintViolationException caught in controller as thrown from service
+   * @return custom response with descriptive error messages
+   */
   @ApiResponses(value = {
       @ApiResponse(responseCode = "400",
           content = {
@@ -30,7 +35,7 @@ public class ControllerExceptionHandler {
           }),
   })
   @ExceptionHandler(ConstraintViolationException.class)
-  public ResponseEntity<ErrorResponse> handleMissingFields(
+  public ResponseEntity<ErrorResponse> handle(
       ConstraintViolationException constraintViolationException) {
     Set<ConstraintViolation<?>> violations = constraintViolationException.getConstraintViolations();
 
@@ -62,6 +67,37 @@ public class ControllerExceptionHandler {
         );
   }
 
+  /**
+   * This will be called when a path param does not match the type in method name
+   *
+   * @param methodArgumentTypeMismatchException caught in controller as thrown from service
+   * @return custom response with descriptive error messages
+   */
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "400",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorResponse.class))
+          }),
+  })
+  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+  public ResponseEntity<ErrorResponse> handle(
+      MethodArgumentTypeMismatchException methodArgumentTypeMismatchException) {
+
+    return ResponseEntity.badRequest()
+        .body(
+            ErrorResponse.builder()
+                .messages(Collections.singletonList(
+                    "Invalid parameter type: " + methodArgumentTypeMismatchException.getName()
+                ))
+                .build()
+        );
+  }
+
+  /**
+   * @param methodArgumentNotValidException caught in controller as thrown from service
+   * @return custom response with descriptive error messages
+   */
   @ApiResponses(value = {
       @ApiResponse(responseCode = "400",
           content = {
@@ -70,7 +106,7 @@ public class ControllerExceptionHandler {
           }),
   })
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorResponse> handleMissingFields(
+  public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
       MethodArgumentNotValidException methodArgumentNotValidException) {
 
     List<String> messages;
@@ -91,6 +127,12 @@ public class ControllerExceptionHandler {
         );
   }
 
+  /**
+   * This will be called when an input to a service does not pass business validations
+   *
+   * @param dataConstraintException caught in controller as thrown from service
+   * @return custom response with descriptive error messages
+   */
   @ExceptionHandler(DataConstraintException.class)
   @ApiResponses(value = {
       @ApiResponse(responseCode = "400",
@@ -99,7 +141,7 @@ public class ControllerExceptionHandler {
                   schema = @Schema(implementation = ErrorResponse.class))
           }),
   })
-  public ResponseEntity<ErrorResponse> handleDataConstraints(
+  public ResponseEntity<ErrorResponse> handleDataConstraintException(
       DataConstraintException dataConstraintException) {
 
     return ResponseEntity.badRequest()
@@ -110,6 +152,10 @@ public class ControllerExceptionHandler {
         );
   }
 
+  /**
+   * @param dataProcessingException caught in controller as thrown from service
+   * @return custom response with descriptive error messages
+   */
   @ExceptionHandler(DataProcessingException.class)
   @ApiResponses(value = {
       @ApiResponse(responseCode = "500",
@@ -118,7 +164,7 @@ public class ControllerExceptionHandler {
                   schema = @Schema(implementation = ErrorResponse.class))
           }),
   })
-  public ResponseEntity<?> handleDataProcessingServerError(
+  public ResponseEntity<?> handleDataProcessingException(
       DataProcessingException dataProcessingException) {
     return ResponseEntity.internalServerError()
         .body(ErrorResponse.builder()
@@ -126,6 +172,10 @@ public class ControllerExceptionHandler {
             .build());
   }
 
+  /**
+   * @param exception caught in controller as thrown from service
+   * @return custom response with descriptive error messages
+   */
   @ExceptionHandler(Exception.class)
   public ResponseEntity<?> handleException(
       Exception exception) {
