@@ -9,6 +9,7 @@ import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -23,7 +24,8 @@ import org.springframework.test.web.servlet.MvcResult;
 @RequiredArgsConstructor
 public class UserDeleteSteps extends BaseTest {
   protected final UserRepository userRepository;
-  private final Integer userId = 1;
+  private final Integer validUserId = 1;
+  private String userUrl;
   private MvcResult result;
 
   @And("the user id provided exists in the database")
@@ -36,6 +38,17 @@ public class UserDeleteSteps extends BaseTest {
     // Nothing to do here
   }
 
+  @And("the user id provided in the url is the format")
+  public void theUserIdProvidedInTheUrlIsTheFormat() {
+    userUrl = Constants.USERS_URI + "/" + validUserId;
+  }
+
+  @And("the user id provided in the url is the incorrect format")
+  public void theUserIdProvidedInTheUrlIsTheIncorrectFormat() {
+    String invalidUserId = "abc";
+    userUrl = Constants.USERS_URI + "/" + invalidUserId;
+  }
+
   @And("the connection to the database fails for the delete user endpoint")
   public void theConnectionToTheDatabaseFailsForTheDeleteUserEndpoint() {
     DataProcessingException dataProcessingException = new DataProcessingException();
@@ -46,7 +59,7 @@ public class UserDeleteSteps extends BaseTest {
   @When("the delete user endpoint is invoked")
   public void theDeleteUserEndpointIsInvoked() throws Exception {
     result = mockMvc
-        .perform(delete(Constants.USERS_URI + "/" + userId))
+        .perform(delete(userUrl))
         .andReturn();
   }
 
@@ -58,21 +71,21 @@ public class UserDeleteSteps extends BaseTest {
 
   @And("the correct user is deleted")
   public void theCorrectUserIsDeleted() {
-    Mockito.verify(userRepository).deleteById(userId.longValue());
+    Mockito.verify(userRepository).deleteById(validUserId.longValue());
   }
 
   @Then("the correct failure response is returned from the delete user endpoint")
-  public void theCorrectFailureResponseIsReturnedFromTheDeleteUserEndpoint()
-      throws UnsupportedEncodingException, JsonProcessingException {
+  public void theCorrectFailureResponseIsReturnedFromTheDeleteUserEndpoint(
+      DataTable dataTable) throws UnsupportedEncodingException, JsonProcessingException {
+
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
-    Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(),
+    Assertions.assertEquals(Integer.parseInt(dataTable.column(0).getFirst()),
         mockHttpServletResponse.getStatus());
 
     String content = mockHttpServletResponse.getContentAsString();
 
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
-    Assertions.assertEquals("Something went wrong while deleting the user",
-        errorResponse.getMessages().getFirst());
+    Assertions.assertEquals(dataTable.column(1).getFirst(), errorResponse.getMessages().getFirst());
   }
 }
