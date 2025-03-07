@@ -101,7 +101,7 @@ public class UserGetAllSteps extends BaseTest {
     String content = mockHttpServletResponse.getContentAsString();
 
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
-    Assertions.assertEquals("Something went wrong while getting all users",
+    Assertions.assertEquals("Something went wrong while fetching all users",
         errorResponse.getMessages().getFirst());
   }
 }

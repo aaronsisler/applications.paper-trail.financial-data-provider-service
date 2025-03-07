@@ -44,6 +44,21 @@ public class UserController {
     return !users.isEmpty() ? ResponseEntity.ok(users) : ResponseEntity.noContent().build();
   }
 
+  @Operation(summary = "Get user")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = User.class))
+          })})
+  @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> get(@PathVariable @Valid Integer userId) {
+
+    User user = userService.get(userId);
+
+    return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
+  }
+
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(summary = "Create users")
   @ApiResponses(value = {
@@ -68,7 +83,7 @@ public class UserController {
     return ResponseEntity.ok().body(userService.update(user));
   }
 
-  @Operation(summary = "Update user")
+  @Operation(summary = "Delete user")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200",
           content = {
