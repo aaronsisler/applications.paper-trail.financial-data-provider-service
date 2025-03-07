@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.8.0] User: Get By Id
+
+### Added
+
+- User GET BY ID with full test suite
+
 ## [0.7.0] User: Delete
 
 ### Added
