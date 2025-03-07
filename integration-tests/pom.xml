@@ -8,14 +8,12 @@
         <version>0.8.0</version>
     </parent>
 
-    <artifactId>financial-data-provider-service</artifactId>
-    <version>${parent.version}</version>
-    <name>Financial Data Provider Service</name>
-    <packaging>jar</packaging>
+    <artifactId>financial-data-provider-service-integration-tests</artifactId>
+    <version>0.8.0</version>
+    <name>Financial Data Provider Service Integration Tests</name>
+    <!--    <packaging>jar</packaging>-->
 
     <properties>
-        <start-class>com.ebsolutions.papertrail.financialdataproviderservice.Application</start-class>
-
         <!-- Versions: Dependencies -->
         <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
         <postgresql-driver.version>42.7.5</postgresql-driver.version>
@@ -158,51 +156,58 @@
             <version>${h2.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.ebsolutions.papertrail</groupId>
+            <artifactId>financial-data-provider-service</artifactId>
+            <version>${parent.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <!-- Used to compile the sources of your project -->
             <!-- Version: Parent POM PIM -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-compiler-plugin</artifactId>-->
+            <!--            </plugin>-->
             <!-- Gives the actuator/info API build information -->
             <!-- Version: Parent POM PIM -->
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.springframework.boot</groupId>-->
+            <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+            <!--            </plugin>-->
             <!-- Maintains strict Code Styles -->
             <!-- Version: Parent POM PIM -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-checkstyle-plugin</artifactId>-->
+            <!--            </plugin>-->
             <!-- Generates Java classes from OpenAPI contracts -->
             <!-- Version: Parent POM PIM -->
-            <plugin>
-                <groupId>org.openapitools</groupId>
-                <artifactId>openapi-generator-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>models-common</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${pom.basedir}/contracts/common.yaml</inputSpec>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.openapitools</groupId>-->
+            <!--                <artifactId>openapi-generator-maven-plugin</artifactId>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>models-common</id>-->
+            <!--                        <goals>-->
+            <!--                            <goal>generate</goal>-->
+            <!--                        </goals>-->
+            <!--                        <configuration>-->
+            <!--                            <inputSpec>${pom.basedir}/contracts/common.yaml</inputSpec>-->
+            <!--                        </configuration>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
             <!-- Used for running JUnit tests that link to Cucumber feature files -->
             <!-- Version: Parent POM PIM -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-surefire-plugin</artifactId>-->
+            <!--            </plugin>-->
             <!-- Used for running the Cucumber feature tests -->
             <!-- Version: Parent POM PIM -->
             <plugin>
@@ -215,12 +220,8 @@
                             <goal>integration-test</goal>
                         </goals>
                         <configuration>
-                            <systemPropertyVariables>
-                                <!-- This triggers the correct config and keeps the H2 DB from spinning up -->
-                                <spring.profiles.active>mocked</spring.profiles.active>
-                            </systemPropertyVariables>
                             <includes>
-                                <include>**/MockedIntegrationFeatures.java</include>
+                                <include>**/IntegrationFeatures.java</include>
                             </includes>
                         </configuration>
                     </execution>

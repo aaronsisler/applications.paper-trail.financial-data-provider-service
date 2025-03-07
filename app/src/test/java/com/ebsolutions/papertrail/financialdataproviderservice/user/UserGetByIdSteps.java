@@ -15,6 +15,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.UnsupportedEncodingException;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class UserGetByIdSteps extends BaseTest {
             .lastName("user")
             .build();
 
-    when(userRepository.getReferenceById((long) userId)).thenReturn(expectedUser);
+    when(userRepository.findById((long) userId)).thenReturn(Optional.ofNullable(expectedUser));
   }
 
   @And("no user for the given id exists in the database")
@@ -63,7 +64,7 @@ public class UserGetByIdSteps extends BaseTest {
   public void theConnectionToTheDatabaseFailsForTheGetUserByIdEndpoint() {
     DataProcessingException dataProcessingException = new DataProcessingException();
 
-    doThrow(dataProcessingException).when(userRepository).getReferenceById(any());
+    doThrow(dataProcessingException).when(userRepository).findById(any());
   }
 
   @When("the get user by id endpoint is invoked")
