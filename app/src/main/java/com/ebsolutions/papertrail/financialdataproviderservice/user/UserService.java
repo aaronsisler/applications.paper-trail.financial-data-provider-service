@@ -18,7 +18,17 @@ public class UserService {
     try {
       return userRepository.findAll();
     } catch (Exception exception) {
-      throw new DataProcessingException("Something went wrong while getting all users");
+      log.error("Error getting all", exception);
+      throw new DataProcessingException("Something went wrong while fetching all users");
+    }
+  }
+
+  public User get(Integer userId) {
+    try {
+      return userRepository.getReferenceById(userId.longValue());
+    } catch (Exception exception) {
+      log.error("Error getting by id", exception);
+      throw new DataProcessingException("Something went wrong while fetching the user");
     }
   }
 
@@ -42,6 +52,7 @@ public class UserService {
     } catch (DataConstraintException dataConstraintException) {
       throw dataConstraintException;
     } catch (Exception exception) {
+      log.error("Error creating", exception);
       throw new DataProcessingException("Something went wrong while saving all users");
     }
   }
@@ -80,7 +91,7 @@ public class UserService {
     } catch (DataConstraintException dataConstraintException) {
       throw dataConstraintException;
     } catch (Exception exception) {
-      log.error("Error saving", exception);
+      log.error("Error deleting", exception);
       throw new DataProcessingException("Something went wrong while deleting the user");
     }
   }

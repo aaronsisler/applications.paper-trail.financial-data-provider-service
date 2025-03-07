@@ -38,8 +38,8 @@ public class UserDeleteSteps extends BaseTest {
     // Nothing to do here
   }
 
-  @And("the user id provided in the url is the format")
-  public void theUserIdProvidedInTheUrlIsTheFormat() {
+  @And("the user id provided in the url is the correct format")
+  public void theUserIdProvidedInTheUrlIsTheCorrectFormat() {
     userUrl = Constants.USERS_URI + "/" + validUserId;
   }
 
