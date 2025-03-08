@@ -31,6 +31,7 @@ public class UserSteps extends BaseStep {
   private User expectedUserOne;
   private User expectedUserTwo;
   private int resultUserId;
+  private String userByIdUrl;
 
   @Before
   public void setup() {
@@ -72,26 +73,12 @@ public class UserSteps extends BaseStep {
 
   @When("the create all users endpoint is invoked")
   public void theCreateAllUsersEndpointIsInvoked() {
-    response = restClient
-        .post()
-        .uri(TestConstants.USERS_URI)
-        .accept(MediaType.APPLICATION_JSON)
-        .body(requestContent)
-        .contentType(MediaType.APPLICATION_JSON)
-        .retrieve();
+    response = createUserThroughApi();
   }
 
   @Then("the newly created users are returned from the create all users endpoint")
   public void theNewlyCreatedUsersAreReturnedFromTheCreateAllUsersEndpoint()
       throws UnsupportedEncodingException, JsonProcessingException {
-    response
-        .onStatus(HttpStatusCode::is4xxClientError,
-            (request, response)
-                -> Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()))
-        .onStatus(HttpStatusCode::is5xxServerError,
-            (request, response)
-                -> Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()));
-
     List<User> users = response.body(
         new ParameterizedTypeReference<ArrayList<User>>() {
         });
@@ -117,14 +104,6 @@ public class UserSteps extends BaseStep {
   @Then("the correct users are returned")
   public void theCorrectUsersAreReturned()
       throws UnsupportedEncodingException, JsonProcessingException {
-    response
-        .onStatus(HttpStatusCode::is4xxClientError,
-            (request, response)
-                -> Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()))
-        .onStatus(HttpStatusCode::is5xxServerError,
-            (request, response)
-                -> Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()));
-
     List<User> users = response.body(
         new ParameterizedTypeReference<ArrayList<User>>() {
         });
@@ -141,35 +120,44 @@ public class UserSteps extends BaseStep {
 
   @And("the user id provided exists in the database")
   public void theUserIdProvidedExistsInTheDatabase() throws Exception {
-    User inputUserOne = User.builder()
+    User inputUser = User.builder()
         .username("'get_user_by_id_and_delete_user'")
         .firstName("N/A")
         .lastName("N/A")
         .build();
 
     requestContent =
-        objectMapper.writeValueAsString(Collections.singletonList(inputUserOne));
+        objectMapper.writeValueAsString(Collections.singletonList(inputUser));
 
-    //    result = mockMvc.perform(post(TestConstants.USERS_URI)
-    //            .contentType(MediaType.APPLICATION_JSON)
-    //            .content(requestContent)
-    //            .accept(MediaType.APPLICATION_JSON))
-    //        .andReturn();
+    response = createUserThroughApi();
 
-    MockHttpServletResponse mockHttpServletResponse = result.getResponse();
+    List<User> users = response.body(
+        new ParameterizedTypeReference<ArrayList<User>>() {
+        });
 
-    Assertions.assertEquals(HttpStatus.OK.value(), mockHttpServletResponse.getStatus());
+    Assertions.assertNotNull(users);
+    Assertions.assertEquals(1, users.size());
 
-    String content = mockHttpServletResponse.getContentAsString();
-    List<User> users = objectMapper.readerForListOf(User.class).readValue(content);
+    User createdUser = users.getFirst();
+    UserTestUtil.assertExpectedUserAgainstCreatedUser(inputUser, createdUser);
 
-    User user = users.getFirst();
-    resultUserId = user.getUserId();
+    Assertions.assertNotNull(createdUser);
+    Assertions.assertNotNull(createdUser.getUserId());
+
+    resultUserId = createdUser.getUserId();
+    userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
+
+    response = getUserThroughApi();
+
+    User retrievedCreatedUser = response.body(User.class);
+
+    Assertions.assertNotNull(retrievedCreatedUser);
+
+    UserTestUtil.assertExpectedUserAgainstActualUser(createdUser, retrievedCreatedUser);
   }
 
   @And("the user id provided in the url is the correct format")
   public void theUserIdProvidedInTheUrlIsTheCorrectFormat() {
-    //    userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
   }
 
   @When("the delete user endpoint is invoked")
@@ -193,6 +181,32 @@ public class UserSteps extends BaseStep {
 
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
     Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), mockHttpServletResponse.getStatus());
+  }
 
+  private RestClient.ResponseSpec createUserThroughApi() {
+    return checkStatusCodes(restClient
+        .post()
+        .uri(TestConstants.USERS_URI)
+        .accept(MediaType.APPLICATION_JSON)
+        .body(requestContent)
+        .contentType(MediaType.APPLICATION_JSON)
+        .retrieve());
+  }
+
+  private RestClient.ResponseSpec getUserThroughApi() {
+    return checkStatusCodes(restClient
+        .get()
+        .uri(userByIdUrl)
+        .retrieve());
+  }
+
+  private RestClient.ResponseSpec checkStatusCodes(RestClient.ResponseSpec response) {
+    return response
+        .onStatus(HttpStatusCode::is4xxClientError,
+            (request, retResponse)
+                -> Assertions.assertEquals(HttpStatus.OK, retResponse.getStatusCode()))
+        .onStatus(HttpStatusCode::is5xxServerError,
+            (request, retResponse)
+                -> Assertions.assertEquals(HttpStatus.OK, retResponse.getStatusCode()));
   }
 }

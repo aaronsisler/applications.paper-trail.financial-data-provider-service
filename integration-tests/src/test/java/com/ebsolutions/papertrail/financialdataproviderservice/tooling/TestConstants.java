@@ -1,7 +1,7 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.tooling;
 
 public class TestConstants {
-  public static final int APPLICATION_START_TIME_WAIT_PERIOD_IN_MILLISECONDS = 10000;
+  public static final int APPLICATION_START_TIME_WAIT_PERIOD_IN_MILLISECONDS = 30000;
   public static final String EMPTY_STRING_ENUM = "EMPTY_STRING";
   public static final String EMPTY_STRING = "";
 

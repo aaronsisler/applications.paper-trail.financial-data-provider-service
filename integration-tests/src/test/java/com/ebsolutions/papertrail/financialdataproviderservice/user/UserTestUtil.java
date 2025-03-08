@@ -12,6 +12,12 @@ public class UserTestUtil {
     Assertions.assertEquals(expectedUser.getLastName(), actualUser.getLastName());
   }
 
+  protected static void assertExpectedUserAgainstCreatedUser(User expectedUser, User actualUser) {
+    Assertions.assertEquals(expectedUser.getUsername(), actualUser.getUsername());
+    Assertions.assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
+    Assertions.assertEquals(expectedUser.getLastName(), actualUser.getLastName());
+  }
+
   protected static String isEmptyString(String value) {
     return TestConstants.EMPTY_STRING_ENUM.equals(value) ? TestConstants.EMPTY_STRING : value;
   }

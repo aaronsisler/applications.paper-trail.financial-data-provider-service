@@ -30,6 +30,7 @@
 
         <!-- Versions: Plugins -->
         <checkstyle-maven-plugin.version>3.5.0</checkstyle-maven-plugin.version>
+        <exec-maven-plugin.version>3.5.0</exec-maven-plugin.version>
         <maven-failsafe-plugin.version>3.5.2</maven-failsafe-plugin.version>
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <openapi-generator-maven-plugin.version>7.11.0</openapi-generator-maven-plugin.version>
@@ -165,6 +166,14 @@
                     <configuration>
                         <testFailureIgnore>true</testFailureIgnore>
                     </configuration>
+                </plugin>
+                <!-- Used to execute commands on the command line -->
+                <!-- For this case, it spins up a clean docker environment for running tests-->
+                <!-- Version: Explicit -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${exec-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
