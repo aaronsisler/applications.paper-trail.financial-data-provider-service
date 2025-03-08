@@ -4,11 +4,11 @@ import com.ebsolutions.papertrail.financialdataproviderservice.BaseStep;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.User;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,6 +24,8 @@ import org.springframework.web.client.RestClient;
 
 @Slf4j
 public class UserSteps extends BaseStep {
+  private final List<Integer> newlyCreateUserIds = new ArrayList<>();
+
   private String requestContent;
   private MvcResult result;
   private RestClient.ResponseSpec response;
@@ -31,19 +33,18 @@ public class UserSteps extends BaseStep {
   private User expectedUserTwo;
   private int resultUserId;
   private String userByIdUrl;
+  private User updatedUser;
 
   @Before
   public void setup() {
     expectedUserOne =
         User.builder()
-            .userId(1)
             .username("first_user")
             .firstName("first")
             .lastName("user")
             .build();
 
     expectedUserTwo = User.builder()
-        .userId(2)
         .username("second_user")
         .firstName("second")
         .lastName("user")
@@ -53,21 +54,8 @@ public class UserSteps extends BaseStep {
   @And("two valid users are part of the request body for the create all users endpoint")
   public void twoValidUsersArePartOfTheRequestBodyForTheCreateAllUsersEndpoint()
       throws JsonProcessingException {
-    User inputUserOne = User.builder()
-        .username("first_user")
-        .firstName("first")
-        .lastName("user")
-        .build();
-
-    User inputUserTwo = User.builder()
-        .username("second_user")
-        .firstName("second")
-        .lastName("user")
-        .build();
-
-
     requestContent =
-        objectMapper.writeValueAsString(Arrays.asList(inputUserOne, inputUserTwo));
+        objectMapper.writeValueAsString(Arrays.asList(expectedUserOne, expectedUserTwo));
   }
 
   @When("the create all users endpoint is invoked")
@@ -76,8 +64,7 @@ public class UserSteps extends BaseStep {
   }
 
   @Then("the newly created users are returned from the create all users endpoint")
-  public void theNewlyCreatedUsersAreReturnedFromTheCreateAllUsersEndpoint()
-      throws UnsupportedEncodingException, JsonProcessingException {
+  public void theNewlyCreatedUsersAreReturnedFromTheCreateAllUsersEndpoint() {
     List<User> users = response.body(
         new ParameterizedTypeReference<ArrayList<User>>() {
         });
@@ -86,43 +73,46 @@ public class UserSteps extends BaseStep {
     Assertions.assertEquals(2, users.size());
 
     User userOne = users.getFirst();
-    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserOne, userOne);
+    UserTestUtil.assertExpectedUserAgainstCreatedUser(expectedUserOne, userOne);
+    newlyCreateUserIds.add(userOne.getUserId());
 
     User userTwo = users.getLast();
-    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserTwo, userTwo);
+    UserTestUtil.assertExpectedUserAgainstCreatedUser(expectedUserTwo, userTwo);
+    newlyCreateUserIds.add(userTwo.getUserId());
   }
 
   @When("the get all users endpoint is invoked")
-  public void theGetAllUsersEndpointIsInvoked() throws Exception {
+  public void theGetAllUsersEndpointIsInvoked() {
     response = restClient
         .get()
         .uri(TestConstants.USERS_URI)
         .retrieve();
   }
 
-  @Then("the correct users are returned")
-  public void theCorrectUsersAreReturned()
-      throws UnsupportedEncodingException, JsonProcessingException {
+  @Then("the correct users are returned from the get all users endpoint")
+  public void theCorrectUsersAreReturnedFromTheGetAllUsersEndpoint() {
     List<User> users = response.body(
         new ParameterizedTypeReference<ArrayList<User>>() {
         });
 
     Assertions.assertNotNull(users);
-    Assertions.assertEquals(2, users.size());
+    List<User> createdUsers =
+        users.stream().filter(user -> newlyCreateUserIds.contains(user.getUserId())).toList();
+    Assertions.assertEquals(2, createdUsers.size());
 
-    User userOne = users.getFirst();
-    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserOne, userOne);
+    User userOne = createdUsers.getFirst();
+    UserTestUtil.assertExpectedUserAgainstCreatedUser(expectedUserOne, userOne);
 
-    User userTwo = users.getLast();
-    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserTwo, userTwo);
+    User userTwo = createdUsers.getLast();
+    UserTestUtil.assertExpectedUserAgainstCreatedUser(expectedUserTwo, userTwo);
   }
 
   @And("the user id provided exists in the database")
-  public void theUserIdProvidedExistsInTheDatabase() throws Exception {
+  public void theUserIdProvidedExistsInTheDatabase(DataTable dataTable) throws Exception {
     User inputUser = User.builder()
-        .username("'get_user_by_id_and_delete_user'")
-        .firstName("N/A")
-        .lastName("N/A")
+        .username(UserTestUtil.isEmptyString(dataTable.column(0).getFirst()))
+        .firstName(UserTestUtil.isEmptyString(dataTable.column(1).getFirst()))
+        .lastName(UserTestUtil.isEmptyString(dataTable.column(2).getFirst()))
         .build();
 
     requestContent =
@@ -155,6 +145,25 @@ public class UserSteps extends BaseStep {
     UserTestUtil.assertExpectedUserAgainstActualUser(createdUser, retrievedCreatedUser);
   }
 
+  @And("an update for the user is valid and part of the request body for the update user endpoint")
+  public void anUpdateForTheUserIsValidAndPartOfTheRequestBodyForTheUpdateUserEndpoint()
+      throws JsonProcessingException {
+    updatedUser = User.builder()
+        .userId(resultUserId)
+        .username("updated_username")
+        .firstName("updated_firstName")
+        .lastName("updated_lastName")
+        .build();
+
+    requestContent =
+        objectMapper.writeValueAsString(updatedUser);
+  }
+
+  @When("the update user endpoint is invoked")
+  public void theUpdateUserEndpointIsInvoked() {
+    response = updateUserThroughApi();
+  }
+
   @When("the delete user endpoint is invoked")
   public void theDeleteUserEndpointIsInvoked() throws Exception {
     response = deleteUserThroughApi();
@@ -172,9 +181,37 @@ public class UserSteps extends BaseStep {
     checkForNoContentStatusCode(response);
   }
 
+  @Then("the updated user is returned from the update user endpoint")
+  public void theUpdatedUserIsReturnedFromTheUpdateUserEndpoint() {
+    User returnedUpdatedUser = response.body(User.class);
+
+    Assertions.assertNotNull(returnedUpdatedUser);
+
+    UserTestUtil.assertExpectedUserAgainstActualUser(updatedUser, returnedUpdatedUser);
+  }
+
+  @And("the updated user is correct in the database")
+  public void theUpdatedUserIsCorrectInTheDatabase() {
+    User retrievedUpdatedUser = response.body(User.class);
+
+    Assertions.assertNotNull(retrievedUpdatedUser);
+
+    UserTestUtil.assertExpectedUserAgainstActualUser(updatedUser, retrievedUpdatedUser);
+  }
+
   private RestClient.ResponseSpec createUserThroughApi() {
     return checkForErrorStatusCodes(restClient
         .post()
+        .uri(TestConstants.USERS_URI)
+        .accept(MediaType.APPLICATION_JSON)
+        .body(requestContent)
+        .contentType(MediaType.APPLICATION_JSON)
+        .retrieve());
+  }
+
+  private RestClient.ResponseSpec updateUserThroughApi() {
+    return checkForErrorStatusCodes(restClient
+        .put()
         .uri(TestConstants.USERS_URI)
         .accept(MediaType.APPLICATION_JSON)
         .body(requestContent)
