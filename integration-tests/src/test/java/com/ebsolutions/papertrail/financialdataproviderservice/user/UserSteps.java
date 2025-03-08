@@ -19,7 +19,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.client.RestClient;
 
@@ -156,35 +155,25 @@ public class UserSteps extends BaseStep {
     UserTestUtil.assertExpectedUserAgainstActualUser(createdUser, retrievedCreatedUser);
   }
 
-  @And("the user id provided in the url is the correct format")
-  public void theUserIdProvidedInTheUrlIsTheCorrectFormat() {
-  }
-
   @When("the delete user endpoint is invoked")
   public void theDeleteUserEndpointIsInvoked() throws Exception {
-    //    result = mockMvc
-    //        .perform(delete(userByIdUrl))
-    //        .andReturn();
+    response = deleteUserThroughApi();
   }
 
   @Then("the correct response is returned from the delete user endpoint")
   public void theCorrectResponseIsReturnedFromTheDeleteUserEndpoint() {
-    MockHttpServletResponse mockHttpServletResponse = result.getResponse();
-    Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), mockHttpServletResponse.getStatus());
+    checkForNoContentStatusCode(response);
   }
 
   @And("the correct user is deleted")
   public void theCorrectUserIsDeleted() throws Exception {
-    //    result = mockMvc
-    //        .perform(get(userByIdUrl))
-    //        .andReturn();
+    response = getUserThroughApi();
 
-    MockHttpServletResponse mockHttpServletResponse = result.getResponse();
-    Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), mockHttpServletResponse.getStatus());
+    checkForNoContentStatusCode(response);
   }
 
   private RestClient.ResponseSpec createUserThroughApi() {
-    return checkStatusCodes(restClient
+    return checkForErrorStatusCodes(restClient
         .post()
         .uri(TestConstants.USERS_URI)
         .accept(MediaType.APPLICATION_JSON)
@@ -194,13 +183,28 @@ public class UserSteps extends BaseStep {
   }
 
   private RestClient.ResponseSpec getUserThroughApi() {
-    return checkStatusCodes(restClient
+    return checkForErrorStatusCodes(restClient
         .get()
         .uri(userByIdUrl)
         .retrieve());
   }
 
-  private RestClient.ResponseSpec checkStatusCodes(RestClient.ResponseSpec response) {
+  private RestClient.ResponseSpec deleteUserThroughApi() {
+    return checkForErrorStatusCodes(restClient
+        .delete()
+        .uri(userByIdUrl)
+        .retrieve());
+  }
+
+
+  private void checkForNoContentStatusCode(RestClient.ResponseSpec response) {
+    response
+        .onStatus(HttpStatusCode::is2xxSuccessful,
+            (request, retResponse)
+                -> Assertions.assertEquals(HttpStatus.NO_CONTENT, retResponse.getStatusCode()));
+  }
+
+  private RestClient.ResponseSpec checkForErrorStatusCodes(RestClient.ResponseSpec response) {
     return response
         .onStatus(HttpStatusCode::is4xxClientError,
             (request, retResponse)
