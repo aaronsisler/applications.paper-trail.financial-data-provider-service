@@ -14,15 +14,12 @@
     <!--    <packaging>jar</packaging>-->
 
     <properties>
-        <!-- Versions: Dependencies -->
-        <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
-        <postgresql-driver.version>42.7.5</postgresql-driver.version>
-        <springdoc-openapi-starter-webmvc-ui.version>2.8.4</springdoc-openapi-starter-webmvc-ui.version>
-
         <!-- Versions: Testing Dependencies -->
         <cucumber-bom.version>7.20.1</cucumber-bom.version>
-        <h2.version>2.3.232</h2.version>
         <junit-bom.version>5.11.4</junit-bom.version>
+
+        <plugins.maven-surefire-plugin.version>3.3.1</plugins.maven-surefire-plugin.version>
+
     </properties>
 
     <dependencyManagement>
@@ -56,35 +53,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Exposes the actuator API health/info/etc. -->
-        <!-- Version: Spring Parent -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <!-- Used for validation annotations in Controller, etc. -->
-        <!-- Version: Spring Parent -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-
-        <!-- Brings the opinionated Hibernate and Spring libs -->
-        <!-- Version: Spring Parent -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-
-        <!-- Used for application driver connection to the Postgres database -->
-        <!-- Version: Explicit -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgresql-driver.version}</version>
-        </dependency>
-
         <!-- Used for POJO annotations within project -->
         <!-- Version: Spring Parent -->
         <dependency>
@@ -93,19 +61,24 @@
         </dependency>
 
         <!-- Used for Swagger UI and Open API annotations -->
-        <!-- Version: Explicit -->
+        <!-- Version: Parent POM -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
         </dependency>
 
         <!-- Used for the validation annotations -->
-        <!-- Version: Explicit -->
+        <!-- Version: Parent POM -->
         <dependency>
             <groupId>org.openapitools</groupId>
             <artifactId>jackson-databind-nullable</artifactId>
-            <version>${jackson-databind-nullable.version}</version>
+        </dependency>
+
+        <!-- Used for validation annotations in Controller, etc. -->
+        <!-- Version: Spring Parent -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
         <!-- Testing framework for starting Spring context and MockMVC -->
@@ -124,13 +97,19 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Testing linkage between Cucumber and Spring context -->
-        <!-- Version: Cucumber BOM -->
         <dependency>
-            <groupId>io.cucumber</groupId>
-            <artifactId>cucumber-spring</artifactId>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- Testing linkage between Cucumber and Spring context -->
+        <!-- Version: Cucumber BOM -->
+        <!--        <dependency>-->
+        <!--            <groupId>io.cucumber</groupId>-->
+        <!--            <artifactId>cucumber-spring</artifactId>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
 
         <!-- Testing linkage between Cucumber and Java -->
         <!-- Version: Cucumber BOM -->
@@ -147,86 +126,81 @@
             <artifactId>cucumber-junit-platform-engine</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- This is used to create an in-memory database used during testing -->
-        <!-- Version: Explicit -->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.ebsolutions.papertrail</groupId>
-            <artifactId>financial-data-provider-service</artifactId>
-            <version>${parent.version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
         <plugins>
             <!-- Used to compile the sources of your project -->
             <!-- Version: Parent POM PIM -->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-compiler-plugin</artifactId>-->
-            <!--            </plugin>-->
-            <!-- Gives the actuator/info API build information -->
-            <!-- Version: Parent POM PIM -->
-            <!--            <plugin>-->
-            <!--                <groupId>org.springframework.boot</groupId>-->
-            <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-            <!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
             <!-- Maintains strict Code Styles -->
-            <!-- Version: Parent POM PIM -->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-checkstyle-plugin</artifactId>-->
-            <!--            </plugin>-->
-            <!-- Generates Java classes from OpenAPI contracts -->
-            <!-- Version: Parent POM PIM -->
-            <!--            <plugin>-->
-            <!--                <groupId>org.openapitools</groupId>-->
-            <!--                <artifactId>openapi-generator-maven-plugin</artifactId>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>models-common</id>-->
-            <!--                        <goals>-->
-            <!--                            <goal>generate</goal>-->
-            <!--                        </goals>-->
-            <!--                        <configuration>-->
-            <!--                            <inputSpec>${pom.basedir}/contracts/common.yaml</inputSpec>-->
-            <!--                        </configuration>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
-            <!-- Used for running JUnit tests that link to Cucumber feature files -->
-            <!-- Version: Parent POM PIM -->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-surefire-plugin</artifactId>-->
-            <!--            </plugin>-->
-            <!-- Used for running the Cucumber feature tests -->
             <!-- Version: Parent POM PIM -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <!-- Generates Java classes from OpenAPI contracts -->
+            <!-- Version: Parent POM PIM -->
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>mocked-integration-tests</id>
+                        <id>models-common</id>
                         <goals>
-                            <goal>integration-test</goal>
+                            <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <includes>
-                                <include>**/IntegrationFeatures.java</include>
-                            </includes>
+                            <inputSpec>${project.parent.basedir}/contracts/common.yaml</inputSpec>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>models-actuator</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.parent.basedir}/contracts/actuator.yaml</inputSpec>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>models-user</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.parent.basedir}/contracts/user.yaml</inputSpec>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${plugins.maven-surefire-plugin.version}</version>
+            </plugin>
+            <!-- Used for running the Cucumber feature tests -->
+            <!-- Version: Parent POM PIM -->
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-failsafe-plugin</artifactId>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>mocked-integration-tests</id>-->
+            <!--                        <goals>-->
+            <!--                            <goal>integration-test</goal>-->
+            <!--                        </goals>-->
+            <!--                        <configuration>-->
+            <!--                            <includes>-->
+            <!--                                <include>**/IntegrationFeatures.java</include>-->
+            <!--                            </includes>-->
+            <!--                        </configuration>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 </project>

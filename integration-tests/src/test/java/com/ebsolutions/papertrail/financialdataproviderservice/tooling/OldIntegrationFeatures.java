@@ -22,5 +22,5 @@ import org.junit.platform.suite.api.Suite;
     @ConfigurationParameter(key = PLUGIN_PUBLISH_QUIET_PROPERTY_NAME, value = "true"),
     @ConfigurationParameter(key = JUNIT_PLATFORM_NAMING_STRATEGY_PROPERTY_NAME, value = "long")
 })
-public class IntegrationFeatures {
+public class OldIntegrationFeatures {
 }

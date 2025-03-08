@@ -1,5 +1,6 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.user;
 
+import com.ebsolutions.papertrail.financialdataproviderservice.model.User;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
 import org.junit.jupiter.api.Assertions;
 

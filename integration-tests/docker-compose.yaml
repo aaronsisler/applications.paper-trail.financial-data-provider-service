@@ -1,0 +1,24 @@
+services:
+  storage:
+    container_name: storage
+    image: postgres
+    hostname: localhost
+    #    ports:
+    #      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: paper_trail
+    volumes:
+      - ../storage/db-init-scripts:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+
+  app:
+    depends_on:
+      - storage
+    container_name: app
+    build: ../app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
