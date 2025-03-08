@@ -9,21 +9,28 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.client.RestClient;
 
+@Slf4j
 public class UserSteps extends BaseStep {
   private String requestContent;
   private MvcResult result;
+  private RestClient.ResponseSpec response;
   private User expectedUserOne;
   private User expectedUserTwo;
   private int resultUserId;
-  private String userByIdUrl;
 
   @Before
   public void setup() {
@@ -58,34 +65,39 @@ public class UserSteps extends BaseStep {
         .lastName("user")
         .build();
 
-    //    HealthCheck healthCheck = restClient
-    //        .get()
-    //        .uri(TestConstants.HEALTH_CHECK_URI)
-    //        .retrieve()
-    //        .body(HealthCheck.class);
 
     requestContent =
         objectMapper.writeValueAsString(Arrays.asList(inputUserOne, inputUserTwo));
   }
 
   @When("the create all users endpoint is invoked")
-  public void theCreateAllUsersEndpointIsInvoked() throws Exception {
-    //    result = mockMvc.perform(post(TestConstants.USERS_URI)
-    //            .contentType(MediaType.APPLICATION_JSON)
-    //            .content(requestContent)
-    //            .accept(MediaType.APPLICATION_JSON))
-    //        .andReturn();
+  public void theCreateAllUsersEndpointIsInvoked() {
+    response = restClient
+        .post()
+        .uri(TestConstants.USERS_URI)
+        .accept(MediaType.APPLICATION_JSON)
+        .body(requestContent)
+        .contentType(MediaType.APPLICATION_JSON)
+        .retrieve();
   }
 
   @Then("the newly created users are returned from the create all users endpoint")
   public void theNewlyCreatedUsersAreReturnedFromTheCreateAllUsersEndpoint()
       throws UnsupportedEncodingException, JsonProcessingException {
-    MockHttpServletResponse mockHttpServletResponse = result.getResponse();
+    response
+        .onStatus(HttpStatusCode::is4xxClientError,
+            (request, response)
+                -> Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()))
+        .onStatus(HttpStatusCode::is5xxServerError,
+            (request, response)
+                -> Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()));
 
-    Assertions.assertEquals(HttpStatus.OK.value(), mockHttpServletResponse.getStatus());
+    List<User> users = response.body(
+        new ParameterizedTypeReference<ArrayList<User>>() {
+        });
 
-    String content = mockHttpServletResponse.getContentAsString();
-    List<User> users = objectMapper.readerForListOf(User.class).readValue(content);
+    Assertions.assertNotNull(users);
+    Assertions.assertEquals(2, users.size());
 
     User userOne = users.getFirst();
     UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserOne, userOne);
@@ -96,18 +108,29 @@ public class UserSteps extends BaseStep {
 
   @When("the get all users endpoint is invoked")
   public void theGetAllUsersEndpointIsInvoked() throws Exception {
-    //    result = mockMvc.perform(get(TestConstants.USERS_URI)).andReturn();
+    response = restClient
+        .get()
+        .uri(TestConstants.USERS_URI)
+        .retrieve();
   }
 
   @Then("the correct users are returned")
   public void theCorrectUsersAreReturned()
       throws UnsupportedEncodingException, JsonProcessingException {
-    MockHttpServletResponse mockHttpServletResponse = result.getResponse();
+    response
+        .onStatus(HttpStatusCode::is4xxClientError,
+            (request, response)
+                -> Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()))
+        .onStatus(HttpStatusCode::is5xxServerError,
+            (request, response)
+                -> Assertions.assertEquals(HttpStatus.OK, response.getStatusCode()));
 
-    Assertions.assertEquals(HttpStatus.OK.value(), mockHttpServletResponse.getStatus());
+    List<User> users = response.body(
+        new ParameterizedTypeReference<ArrayList<User>>() {
+        });
 
-    String content = mockHttpServletResponse.getContentAsString();
-    List<User> users = objectMapper.readerForListOf(User.class).readValue(content);
+    Assertions.assertNotNull(users);
+    Assertions.assertEquals(2, users.size());
 
     User userOne = users.getFirst();
     UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserOne, userOne);
@@ -146,7 +169,7 @@ public class UserSteps extends BaseStep {
 
   @And("the user id provided in the url is the correct format")
   public void theUserIdProvidedInTheUrlIsTheCorrectFormat() {
-    userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
+    //    userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
   }
 
   @When("the delete user endpoint is invoked")

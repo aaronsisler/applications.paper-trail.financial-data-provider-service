@@ -7,6 +7,7 @@ servers:
 paths:
   /actuator/health:
     get:
+      operationId: actuatorHealthGET
       responses:
         "200":
           description: Health check from Spring Actuator
@@ -16,6 +17,7 @@ paths:
                 $ref: "#/components/schemas/HealthCheck"
   /actuator/info:
     get:
+      operationId: actuatorInfoGET
       responses:
         "200":
           description: Info check from Spring Actuator

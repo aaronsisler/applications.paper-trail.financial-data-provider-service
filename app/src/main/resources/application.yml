@@ -22,3 +22,15 @@ spring:
     password: root
 
 ---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://storage:5432/paper_trail
+    username: admin
+    password: root
+    jpa:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect

@@ -16,12 +16,17 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>app</module>
+        <!--        <module>app</module>-->
         <module>integration-tests</module>
     </modules>
 
     <properties>
         <java.version>21</java.version>
+
+        <!-- Versions: Dependencies -->
+        <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+        <postgresql-driver.version>42.7.5</postgresql-driver.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.8.4</springdoc-openapi-starter-webmvc-ui.version>
 
         <!-- Versions: Plugins -->
         <checkstyle-maven-plugin.version>3.5.0</checkstyle-maven-plugin.version>
@@ -29,7 +34,31 @@
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <openapi-generator-maven-plugin.version>7.11.0</openapi-generator-maven-plugin.version>
         <spring-boot-maven-plugin.version>3.4.2</spring-boot-maven-plugin.version>
+
+        <!-- Versions: Testing Dependencies -->
+        <cucumber-bom.version>7.20.1</cucumber-bom.version>
+        <h2.version>2.3.232</h2.version>
+        <junit-bom.version>5.11.4</junit-bom.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Used for Swagger UI and Open API annotations -->
+            <!-- Version: Explicit -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+            </dependency>
+            <!-- Used for the validation annotations -->
+            <!-- Version: Explicit -->
+            <dependency>
+                <groupId>org.openapitools</groupId>
+                <artifactId>jackson-databind-nullable</artifactId>
+                <version>${jackson-databind-nullable.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <pluginManagement>
