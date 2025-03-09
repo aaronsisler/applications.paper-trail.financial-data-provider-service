@@ -16,7 +16,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>app</module>
+        <!--        <module>app</module>-->
         <module>integration-tests</module>
     </modules>
 
@@ -68,29 +68,17 @@
     <build>
         <plugins>
             <plugin>
+                <!-- Allows for a single version to be declared in parent pom -->
+                <!-- Version: Parent POM PIM -->
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
-                <!--                <executions>-->
-                <!--                    &lt;!&ndash; enable flattening &ndash;&gt;-->
-                <!--                    <execution>-->
-                <!--                        <id>flatten</id>-->
-                <!--                        <phase>process-resources</phase>-->
-                <!--                        <goals>-->
-                <!--                            <goal>flatten</goal>-->
-                <!--                        </goals>-->
-                <!--                    </execution>-->
-                <!--                    &lt;!&ndash; ensure proper cleanup &ndash;&gt;-->
-                <!--                    <execution>-->
-                <!--                        <id>flatten-clean</id>-->
-                <!--                        <goals>-->
-                <!--                            <goal>clean</goal>-->
-                <!--                        </goals>-->
-                <!--                    </execution>-->
-                <!--                </executions>-->
             </plugin>
         </plugins>
+
         <pluginManagement>
             <plugins>
+                <!-- Allows for a single version to be declared in parent pom -->
+                <!-- Version: Explicit -->
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>flatten-maven-plugin</artifactId>
