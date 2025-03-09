@@ -19,5 +19,8 @@ jobs:
           distribution: "corretto"
           cache: "maven"
 
+      - name: Check things
+        run: mvn --version
+
       - name: Build Application
         run: mvn clean install --no-transfer-progress --batch-mode
