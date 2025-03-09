@@ -25,9 +25,6 @@ jobs:
       - name: Check Docker version
         run: docker --version
 
-      - name: Check Docker Compose version
-        run: docker-compose --version
-
       #      - name: Build Application
       #        run: mvn clean install --no-transfer-progress --batch-mode
 
