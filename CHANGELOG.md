@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Framework for starting Docker compose and running integration tests
 
+### Changed
+
+- Moved the Contracts folder up a layer so it could be used to build the domain objects in integrations tests
+
 ## [0.8.0] User: Get By Id
 
 ### Added
