@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.9.0] Integration Test Framework
+
+### Added
+
+- Framework for starting Docker compose and running integration tests
+
 ## [0.8.0] User: Get By Id
 
 ### Added

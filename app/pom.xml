@@ -5,11 +5,10 @@
     <parent>
         <groupId>com.ebsolutions.papertrail</groupId>
         <artifactId>financial-data-provider-service-parent</artifactId>
-        <version>0.8.0</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>financial-data-provider-service</artifactId>
-    <version>${parent.version}</version>
     <name>Financial Data Provider Service</name>
     <packaging>jar</packaging>
 
