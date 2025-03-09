@@ -1,3 +1,5 @@
+version: "2"
+
 services:
   storage:
     container_name: storage
