@@ -11,28 +11,91 @@
 
     <groupId>com.ebsolutions.papertrail</groupId>
     <artifactId>financial-data-provider-service-parent</artifactId>
-    <version>0.8.0</version>
+    <version>${revision}</version>
     <name>financial-data-provider-service-parent</name>
     <packaging>pom</packaging>
 
     <modules>
         <module>app</module>
+        <module>integration-tests</module>
     </modules>
 
     <properties>
+        <!-- This is the property that is propagated to all children modules -->
+        <revision>0.9.0</revision>
+
         <java.version>21</java.version>
+
+        <!-- Versions: Dependencies -->
+        <jackson-databind-nullable.version>0.2.6</jackson-databind-nullable.version>
+        <postgresql-driver.version>42.7.5</postgresql-driver.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.8.4</springdoc-openapi-starter-webmvc-ui.version>
 
         <!-- Versions: Plugins -->
         <checkstyle-maven-plugin.version>3.5.0</checkstyle-maven-plugin.version>
+        <exec-maven-plugin.version>3.5.0</exec-maven-plugin.version>
+        <flatten-maven-plugin.version>1.7.0</flatten-maven-plugin.version>
         <maven-failsafe-plugin.version>3.5.2</maven-failsafe-plugin.version>
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <openapi-generator-maven-plugin.version>7.11.0</openapi-generator-maven-plugin.version>
         <spring-boot-maven-plugin.version>3.4.2</spring-boot-maven-plugin.version>
+
+        <!-- Versions: Testing Dependencies -->
+        <cucumber-bom.version>7.20.1</cucumber-bom.version>
+        <h2.version>2.3.232</h2.version>
+        <junit-bom.version>5.11.4</junit-bom.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- Used for Swagger UI and Open API annotations -->
+            <!-- Version: Explicit -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+            </dependency>
+            <!-- Used for the validation annotations -->
+            <!-- Version: Explicit -->
+            <dependency>
+                <groupId>org.openapitools</groupId>
+                <artifactId>jackson-databind-nullable</artifactId>
+                <version>${jackson-databind-nullable.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <!--                <executions>-->
+                <!--                    &lt;!&ndash; enable flattening &ndash;&gt;-->
+                <!--                    <execution>-->
+                <!--                        <id>flatten</id>-->
+                <!--                        <phase>process-resources</phase>-->
+                <!--                        <goals>-->
+                <!--                            <goal>flatten</goal>-->
+                <!--                        </goals>-->
+                <!--                    </execution>-->
+                <!--                    &lt;!&ndash; ensure proper cleanup &ndash;&gt;-->
+                <!--                    <execution>-->
+                <!--                        <id>flatten-clean</id>-->
+                <!--                        <goals>-->
+                <!--                            <goal>clean</goal>-->
+                <!--                        </goals>-->
+                <!--                    </execution>-->
+                <!--                </executions>-->
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>${flatten-maven-plugin.version}</version>
+                </plugin>
                 <!-- Used to compile the sources of your project -->
                 <!-- Version: Explicit -->
                 <plugin>
@@ -135,6 +198,14 @@
                     <configuration>
                         <testFailureIgnore>true</testFailureIgnore>
                     </configuration>
+                </plugin>
+                <!-- Used to execute commands on the command line -->
+                <!-- For this case, it spins up a clean docker environment for running tests-->
+                <!-- Version: Explicit -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${exec-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

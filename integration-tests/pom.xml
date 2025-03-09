@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.ebsolutions.papertrail</groupId>
+        <artifactId>financial-data-provider-service-parent</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>financial-data-provider-service-integration-tests</artifactId>
+    <name>Financial Data Provider Service Integration Tests</name>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Used for JUnit and Mockito testing libs-->
+            <!-- Version: Explicit -->
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Used for Cucumber BDD testing libs-->
+            <!-- Version: Explicit -->
+            <dependency>
+                <groupId>io.cucumber</groupId>
+                <artifactId>cucumber-bom</artifactId>
+                <version>${cucumber-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Contains Spring Boot Starter and Tomcat web server -->
+        <!-- Version: Spring Parent -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- Used for POJO annotations within project -->
+        <!-- Version: Spring Parent -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- Used for Swagger UI and Open API annotations -->
+        <!-- Version: Parent POM -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        </dependency>
+
+        <!-- Used for the validation annotations -->
+        <!-- Version: Parent POM -->
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+        </dependency>
+
+        <!-- Used for validation annotations in Controller, etc. -->
+        <!-- Version: Spring Parent -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- Testing framework for starting Spring context and MockMVC -->
+        <!-- Version: Spring Parent -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Needed for running tests in Junit -->
+        <!-- Version: JUnit BOM -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Testing linkage between Cucumber and Java -->
+        <!-- Version: Cucumber BOM -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Testing linkage between Cucumber and JUnit -->
+        <!-- Version: Cucumber BOM -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Used to compile the sources of your project -->
+            <!-- Version: Parent POM PIM -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <!-- Maintains strict Code Styles -->
+            <!-- Version: Parent POM PIM -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <!-- Generates Java classes from OpenAPI contracts -->
+            <!-- Version: Parent POM PIM -->
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>models-common</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.parent.basedir}/contracts/common.yaml</inputSpec>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>models-actuator</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.parent.basedir}/contracts/actuator.yaml</inputSpec>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>models-user</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.parent.basedir}/contracts/user.yaml</inputSpec>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Used for compiling the Cucumber integration tests but not running them -->
+            <!-- skipTests are true here since they should only be run while Docker is up -->
+            <!-- Version: Parent POM PIM -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!-- This is needed since Surefire is running the tests by default, which we don't want -->
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>docker</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- Used to execute commands on the command line -->
+                    <!-- For this case, it spins up a clean docker environment for running tests-->
+                    <!-- Version: Parent POM PIM -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>pre-test-cleanup</id>
+                                <phase>post-clean</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>docker-compose</executable>
+                                    <arguments>
+                                        <argument>down</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>docker-compose-up</id>
+                                <phase>test-compile</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>docker-compose</executable>
+                                    <arguments>
+                                        <argument>up</argument>
+                                        <argument>-d</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>post-test-cleanup</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>docker-compose</executable>
+                                    <arguments>
+                                        <argument>down</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Used for running the Cucumber integration tests -->
+                    <!-- skipTests are false here since they should only be run while Docker is up -->
+                    <!-- Version: Parent POM PIM -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skipTests>false</skipTests>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

@@ -76,6 +76,8 @@ paths:
               schema:
                 $ref: "common.yaml#/components/schemas/ErrorResponse"
   /users/{userId}:
+    parameters:
+      - $ref: "#/components/parameters/UserId"
     delete:
       operationId: deleteUser
       responses:

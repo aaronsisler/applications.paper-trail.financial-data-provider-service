@@ -25,7 +25,7 @@ public class UserService {
 
   public User get(Integer userId) {
     try {
-      return userRepository.getReferenceById(userId.longValue());
+      return userRepository.findById(userId.longValue()).orElse(null);
     } catch (Exception exception) {
       log.error("Error getting by id", exception);
       throw new DataProcessingException("Something went wrong while fetching the user");
