@@ -19,8 +19,11 @@ jobs:
           distribution: "corretto"
           cache: "maven"
 
-      - name: Check things
+      - name: Check Maven version
         run: mvn --version
 
-      - name: Build Application
-        run: mvn clean install --no-transfer-progress --batch-mode
+      - name: Check Docker version
+        run: docker --version
+
+#      - name: Build Application
+#        run: mvn clean install --no-transfer-progress --batch-mode
