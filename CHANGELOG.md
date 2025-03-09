@@ -14,6 +14,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.10.0] GitHub Actions using Docker for integration testing
+
+### Added
+
+- Usage of a new plugin that keeps the application version in one property location
+
+### Changed
+
+- Added GitHub action adoption for Docker based integration testing
+
 ## [0.9.0] Integration Test Framework
 
 ### Added

@@ -11,29 +11,6 @@
     <artifactId>financial-data-provider-service-integration-tests</artifactId>
     <name>Financial Data Provider Service Integration Tests</name>
 
-    <dependencyManagement>
-        <dependencies>
-            <!-- Used for JUnit and Mockito testing libs-->
-            <!-- Version: Explicit -->
-            <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>${junit-bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <!-- Used for Cucumber BDD testing libs-->
-            <!-- Version: Explicit -->
-            <dependency>
-                <groupId>io.cucumber</groupId>
-                <artifactId>cucumber-bom</artifactId>
-                <version>${cucumber-bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <!-- Contains Spring Boot Starter and Tomcat web server -->
         <!-- Version: Spring Parent -->
@@ -194,8 +171,9 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>docker-compose</executable>
+                                    <executable>docker</executable>
                                     <arguments>
+                                        <argument>compose</argument>
                                         <argument>down</argument>
                                     </arguments>
                                 </configuration>
@@ -207,10 +185,12 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>docker-compose</executable>
+                                    <executable>docker</executable>
                                     <arguments>
+                                        <argument>compose</argument>
                                         <argument>up</argument>
-                                        <argument>-d</argument>
+                                        <argument>--detach</argument>
+                                        <argument>--quiet-pull</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -221,8 +201,9 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>docker-compose</executable>
+                                    <executable>docker</executable>
                                     <arguments>
+                                        <argument>compose</argument>
                                         <argument>down</argument>
                                     </arguments>
                                 </configuration>

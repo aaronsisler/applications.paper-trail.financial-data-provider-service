@@ -19,5 +19,5 @@ jobs:
           distribution: "corretto"
           cache: "maven"
 
-      - name: Build Application
-        run: mvn clean install
+      - name: Build and Test Application
+        run: mvn clean install --activate-profiles docker --no-transfer-progress --batch-mode
