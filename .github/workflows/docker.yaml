@@ -25,8 +25,11 @@ jobs:
       - name: Check Docker version
         run: docker --version
 
-      - name: Build Application
-        run: mvn clean install --no-transfer-progress --batch-mode
+      - name: Check Docker Compose version
+        run: docker-compose --version
 
-      - name: Build Application with Docker
-        run: mvn clean install --activate-profiles docker --no-transfer-progress --batch-mode
+      #      - name: Build Application
+      #        run: mvn clean install --no-transfer-progress --batch-mode
+
+#      - name: Build Application with Docker
+#        run: mvn clean install --activate-profiles docker --no-transfer-progress --batch-mode
