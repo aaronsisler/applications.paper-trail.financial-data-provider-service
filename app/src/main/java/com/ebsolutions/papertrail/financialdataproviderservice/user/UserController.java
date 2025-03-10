@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -54,9 +55,9 @@ public class UserController {
   @GetMapping(value = "/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> get(@PathVariable @Valid Integer userId) {
 
-    User user = userService.get(userId);
+    Optional<User> user = userService.get(userId);
 
-    return user != null ? ResponseEntity.ok(user) : ResponseEntity.noContent().build();
+    return user.isPresent() ? ResponseEntity.ok(user.get()) : ResponseEntity.noContent().build();
   }
 
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)

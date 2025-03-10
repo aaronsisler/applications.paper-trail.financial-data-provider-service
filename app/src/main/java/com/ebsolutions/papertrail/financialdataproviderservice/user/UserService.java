@@ -4,6 +4,7 @@ import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.
 import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,9 +24,9 @@ public class UserService {
     }
   }
 
-  public User get(Integer userId) {
+  public Optional<User> get(Integer userId) {
     try {
-      return userRepository.findById(userId.longValue()).orElse(null);
+      return userRepository.findById(userId.longValue());
     } catch (Exception exception) {
       log.error("Error getting by id", exception);
       throw new DataProcessingException("Something went wrong while fetching the user");
