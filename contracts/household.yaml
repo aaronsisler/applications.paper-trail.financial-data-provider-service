@@ -1,0 +1,110 @@
+openapi: 3.0.0
+info:
+  title: Household REST API
+  version: "1.0"
+servers:
+  - url: http://localhost/
+paths:
+  /households:
+    get:
+      operationId: getHouseholds
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Household"
+        204:
+          description: No content
+    post:
+      operationId: createHouseholds
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              $ref: "#/components/schemas/Household"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/Household"
+        4XX:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+    put:
+      operationId: updateHousehold
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Household"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Household"
+        4XX:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+  /households/{householdId}:
+    parameters:
+      - $ref: "#/components/parameters/HouseholdId"
+    delete:
+      operationId: deleteHousehold
+      responses:
+        204:
+          description: No content
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    Household:
+      type: object
+      required:
+        - name
+      properties:
+        householdId:
+          type: integer
+        name:
+          type: string
+          minLength: 1
+  parameters:
+    HouseholdId:
+      in: path
+      name: householdId
+      required: true
+      schema:
+        type: integer

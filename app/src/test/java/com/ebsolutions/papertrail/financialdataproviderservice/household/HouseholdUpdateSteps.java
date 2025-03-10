@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataproviderservice.user;
+package com.ebsolutions.papertrail.financialdataproviderservice.household;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -23,94 +23,89 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 
 @RequiredArgsConstructor
-public class UserUpdateSteps extends BaseTest {
-  protected final UserRepository userRepository;
+public class HouseholdUpdateSteps extends BaseTest {
+  protected final HouseholdRepository householdRepository;
 
   private String requestContent;
   private MvcResult result;
-  private User expectedUserOne;
+  private Household expectedHouseholdOne;
 
-  @And("the user is part of the request body for the update user endpoint")
-  public void theUserIsPartOfTheRequestBodyForTheUpdateUserEndpoint()
+  @And("the household is part of the request body for the update household endpoint")
+  public void theHouseholdIsPartOfTheRequestBodyForTheUpdateHouseholdEndpoint()
       throws JsonProcessingException {
-    int validUserId = 1;
+    int validHouseholdId = 1;
 
-    User inputUserOne = User.builder()
-        .userId(validUserId)
-        .username("first_user")
-        .firstName("first")
-        .lastName("user")
+    Household inputHouseholdOne = Household.builder()
+        .householdId(validHouseholdId)
+        .name("first_household")
         .build();
 
-    expectedUserOne =
-        User.builder()
-            .userId(validUserId)
-            .username("first_user")
-            .firstName("first")
-            .lastName("user")
+    expectedHouseholdOne =
+        Household.builder()
+            .householdId(validHouseholdId)
+            .name("first_household")
             .build();
 
     requestContent =
-        objectMapper.writeValueAsString(inputUserOne);
+        objectMapper.writeValueAsString(inputHouseholdOne);
 
-    when(userRepository.findById(1L)).thenReturn(Optional.ofNullable(expectedUserOne));
+    when(householdRepository.findById(1L)).thenReturn(Optional.ofNullable(expectedHouseholdOne));
 
-    when(userRepository.save(any())).thenReturn(expectedUserOne);
+    when(householdRepository.save(any())).thenReturn(expectedHouseholdOne);
   }
 
-  @And("the user id does not exist in the database")
-  public void theUserIdDoesNotExistInTheDatabase() {
-    when(userRepository.findById(1L)).thenReturn(Optional.empty());
+  @And("the household id does not exist in the database")
+  public void theHouseholdIdDoesNotExistInTheDatabase() {
+    when(householdRepository.findById(1L)).thenReturn(Optional.empty());
   }
 
-  @And("the connection to the database fails for the update user endpoint")
-  public void theConnectionToTheDatabaseFailsForTheUpdateUserEndpoint() {
+  @And("the connection to the database fails for the update household endpoint")
+  public void theConnectionToTheDatabaseFailsForTheUpdateHouseholdEndpoint() {
     DataProcessingException dataProcessingException = new DataProcessingException();
 
-    when(userRepository.save(any())).thenThrow(dataProcessingException);
+    when(householdRepository.save(any())).thenThrow(dataProcessingException);
   }
 
-  @And("the user in the update user request body has an invalid input")
-  public void theUserInTheUpdateUserRequestBodyHasAnInvalidInput(DataTable dataTable)
+  @And("the household in the update household request body has an invalid input")
+  public void theHouseholdInTheUpdateHouseholdRequestBodyHasAnInvalidInput(DataTable dataTable)
       throws JsonProcessingException {
-    int userId = dataTable.column(0).getFirst() == null ? 0 :
+    int householdId = dataTable.column(0).getFirst() == null ? 0 :
         Integer.parseInt(dataTable.column(0).getFirst());
 
-    User inputUserOne = User.builder()
-        .userId(userId)
-        .username(UserTestUtil.isEmptyString(dataTable.column(1).getFirst()))
-        .firstName(UserTestUtil.isEmptyString(dataTable.column(2).getFirst()))
-        .lastName(UserTestUtil.isEmptyString(dataTable.column(3).getFirst()))
+    Household inputHouseholdOne = Household.builder()
+        .householdId(householdId)
+        .name(HouseholdTestUtil.isEmptyString(dataTable.column(1).getFirst()))
         .build();
 
     requestContent =
-        objectMapper.writeValueAsString(inputUserOne);
+        objectMapper.writeValueAsString(inputHouseholdOne);
   }
 
-  @When("the update user endpoint is invoked")
-  public void theUpdateUserEndpointIsInvoked() throws Exception {
-    result = mockMvc.perform(put(Constants.USERS_URI)
+  @When("the update household endpoint is invoked")
+  public void theUpdateHouseholdEndpointIsInvoked() throws Exception {
+    result = mockMvc.perform(put(Constants.HOUSEHOLDS_URI)
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestContent)
             .accept(MediaType.APPLICATION_JSON))
         .andReturn();
   }
 
-  @Then("the updated user is returned from the update user endpoint")
-  public void theUpdatedUserIsReturnedFromTheUpdateUserEndpoint()
+  @Then("the updated household is returned from the update household endpoint")
+  public void theUpdatedHouseholdIsReturnedFromTheUpdateHouseholdEndpoint()
       throws UnsupportedEncodingException, JsonProcessingException {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
     Assertions.assertEquals(HttpStatus.OK.value(), mockHttpServletResponse.getStatus());
 
     String content = mockHttpServletResponse.getContentAsString();
-    User user = objectMapper.readValue(content, User.class);
+    Household household = objectMapper.readValue(content, Household.class);
 
-    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserOne, user);
+    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(expectedHouseholdOne,
+        household);
   }
 
-  @Then("the correct failure response is returned from the update user endpoint")
-  public void theCorrectFailureResponseIsReturnedFromTheUpdateUserEndpoint()
+  @Then("the correct failure response is returned from the update household endpoint")
+  public void theCorrectFailureResponseIsReturnedFromTheUpdateHouseholdEndpoint()
       throws UnsupportedEncodingException, JsonProcessingException {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
@@ -120,12 +115,12 @@ public class UserUpdateSteps extends BaseTest {
     String content = mockHttpServletResponse.getContentAsString();
 
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
-    Assertions.assertEquals("Something went wrong while saving the user",
+    Assertions.assertEquals("Something went wrong while saving the household",
         errorResponse.getMessages().getFirst());
   }
 
-  @Then("the correct bad request response is returned from the update user endpoint")
-  public void theCorrectBadRequestResponseIsReturnedFromTheUpdateUserEndpoint()
+  @Then("the correct bad request response is returned from the update household endpoint")
+  public void theCorrectBadRequestResponseIsReturnedFromTheUpdateHouseholdEndpoint()
       throws UnsupportedEncodingException, JsonProcessingException {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
@@ -135,13 +130,13 @@ public class UserUpdateSteps extends BaseTest {
     String content = mockHttpServletResponse.getContentAsString();
 
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
-    Assertions.assertEquals("User Id does not exist: 1",
+    Assertions.assertEquals("Household Id does not exist: 1",
         errorResponse.getMessages().getFirst());
   }
 
 
-  @Then("the correct failure response and message is returned from the update user endpoint")
-  public void theCorrectFailureResponseAndMessageIsReturnedFromTheUpdateUserEndpoint(
+  @Then("the correct failure response and message is returned from the update household endpoint")
+  public void theCorrectFailureResponseAndMessageIsReturnedFromTheUpdateHouseholdEndpoint(
       DataTable dataTable) throws UnsupportedEncodingException, JsonProcessingException {
 
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();

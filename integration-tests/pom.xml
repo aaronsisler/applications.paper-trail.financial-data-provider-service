@@ -133,6 +133,15 @@
                             <inputSpec>${project.parent.basedir}/contracts/user.yaml</inputSpec>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>models-household</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.parent.basedir}/contracts/household.yaml</inputSpec>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <!-- Used for compiling the Cucumber integration tests but not running them -->
