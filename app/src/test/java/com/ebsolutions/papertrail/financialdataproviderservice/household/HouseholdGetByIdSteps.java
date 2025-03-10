@@ -9,8 +9,6 @@ import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
-import com.ebsolutions.papertrail.financialdataproviderservice.user.User;
-import com.ebsolutions.papertrail.financialdataproviderservice.user.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -26,78 +24,77 @@ import org.springframework.test.web.servlet.MvcResult;
 
 @RequiredArgsConstructor
 public class HouseholdGetByIdSteps extends BaseTest {
-  protected final UserRepository userRepository;
-  private final int userId = 1;
+  protected final HouseholdRepository householdRepository;
+  private final int householdId = 1;
   private MvcResult result;
-  private User expectedUser;
-  private String getUserByIdUrl;
+  private Household expectedHousehold;
+  private String getHouseholdByIdUrl;
 
 
-  @And("the requested user exist in the database")
-  public void theRequestedUserExistInTheDatabase() {
-    expectedUser =
-        User.builder()
-            .userId(userId)
-            .username("first_user")
-            .firstName("first")
-            .lastName("user")
+  @And("the requested household exist in the database")
+  public void theRequestedHouseholdExistInTheDatabase() {
+    expectedHousehold =
+        Household.builder()
+            .householdId(householdId)
+            .name("first_household")
             .build();
 
-    when(userRepository.findById((long) userId)).thenReturn(Optional.ofNullable(expectedUser));
+    when(householdRepository.findById((long) householdId)).thenReturn(
+        Optional.ofNullable(expectedHousehold));
   }
 
-  @And("no user for the given id exists in the database")
-  public void noUserForTheGivenIdExistsInTheDatabase() {
+  @And("no household for the given id exists in the database")
+  public void noHouseholdForTheGivenIdExistsInTheDatabase() {
     // Nothing to do here
   }
 
-  @And("the user id provided in the url is the correct format for the get user by id endpoint")
-  public void theUserIdProvidedInTheUrlIsTheCorrectFormatForTheGetUserByIdEndpoint() {
-    getUserByIdUrl = Constants.USERS_URI + "/" + userId;
+  @And("the household id provided in the url is the correct format for the get household by id endpoint")
+  public void theHouseholdIdProvidedInTheUrlIsTheCorrectFormatForTheGetHouseholdByIdEndpoint() {
+    getHouseholdByIdUrl = Constants.HOUSEHOLDS_URI + "/" + householdId;
   }
 
-  @And("the user id provided in the url is the incorrect format for the get user by id endpoint")
-  public void theUserIdProvidedInTheUrlIsTheIncorrectFormatForTheGetUserByIdEndpoint() {
-    String invalidUserId = "abc";
-    getUserByIdUrl = Constants.USERS_URI + "/" + invalidUserId;
+  @And("the household id provided in the url is the incorrect format for the get household by id endpoint")
+  public void theHouseholdIdProvidedInTheUrlIsTheIncorrectFormatForTheGetHouseholdByIdEndpoint() {
+    String invalidHouseholdId = "abc";
+    getHouseholdByIdUrl = Constants.HOUSEHOLDS_URI + "/" + invalidHouseholdId;
   }
 
-  @And("the connection to the database fails for the get user by id endpoint")
-  public void theConnectionToTheDatabaseFailsForTheGetUserByIdEndpoint() {
+  @And("the connection to the database fails for the get household by id endpoint")
+  public void theConnectionToTheDatabaseFailsForTheGetHouseholdByIdEndpoint() {
     DataProcessingException dataProcessingException = new DataProcessingException();
 
-    doThrow(dataProcessingException).when(userRepository).findById(any());
+    doThrow(dataProcessingException).when(householdRepository).findById(any());
   }
 
-  @When("the get user by id endpoint is invoked")
-  public void theGetUserByIdEndpointIsInvoked() throws Exception {
+  @When("the get household by id endpoint is invoked")
+  public void theGetHouseholdByIdEndpointIsInvoked() throws Exception {
     result = mockMvc
-        .perform(get(getUserByIdUrl))
+        .perform(get(getHouseholdByIdUrl))
         .andReturn();
   }
 
-  @Then("the correct empty response is returned from the get user by id endpoint")
-  public void theCorrectEmptyResponseIsReturnedFromTheGetUserByIdEndpoint() {
+  @Then("the correct empty response is returned from the get household by id endpoint")
+  public void theCorrectEmptyResponseIsReturnedFromTheGetHouseholdByIdEndpoint() {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
     Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), mockHttpServletResponse.getStatus());
   }
 
-  @Then("the correct user are returned from the get user by id endpoint")
-  public void theCorrectUserAreReturnedFromTheGetUserByIdEndpoint()
+  @Then("the correct household are returned from the get household by id endpoint")
+  public void theCorrectHouseholdAreReturnedFromTheGetHouseholdByIdEndpoint()
       throws UnsupportedEncodingException, JsonProcessingException {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
     Assertions.assertEquals(HttpStatus.OK.value(), mockHttpServletResponse.getStatus());
 
     String content = mockHttpServletResponse.getContentAsString();
-    User user = objectMapper.readValue(content, User.class);
+    Household household = objectMapper.readValue(content, Household.class);
 
-    HouseholdTestUtil.assertExpectedUserAgainstActualUser(expectedUser, user);
-
+    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(expectedHousehold, household);
   }
 
-  @Then("the correct failure response is returned from the get user by id endpoint")
-  public void theCorrectFailureResponseIsReturnedFromTheGetUserByIdEndpoint(DataTable dataTable)
+  @Then("the correct failure response is returned from the get household by id endpoint")
+  public void theCorrectFailureResponseIsReturnedFromTheGetHouseholdByIdEndpoint(
+      DataTable dataTable)
       throws UnsupportedEncodingException, JsonProcessingException {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 

@@ -1,19 +1,19 @@
-Feature: User: Get All
+Feature: Household: Get All
 
-  Scenario: Get All Users endpoint returns correctly when users present
+  Scenario: Get All Households endpoint returns correctly when households present
     Given application is up
-    And two users exist in the database
-    When the get all users endpoint is invoked
-    Then the correct users are returned
+    And two households exist in the database
+    When the get all households endpoint is invoked
+    Then the correct households are returned
 
-  Scenario: Get All Users endpoint returns correctly when no users present
+  Scenario: Get All Households endpoint returns correctly when no households present
     Given application is up
-    And no users exist
-    When the get all users endpoint is invoked
-    Then the correct empty users response is returned
+    And no households exist
+    When the get all households endpoint is invoked
+    Then the correct empty households response is returned
 
-  Scenario: Get All Users endpoint is not able to connect to the database
+  Scenario: Get All Households endpoint is not able to connect to the database
     Given application is up
-    And the connection to the database fails for the get all users endpoint
-    When the get all users endpoint is invoked
-    Then the correct failure response is returned from the get all users endpoint
+    And the connection to the database fails for the get all households endpoint
+    When the get all households endpoint is invoked
+    Then the correct failure response is returned from the get all households endpoint

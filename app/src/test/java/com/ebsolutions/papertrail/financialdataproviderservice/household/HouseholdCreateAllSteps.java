@@ -8,8 +8,6 @@ import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
-import com.ebsolutions.papertrail.financialdataproviderservice.user.User;
-import com.ebsolutions.papertrail.financialdataproviderservice.user.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -28,108 +26,102 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 
+@SuppressWarnings("checkstyle:LineLength")
 @RequiredArgsConstructor
 public class HouseholdCreateAllSteps extends BaseTest {
-  protected final UserRepository userRepository;
+  protected final HouseholdRepository householdRepository;
 
   private String requestContent;
   private MvcResult result;
-  private User expectedUserOne;
-  private User expectedUserTwo;
+  private Household expectedHouseholdOne;
+  private Household expectedHouseholdTwo;
 
-  @And("two valid users are part of the request body for the create all users endpoint")
-  public void twoValidUsersArePartOfTheRequestBodyForTheCreateAllUsersEndpoint()
+  @And("two valid households are part of the request body for the create all households endpoint")
+  public void twoValidHouseholdsArePartOfTheRequestBodyForTheCreateAllHouseholdsEndpoint()
       throws JsonProcessingException {
-    User inputUserOne = User.builder()
-        .username("first_user")
-        .firstName("first")
-        .lastName("user")
+    Household inputHouseholdOne = Household.builder()
+        .name("first_household")
         .build();
 
-    User inputUserTwo = User.builder()
-        .username("second_user")
-        .firstName("second")
-        .lastName("user")
+    Household inputHouseholdTwo = Household.builder()
+        .name("second_household")
         .build();
 
-    expectedUserOne =
-        User.builder()
-            .userId(1)
-            .username("first_user")
-            .firstName("first")
-            .lastName("user")
+    expectedHouseholdOne =
+        Household.builder()
+            .householdId(1)
+            .name("first_household")
             .build();
 
-    expectedUserTwo = User.builder()
-        .userId(2)
-        .username("second_user")
-        .firstName("second")
-        .lastName("user")
+    expectedHouseholdTwo = Household.builder()
+        .householdId(2)
+        .name("second_household")
         .build();
 
     requestContent =
-        objectMapper.writeValueAsString(Arrays.asList(inputUserOne, inputUserTwo));
+        objectMapper.writeValueAsString(Arrays.asList(inputHouseholdOne, inputHouseholdTwo));
 
-    when(userRepository.saveAll(any())).thenReturn(Arrays.asList(expectedUserOne, expectedUserTwo));
+    when(householdRepository.saveAll(any())).thenReturn(
+        Arrays.asList(expectedHouseholdOne, expectedHouseholdTwo));
   }
 
-  @And("the user in the request body has an invalid input")
-  public void theUserInTheRequestBodyHasAnInvalidInput(DataTable dataTable)
+  @And("the household in the request body has an invalid input")
+  public void theHouseholdInTheRequestBodyHasAnInvalidInput(DataTable dataTable)
       throws JsonProcessingException {
-    int userId = dataTable.column(0).getFirst() == null ? 0 :
+    int householdId = dataTable.column(0).getFirst() == null ? 0 :
         Integer.parseInt(dataTable.column(0).getFirst());
 
-    User inputUserOne = User.builder()
-        .userId(userId)
-        .username(HouseholdTestUtil.isEmptyString(dataTable.column(1).getFirst()))
-        .firstName(HouseholdTestUtil.isEmptyString(dataTable.column(2).getFirst()))
-        .lastName(HouseholdTestUtil.isEmptyString(dataTable.column(3).getFirst()))
+    Household inputHouseholdOne = Household.builder()
+        .householdId(householdId)
+        .name(HouseholdTestUtil.isEmptyString(dataTable.column(1).getFirst()))
         .build();
 
     requestContent =
-        objectMapper.writeValueAsString(Collections.singletonList(inputUserOne));
+        objectMapper.writeValueAsString(Collections.singletonList(inputHouseholdOne));
   }
 
-  @And("no users are part of the request body")
-  public void noUsersArePartOfTheRequestBody() {
+  @And("no households are part of the request body")
+  public void noHouseholdsArePartOfTheRequestBody() {
     requestContent = new ArrayList<>().toString();
   }
 
-  @And("the connection to the database fails for the create all users endpoint")
-  public void theConnectionToTheDatabaseFailsForTheCreateAllUsersEndpoint() {
+  @And("the connection to the database fails for the create all households endpoint")
+  public void theConnectionToTheDatabaseFailsForTheCreateAllHouseholdsEndpoint() {
     DataProcessingException dataProcessingException = new DataProcessingException();
 
-    when(userRepository.saveAll(any())).thenThrow(dataProcessingException);
+    when(householdRepository.saveAll(any())).thenThrow(dataProcessingException);
   }
 
-  @When("the create all users endpoint is invoked")
-  public void theCreateAllUsersEndpointIsInvoked() throws Exception {
-    result = mockMvc.perform(post(Constants.USERS_URI)
+  @When("the create all households endpoint is invoked")
+  public void theCreateAllHouseholdsEndpointIsInvoked() throws Exception {
+    result = mockMvc.perform(post(Constants.HOUSEHOLDS_URI)
             .contentType(MediaType.APPLICATION_JSON)
             .content(requestContent)
             .accept(MediaType.APPLICATION_JSON))
         .andReturn();
   }
 
-  @Then("the newly created users are returned from the create all users endpoint")
-  public void theCorrectUsersAreReturnedFromTheCreateAllUserEndpoint()
+  @Then("the newly created households are returned from the create all households endpoint")
+  public void theCorrectHouseholdsAreReturnedFromTheCreateAllHouseholdEndpoint()
       throws JsonProcessingException, UnsupportedEncodingException {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
     Assertions.assertEquals(HttpStatus.OK.value(), mockHttpServletResponse.getStatus());
 
     String content = mockHttpServletResponse.getContentAsString();
-    List<User> users = objectMapper.readerForListOf(User.class).readValue(content);
+    List<Household> households = objectMapper.readerForListOf(Household.class).readValue(content);
 
-    User userOne = users.getFirst();
-    HouseholdTestUtil.assertExpectedUserAgainstActualUser(expectedUserOne, userOne);
+    Household householdOne = households.getFirst();
+    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(expectedHouseholdOne,
+        householdOne);
 
-    User userTwo = users.getLast();
-    HouseholdTestUtil.assertExpectedUserAgainstActualUser(expectedUserTwo, userTwo);
+    Household householdTwo = households.getLast();
+    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(expectedHouseholdTwo,
+        householdTwo);
   }
 
-  @Then("the correct failure response is returned from the create all users endpoint")
-  public void theCorrectFailureResponseIsReturnedFromTheCreateAllUsersEndpoint()
+  @Then("the correct failure response is returned from the create all households endpoint")
+  public void theCorrectFailureResponseIsReturnedFromTheCreateAllHouseholdsEndpoint()
       throws UnsupportedEncodingException, JsonProcessingException {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
@@ -139,12 +131,12 @@ public class HouseholdCreateAllSteps extends BaseTest {
     String content = mockHttpServletResponse.getContentAsString();
 
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
-    Assertions.assertEquals("Something went wrong while saving all users",
+    Assertions.assertEquals("Something went wrong while saving all households",
         errorResponse.getMessages().getFirst());
   }
 
-  @Then("the correct bad request response is returned from the create all users endpoint")
-  public void theCorrectBadRequestResponseIsReturnedFromTheCreateAllUsersEndpoint()
+  @Then("the correct bad request response is returned from the create all households endpoint")
+  public void theCorrectBadRequestResponseIsReturnedFromTheCreateAllHouseholdsEndpoint()
       throws UnsupportedEncodingException, JsonProcessingException {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
 
@@ -154,14 +146,14 @@ public class HouseholdCreateAllSteps extends BaseTest {
     String content = mockHttpServletResponse.getContentAsString();
 
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
-    Assertions.assertEquals("Users cannot be empty",
+    Assertions.assertEquals("Households cannot be empty",
         errorResponse.getMessages().getFirst());
 
-    Mockito.verifyNoInteractions(userRepository);
+    Mockito.verifyNoInteractions(householdRepository);
   }
 
-  @Then("the correct failure response and message is returned from the create all users endpoint")
-  public void theCorrectFailureResponseAndMessageIsReturnedFromTheCreateAllUsersEndpoint(
+  @Then("the correct failure response and message is returned from the create all households endpoint")
+  public void theCorrectFailureResponseAndMessageIsReturnedFromTheCreateAllHouseholdsEndpoint(
       DataTable dataTable) throws UnsupportedEncodingException, JsonProcessingException {
 
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();

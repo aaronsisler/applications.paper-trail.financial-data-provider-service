@@ -28,7 +28,6 @@ public class UserUpdateSteps extends BaseTest {
 
   private String requestContent;
   private MvcResult result;
-  private User inputUserOne;
   private User expectedUserOne;
 
   @And("the user is part of the request body for the update user endpoint")
@@ -36,7 +35,7 @@ public class UserUpdateSteps extends BaseTest {
       throws JsonProcessingException {
     int validUserId = 1;
 
-    inputUserOne = User.builder()
+    User inputUserOne = User.builder()
         .userId(validUserId)
         .username("first_user")
         .firstName("first")
