@@ -14,6 +14,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.11.0] Household
+
+### Added
+
+- Household GET / GET ALL with behavior test suite
+- Household GET BY ID with behavior test suite
+- Household POST / CREATE ALL with behavior test suite
+- Household DELETE with behavior test suite
+- Household PUT / UPDATE with behavior test suite
+- Household integration test suite
+
 ## [0.10.0] GitHub Actions using Docker for integration testing
 
 ### Added
