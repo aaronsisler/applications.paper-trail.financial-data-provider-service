@@ -1,6 +1,7 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.user;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.BaseStep;
+import com.ebsolutions.papertrail.financialdataproviderservice.common.CommonTestUtil;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.User;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -110,9 +111,9 @@ public class UserSteps extends BaseStep {
   @And("the user id provided exists in the database")
   public void theUserIdProvidedExistsInTheDatabase(DataTable dataTable) throws Exception {
     User inputUser = User.builder()
-        .username(UserTestUtil.isEmptyString(dataTable.column(0).getFirst()))
-        .firstName(UserTestUtil.isEmptyString(dataTable.column(1).getFirst()))
-        .lastName(UserTestUtil.isEmptyString(dataTable.column(2).getFirst()))
+        .username(CommonTestUtil.isEmptyString(dataTable.column(0).getFirst()))
+        .firstName(CommonTestUtil.isEmptyString(dataTable.column(1).getFirst()))
+        .lastName(CommonTestUtil.isEmptyString(dataTable.column(2).getFirst()))
         .build();
 
     requestContent =

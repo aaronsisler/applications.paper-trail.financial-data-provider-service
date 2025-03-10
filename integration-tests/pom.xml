@@ -125,6 +125,15 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <id>models-user</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.parent.basedir}/contracts/user.yaml</inputSpec>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>models-household</id>
                         <goals>
                             <goal>generate</goal>
