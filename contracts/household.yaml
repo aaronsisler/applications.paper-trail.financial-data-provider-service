@@ -1,0 +1,118 @@
+openapi: 3.0.0
+info:
+  title: Users REST API
+  version: "1.0"
+servers:
+  - url: http://localhost/
+paths:
+  /users:
+    get:
+      operationId: getUsers
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        204:
+          description: No content
+    post:
+      operationId: createUsers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/User"
+        4XX:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+    put:
+      operationId: updateUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        4XX:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+  /users/{userId}:
+    parameters:
+      - $ref: "#/components/parameters/UserId"
+    delete:
+      operationId: deleteUser
+      responses:
+        204:
+          description: No content
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - username
+        - firstName
+        - lastName
+      properties:
+        userId:
+          type: integer
+        username:
+          type: string
+          minLength: 1
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+  parameters:
+    UserId:
+      in: path
+      name: userId
+      required: true
+      schema:
+        type: integer
