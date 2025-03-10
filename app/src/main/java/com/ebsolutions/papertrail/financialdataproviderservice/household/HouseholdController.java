@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -54,10 +55,13 @@ public class HouseholdController {
           })})
   @GetMapping(value = "/{householdId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> get(@PathVariable @Valid Integer householdId) {
+    Optional<Household> household = householdService.get(householdId);
 
-    Household household = householdService.get(householdId);
+    return household.isPresent()
+        ?
+        ResponseEntity.ok(household.get()) :
+        ResponseEntity.noContent().build();
 
-    return household != null ? ResponseEntity.ok(household) : ResponseEntity.noContent().build();
   }
 
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
