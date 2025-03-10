@@ -2,10 +2,9 @@ package com.ebsolutions.papertrail.financialdataproviderservice.householdmember;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataConstraintException;
 import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
-import com.ebsolutions.papertrail.financialdataproviderservice.household.Household;
 import com.ebsolutions.papertrail.financialdataproviderservice.household.HouseholdService;
-import com.ebsolutions.papertrail.financialdataproviderservice.user.User;
 import com.ebsolutions.papertrail.financialdataproviderservice.user.UserService;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +30,27 @@ public class HouseholdMemberService {
 
   public HouseholdMember create(HouseholdMember householdMember) {
     try {
-      User user = userService.get(householdMember.getUserId());
-      Household household = householdService.get(householdMember.getHouseholdId());
+      var user = userService.get(householdMember.getUserId());
+
+      if (user.isEmpty()) {
+        List<String> existingUserErrorMessages =
+            Collections.singletonList(
+                "User Id does not exist: ".concat(Integer.toString(householdMember.getUserId())));
+
+        throw new DataConstraintException(existingUserErrorMessages);
+      }
+
+      var household = householdService.get(householdMember.getHouseholdId());
+
+      if (household.isEmpty()) {
+        List<String> existingUserErrorMessages =
+            Collections.singletonList(
+                "Household Id does not exist: ".concat(
+                    Integer.toString(householdMember.getUserId())));
+
+        throw new DataConstraintException(existingUserErrorMessages);
+      }
+
       return householdMemberRepository.save(householdMember);
     } catch (DataConstraintException dataConstraintException) {
       throw dataConstraintException;
