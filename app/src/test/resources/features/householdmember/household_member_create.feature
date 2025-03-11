@@ -54,14 +54,43 @@ Feature: Household Member: Create
 #      |                   | 1           |        | post.householdMember[0].householdId::householdId is mandatory |
 #      |                   |             | 1      | post.householdMember[0].userId::userId is mandatory           |
 
-#  Scenario Outline: Create Household member endpoint is not able to connect to the database
-#    Given application is up
-#    And a valid household member is part of the request body for the create household member endpoint
-#    And the connection to the database fails for the create household member endpoint
-#    When the create household member endpoint is invoked
-#    Then the correct bad request response is returned from the create household member endpoint
-#      | <statusCode> | <responseMessage> |
-#
-#    Examples:
-#      | statusCode | responseMessage                     |
-#      | 400        | Invalid parameter type: householdId |
+  Scenario Outline: Create Household member endpoint is not able to connect to the database
+    Given application is up
+    And a valid household member is part of the request body for the create household member endpoint
+    And the connection to the database fails for the get user by id
+    When the create household member endpoint is invoked
+    Then the correct bad request response is returned from the create household member endpoint
+      | <statusCode> | <responseMessage> |
+    And the household member is not created
+
+    Examples:
+      | statusCode | responseMessage                                    |
+      | 500        | Something went wrong while saving household member |
+
+  Scenario Outline: Create Household member endpoint is not able to connect to the database
+    Given application is up
+    And a valid household member is part of the request body for the create household member endpoint
+    And user id exists in the database for the household member
+    And the connection to the database fails for the get household by id
+    When the create household member endpoint is invoked
+    Then the correct bad request response is returned from the create household member endpoint
+      | <statusCode> | <responseMessage> |
+    And the household member is not created
+
+    Examples:
+      | statusCode | responseMessage                                    |
+      | 500        | Something went wrong while saving household member |
+
+  Scenario Outline: Create Household member endpoint is not able to connect to the database
+    Given application is up
+    And a valid household member is part of the request body for the create household member endpoint
+    And user id exists in the database for the household member
+    And household id exists in the database for the household member
+    And the connection to the database fails for the create household member endpoint
+    When the create household member endpoint is invoked
+    Then the correct bad request response is returned from the create household member endpoint
+      | <statusCode> | <responseMessage> |
+
+    Examples:
+      | statusCode | responseMessage                                    |
+      | 500        | Something went wrong while saving household member |

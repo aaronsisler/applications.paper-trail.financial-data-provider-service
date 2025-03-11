@@ -28,7 +28,7 @@ Feature: Household: Get By Id
   Scenario Outline: Get Household By Id endpoint is not able to connect to the database
     Given application is up
     And the household id provided in the url is the correct format for the get household by id endpoint
-    And the connection to the database fails for the get household by id endpoint
+    And the connection to the database fails for the get household by id
     When the get household by id endpoint is invoked
     Then the correct failure response is returned from the get household by id endpoint
       | <statusCode> | <responseMessage> |

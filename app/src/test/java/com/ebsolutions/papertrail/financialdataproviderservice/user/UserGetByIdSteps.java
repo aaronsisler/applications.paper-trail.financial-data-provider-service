@@ -1,11 +1,8 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.user;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
@@ -59,13 +56,6 @@ public class UserGetByIdSteps extends BaseTest {
   public void theUserIdProvidedInTheUrlIsTheIncorrectFormatForTheGetUserByIdEndpoint() {
     String invalidUserId = "abc";
     getUserByIdUrl = Constants.USERS_URI + "/" + invalidUserId;
-  }
-
-  @And("the connection to the database fails for the get user by id endpoint")
-  public void theConnectionToTheDatabaseFailsForTheGetUserByIdEndpoint() {
-    DataProcessingException dataProcessingException = new DataProcessingException();
-
-    doThrow(dataProcessingException).when(userRepository).findById(any());
   }
 
   @When("the get user by id endpoint is invoked")

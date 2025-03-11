@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.household.Household;
 import com.ebsolutions.papertrail.financialdataproviderservice.household.HouseholdRepository;
@@ -21,6 +22,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
+import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -115,6 +117,17 @@ public class HouseholdMemberCreateSteps extends BaseTest {
 
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
     Assertions.assertEquals(dataTable.column(1).getFirst(), errorResponse.getMessages().getFirst());
+  }
 
+  @And("the connection to the database fails for the create household member endpoint")
+  public void theConnectionToTheDatabaseFailsForTheCreateHouseholdMemberEndpoint() {
+    DataProcessingException dataProcessingException = new DataProcessingException();
+
+    when(householdMemberRepository.save(any())).thenThrow(dataProcessingException);
+  }
+
+  @Then("the household member is not created")
+  public void theHouseholdMemberIsNotCreated() {
+    Mockito.verifyNoInteractions(householdMemberRepository);
   }
 }

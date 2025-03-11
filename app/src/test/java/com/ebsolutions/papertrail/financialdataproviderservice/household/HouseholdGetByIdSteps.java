@@ -1,11 +1,8 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.household;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
@@ -60,12 +57,6 @@ public class HouseholdGetByIdSteps extends BaseTest {
     getHouseholdByIdUrl = Constants.HOUSEHOLDS_URI + "/" + invalidHouseholdId;
   }
 
-  @And("the connection to the database fails for the get household by id endpoint")
-  public void theConnectionToTheDatabaseFailsForTheGetHouseholdByIdEndpoint() {
-    DataProcessingException dataProcessingException = new DataProcessingException();
-
-    doThrow(dataProcessingException).when(householdRepository).findById(any());
-  }
 
   @When("the get household by id endpoint is invoked")
   public void theGetHouseholdByIdEndpointIsInvoked() throws Exception {
