@@ -8,6 +8,8 @@ import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.CommonTestUtil;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.HouseholdTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -74,7 +76,7 @@ public class HouseholdUpdateSteps extends BaseTest {
 
     Household inputHouseholdOne = Household.builder()
         .householdId(householdId)
-        .name(HouseholdTestUtil.isEmptyString(dataTable.column(1).getFirst()))
+        .name(CommonTestUtil.isEmptyString(dataTable.column(1).getFirst()))
         .build();
 
     requestContent =
@@ -100,7 +102,7 @@ public class HouseholdUpdateSteps extends BaseTest {
     String content = mockHttpServletResponse.getContentAsString();
     Household household = objectMapper.readValue(content, Household.class);
 
-    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(expectedHouseholdOne,
+    HouseholdTestUtil.assertExpectedAgainstActual(expectedHouseholdOne,
         household);
   }
 

@@ -134,12 +134,21 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>models-householdMember</id>
+                        <id>models-household</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.parent.basedir}/contracts/householdMember.yaml</inputSpec>
+                            <inputSpec>${project.parent.basedir}/contracts/household.yaml</inputSpec>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>models-household-member</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.parent.basedir}/contracts/household-member.yaml</inputSpec>
                         </configuration>
                     </execution>
                 </executions>

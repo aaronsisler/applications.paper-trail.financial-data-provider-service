@@ -9,6 +9,7 @@ import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.HouseholdTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -89,7 +90,7 @@ public class HouseholdGetByIdSteps extends BaseTest {
     String content = mockHttpServletResponse.getContentAsString();
     Household household = objectMapper.readValue(content, Household.class);
 
-    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(expectedHousehold, household);
+    HouseholdTestUtil.assertExpectedAgainstActual(expectedHousehold, household);
   }
 
   @Then("the correct failure response is returned from the get household by id endpoint")

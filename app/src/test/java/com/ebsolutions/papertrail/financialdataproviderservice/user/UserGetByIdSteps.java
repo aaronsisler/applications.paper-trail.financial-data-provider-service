@@ -9,6 +9,7 @@ import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.UserTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -90,7 +91,7 @@ public class UserGetByIdSteps extends BaseTest {
     String content = mockHttpServletResponse.getContentAsString();
     User user = objectMapper.readValue(content, User.class);
 
-    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUser, user);
+    UserTestUtil.assertExpectedAgainstActual(expectedUser, user);
 
   }
 

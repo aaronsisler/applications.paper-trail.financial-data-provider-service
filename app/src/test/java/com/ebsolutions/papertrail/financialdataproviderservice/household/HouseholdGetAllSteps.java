@@ -7,6 +7,7 @@ import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.HouseholdTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -75,11 +76,11 @@ public class HouseholdGetAllSteps extends BaseTest {
     List<Household> households = objectMapper.readerForListOf(Household.class).readValue(content);
 
     Household householdOne = households.getFirst();
-    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(expectedHouseholdOne,
+    HouseholdTestUtil.assertExpectedAgainstActual(expectedHouseholdOne,
         householdOne);
 
     Household householdTwo = households.getLast();
-    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(expectedHouseholdTwo,
+    HouseholdTestUtil.assertExpectedAgainstActual(expectedHouseholdTwo,
         householdTwo);
   }
 

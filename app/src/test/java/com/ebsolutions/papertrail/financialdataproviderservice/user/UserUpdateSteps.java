@@ -8,6 +8,8 @@ import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.CommonTestUtil;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.UserTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -78,9 +80,9 @@ public class UserUpdateSteps extends BaseTest {
 
     User inputUserOne = User.builder()
         .userId(userId)
-        .username(UserTestUtil.isEmptyString(dataTable.column(1).getFirst()))
-        .firstName(UserTestUtil.isEmptyString(dataTable.column(2).getFirst()))
-        .lastName(UserTestUtil.isEmptyString(dataTable.column(3).getFirst()))
+        .username(CommonTestUtil.isEmptyString(dataTable.column(1).getFirst()))
+        .firstName(CommonTestUtil.isEmptyString(dataTable.column(2).getFirst()))
+        .lastName(CommonTestUtil.isEmptyString(dataTable.column(3).getFirst()))
         .build();
 
     requestContent =
@@ -106,7 +108,7 @@ public class UserUpdateSteps extends BaseTest {
     String content = mockHttpServletResponse.getContentAsString();
     User user = objectMapper.readValue(content, User.class);
 
-    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserOne, user);
+    UserTestUtil.assertExpectedAgainstActual(expectedUserOne, user);
   }
 
   @Then("the correct failure response is returned from the update user endpoint")
