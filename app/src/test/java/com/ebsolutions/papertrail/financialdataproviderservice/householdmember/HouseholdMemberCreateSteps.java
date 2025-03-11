@@ -55,8 +55,6 @@ public class HouseholdMemberCreateSteps extends BaseTest {
             .build();
 
     requestContent = objectMapper.writeValueAsString(inputHouseholdMember);
-
-    when(householdMemberRepository.save(any())).thenReturn(expectedHouseholdMember);
   }
 
   @And("user id exists in the database for the household member")
@@ -69,8 +67,9 @@ public class HouseholdMemberCreateSteps extends BaseTest {
     when(householdRepository.findById(any())).thenReturn(Optional.of(Household.builder().build()));
   }
 
-  @And("no household member is part of the request body")
-  public void noHouseholdMemberIsPartOfTheRequestBody() {
+  @And("the database connection succeeds for create household member")
+  public void theDatabaseConnectionSucceedsForCreateHouseholdMember() {
+    when(householdMemberRepository.save(any())).thenReturn(expectedHouseholdMember);
   }
 
   @And("household id does not exist in the household member")
@@ -81,6 +80,28 @@ public class HouseholdMemberCreateSteps extends BaseTest {
   @And("user id does not exist in the household member")
   public void userIdDoesNotExistInTheHouseholdMember() {
     when(userRepository.findById(any())).thenReturn(Optional.empty());
+  }
+
+  @And("the household member in the request body has an invalid input")
+  public void theHouseholdMemberInTheRequestBodyHasAnInvalidInput(DataTable dataTable)
+      throws JsonProcessingException {
+    int householdMemberId = dataTable.column(0).getFirst() == null ? 0 :
+        Integer.parseInt(dataTable.column(0).getFirst());
+
+    int householdId = dataTable.column(1).getFirst() == null ? 0 :
+        Integer.parseInt(dataTable.column(1).getFirst());
+
+    int userId = dataTable.column(2).getFirst() == null ? 0 :
+        Integer.parseInt(dataTable.column(2).getFirst());
+
+    HouseholdMember inputHouseholdMember = HouseholdMember.builder()
+        .householdMemberId(householdMemberId)
+        .householdId(householdId)
+        .userId(userId)
+        .build();
+
+    requestContent =
+        objectMapper.writeValueAsString(inputHouseholdMember);
   }
 
   @When("the create household member endpoint is invoked")

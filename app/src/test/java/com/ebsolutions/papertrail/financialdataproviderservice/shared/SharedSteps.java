@@ -5,12 +5,13 @@ import static org.mockito.Mockito.doThrow;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.household.HouseholdRepository;
+import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
 import com.ebsolutions.papertrail.financialdataproviderservice.user.UserRepository;
 import io.cucumber.java.en.And;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class SharedSteps {
+public class SharedSteps extends BaseTest {
   protected final HouseholdRepository householdRepository;
   protected final UserRepository userRepository;
 
