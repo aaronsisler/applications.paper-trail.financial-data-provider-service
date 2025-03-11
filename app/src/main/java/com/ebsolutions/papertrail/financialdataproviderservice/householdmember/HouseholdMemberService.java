@@ -46,7 +46,7 @@ public class HouseholdMemberService {
         List<String> existingUserErrorMessages =
             Collections.singletonList(
                 "Household Id does not exist: ".concat(
-                    Integer.toString(householdMember.getUserId())));
+                    Integer.toString(householdMember.getHouseholdId())));
 
         throw new DataConstraintException(existingUserErrorMessages);
       }

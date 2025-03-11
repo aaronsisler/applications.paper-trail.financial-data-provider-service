@@ -7,11 +7,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.household.Household;
 import com.ebsolutions.papertrail.financialdataproviderservice.household.HouseholdRepository;
+import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
 import com.ebsolutions.papertrail.financialdataproviderservice.user.User;
 import com.ebsolutions.papertrail.financialdataproviderservice.user.UserRepository;
 import com.ebsolutions.papertrail.financialdataproviderservice.util.HouseholdMemberTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -65,6 +67,20 @@ public class HouseholdMemberCreateSteps extends BaseTest {
     when(householdRepository.findById(any())).thenReturn(Optional.of(Household.builder().build()));
   }
 
+  @And("no household member is part of the request body")
+  public void noHouseholdMemberIsPartOfTheRequestBody() {
+  }
+
+  @And("household id does not exist in the household member")
+  public void householdIdDoesNotExistInTheHouseholdMember() {
+    when(householdRepository.findById(any())).thenReturn(Optional.empty());
+  }
+
+  @And("user id does not exist in the household member")
+  public void userIdDoesNotExistInTheHouseholdMember() {
+    when(userRepository.findById(any())).thenReturn(Optional.empty());
+  }
+
   @When("the create household member endpoint is invoked")
   public void theCreateHouseholdMemberEndpointIsInvoked() throws Exception {
     result = mockMvc.perform(post(Constants.HOUSEHOLD_MEMBERS_URI)
@@ -85,5 +101,20 @@ public class HouseholdMemberCreateSteps extends BaseTest {
     HouseholdMember householdMember = objectMapper.readValue(content, HouseholdMember.class);
 
     HouseholdMemberTestUtil.assertExpectedAgainstActual(expectedHouseholdMember, householdMember);
+  }
+
+  @Then("the correct bad request response is returned from the create household member endpoint")
+  public void theCorrectBadRequestResponseIsReturnedFromTheCreateHouseholdMemberEndpoint(
+      DataTable dataTable) throws UnsupportedEncodingException, JsonProcessingException {
+    MockHttpServletResponse mockHttpServletResponse = result.getResponse();
+
+    Assertions.assertEquals(Integer.parseInt(dataTable.column(0).getFirst()),
+        mockHttpServletResponse.getStatus());
+
+    String content = mockHttpServletResponse.getContentAsString();
+
+    ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
+    Assertions.assertEquals(dataTable.column(1).getFirst(), errorResponse.getMessages().getFirst());
+
   }
 }

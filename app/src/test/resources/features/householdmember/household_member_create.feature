@@ -14,17 +14,31 @@ Feature: Household Member: Create
 #    When the create household member endpoint is invoked
 #    Then the correct bad request response is returned from the create household member endpoint
 
-#  Scenario: Create household member endpoint returns correct error when user id does not exist
-#    Given application is up
-#    And user id does not exist in the household member
-#    When the create household member endpoint is invoked
-#    Then the correct bad request response is returned from the create household member endpoint
+  Scenario Outline: Create household member endpoint returns correct error when user id does not exist
+    Given application is up
+    And a valid household member is part of the request body for the create household member endpoint
+    And user id does not exist in the household member
+    When the create household member endpoint is invoked
+    Then the correct bad request response is returned from the create household member endpoint
+      | <statusCode> | <responseMessage> |
+#
+    Examples:
+      | statusCode | responseMessage             |
+      | 400        | User Id does not exist: 456 |
 
-#  Scenario: Create household member endpoint returns correct error when household id does not exist
-#    Given application is up
-#    And household id does not exist in the household member
-#    When the create household member endpoint is invoked
-#    Then the correct bad request response is returned from the create household member endpoint
+  Scenario Outline: Create household member endpoint returns correct error when household id does not exist
+    Given application is up
+    And a valid household member is part of the request body for the create household member endpoint
+    And user id exists in the database for the household member
+    And household id does not exist in the household member
+    When the create household member endpoint is invoked
+    Then the correct bad request response is returned from the create household member endpoint
+      | <statusCode> | <responseMessage> |
+
+    Examples:
+      | statusCode | responseMessage                  |
+      | 400        | Household Id does not exist: 123 |
+
 
 #  Scenario Outline: Create household member endpoint returns correct errors when required field is missing
 #    Given application is up
@@ -40,9 +54,14 @@ Feature: Household Member: Create
 #      |                   | 1           |        | post.householdMember[0].householdId::householdId is mandatory |
 #      |                   |             | 1      | post.householdMember[0].userId::userId is mandatory           |
 
-#  Scenario: Create Household member endpoint is not able to connect to the database
+#  Scenario Outline: Create Household member endpoint is not able to connect to the database
 #    Given application is up
 #    And a valid household member is part of the request body for the create household member endpoint
 #    And the connection to the database fails for the create household member endpoint
 #    When the create household member endpoint is invoked
-#    Then the correct failure response is returned from the create household member endpoint
+#    Then the correct bad request response is returned from the create household member endpoint
+#      | <statusCode> | <responseMessage> |
+#
+#    Examples:
+#      | statusCode | responseMessage                     |
+#      | 400        | Invalid parameter type: householdId |
