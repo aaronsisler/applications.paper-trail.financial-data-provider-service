@@ -85,7 +85,7 @@ public class HouseholdGetAllSteps extends BaseTest {
   }
 
   @Then("the correct empty households response is returned")
-  public void theCorrectEmptyHouseholdsResponseIsReturned() throws UnsupportedEncodingException {
+  public void theCorrectEmptyHouseholdsResponseIsReturned() {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
     Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), mockHttpServletResponse.getStatus());
   }

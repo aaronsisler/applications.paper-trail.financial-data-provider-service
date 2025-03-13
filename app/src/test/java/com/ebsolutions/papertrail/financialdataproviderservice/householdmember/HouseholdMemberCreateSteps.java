@@ -142,9 +142,7 @@ public class HouseholdMemberCreateSteps extends BaseTest {
 
   @And("the connection to the database fails for the create household member endpoint")
   public void theConnectionToTheDatabaseFailsForTheCreateHouseholdMemberEndpoint() {
-    DataProcessingException dataProcessingException = new DataProcessingException();
-
-    when(householdMemberRepository.save(any())).thenThrow(dataProcessingException);
+    when(householdMemberRepository.save(any())).thenThrow(new DataProcessingException());
   }
 
   @Then("the household member is not created")

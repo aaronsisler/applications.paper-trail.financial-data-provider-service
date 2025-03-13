@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -36,8 +37,13 @@ public class HouseholdMemberController {
                   array = @ArraySchema(schema = @Schema(implementation = HouseholdMember.class)))
           }),
       @ApiResponse(responseCode = "204", content = @Content(schema = @Schema(hidden = true)))})
-  public ResponseEntity<?> getAll() {
-    List<HouseholdMember> householdMembers = householdMemberService.getAll();
+  public ResponseEntity<?> getAllById(@RequestParam(required = false) Integer userId) {
+    List<HouseholdMember> householdMembers;
+    if (userId == null) {
+      householdMembers = householdMemberService.getAll();
+    } else {
+      householdMembers = householdMemberService.getAllById(userId);
+    }
 
     return !householdMembers.isEmpty() ? ResponseEntity.ok(householdMembers) :
         ResponseEntity.noContent().build();

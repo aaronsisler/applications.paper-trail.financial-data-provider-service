@@ -19,12 +19,23 @@ public class HouseholdMemberService {
   private final HouseholdService householdService;
   private final HouseholdMemberRepository householdMemberRepository;
 
+  public List<HouseholdMember> getAllById(Integer userId) {
+    try {
+      return householdMemberRepository.findByUserId(userId);
+    } catch (Exception exception) {
+      log.error("Error getting all", exception);
+      throw new DataProcessingException(
+          "Something went wrong while fetching household members");
+    }
+  }
+
   public List<HouseholdMember> getAll() {
     try {
       return householdMemberRepository.findAll();
     } catch (Exception exception) {
       log.error("Error getting all", exception);
-      throw new DataProcessingException("Something went wrong while fetching all households");
+      throw new DataProcessingException(
+          "Something went wrong while fetching household members");
     }
   }
 
