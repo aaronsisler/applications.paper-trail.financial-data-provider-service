@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -71,6 +72,9 @@ public class HouseholdMemberService {
       return householdMemberRepository.save(householdMember);
     } catch (DataConstraintException dataConstraintException) {
       throw dataConstraintException;
+    } catch (DataIntegrityViolationException dataIntegrityViolationException) {
+      log.error("Data Integrity:", dataIntegrityViolationException);
+      throw dataIntegrityViolationException;
     } catch (Exception exception) {
       log.error("Error creating", exception);
       throw new DataProcessingException("Something went wrong while saving household member");
