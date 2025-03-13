@@ -1,6 +1,7 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.householdmember;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -23,6 +24,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.mockito.Mockito;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -104,6 +106,12 @@ public class HouseholdMemberCreateSteps extends BaseTest {
         objectMapper.writeValueAsString(inputHouseholdMember);
   }
 
+  @And("the database save fails given a user or household was deleted during the create household member database call")
+  public void theDatabaseSaveFailsGivenAUserOrHouseholdWasDeletedDuringTheCreateHouseholdMemberDatabaseCall() {
+    doThrow(DataIntegrityViolationException.class)
+        .when(householdMemberRepository).save(any());
+  }
+
   @When("the create household member endpoint is invoked")
   public void theCreateHouseholdMemberEndpointIsInvoked() throws Exception {
     result = mockMvc.perform(post(Constants.HOUSEHOLD_MEMBERS_URI)
@@ -149,4 +157,6 @@ public class HouseholdMemberCreateSteps extends BaseTest {
   public void theHouseholdMemberIsNotCreated() {
     Mockito.verifyNoInteractions(householdMemberRepository);
   }
+
+
 }

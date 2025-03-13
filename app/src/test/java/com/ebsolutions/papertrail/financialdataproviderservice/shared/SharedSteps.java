@@ -17,15 +17,11 @@ public class SharedSteps extends BaseTest {
 
   @And("the connection to the database fails for the get user by id")
   public void theConnectionToTheDatabaseFailsForTheGetUserById() {
-    DataProcessingException dataProcessingException = new DataProcessingException();
-
-    doThrow(dataProcessingException).when(userRepository).findById(any());
+    doThrow(new DataProcessingException()).when(userRepository).findById(any());
   }
 
   @And("the connection to the database fails for the get household by id")
   public void theConnectionToTheDatabaseFailsForTheGetHouseholdById() {
-    DataProcessingException dataProcessingException = new DataProcessingException();
-
-    doThrow(dataProcessingException).when(householdRepository).findById(any());
+    doThrow(new DataProcessingException()).when(householdRepository).findById(any());
   }
 }

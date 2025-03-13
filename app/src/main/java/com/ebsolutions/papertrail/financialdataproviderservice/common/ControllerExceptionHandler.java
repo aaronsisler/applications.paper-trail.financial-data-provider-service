@@ -179,7 +179,7 @@ public class ControllerExceptionHandler {
   public ResponseEntity<?> handleException(
       DataIntegrityViolationException dataIntegrityViolationException) {
     log.error("Error", dataIntegrityViolationException);
-    return ResponseEntity.internalServerError().body(ErrorResponse.builder()
+    return ResponseEntity.badRequest().body(ErrorResponse.builder()
         .messages(Collections
             .singletonList("A provided field is relationally incorrect"))
         .build()
