@@ -1,19 +1,37 @@
-package com.ebsolutions.papertrail.financialdataproviderservice.user;
+package com.ebsolutions.papertrail.financialdataproviderservice.util;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.model.User;
 import org.junit.jupiter.api.Assertions;
 
 public class UserTestUtil {
-  protected static void assertExpectedUserAgainstActualUser(User expectedUser, User actualUser) {
+  public static void assertExpectedUserAgainstActualUser(User expectedUser, User actualUser) {
     Assertions.assertEquals(expectedUser.getUserId(), actualUser.getUserId());
     Assertions.assertEquals(expectedUser.getUsername(), actualUser.getUsername());
     Assertions.assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
     Assertions.assertEquals(expectedUser.getLastName(), actualUser.getLastName());
   }
 
-  protected static void assertExpectedUserAgainstCreatedUser(User expectedUser, User actualUser) {
+  public static void assertExpectedUserAgainstCreatedUser(User expectedUser, User actualUser) {
     Assertions.assertEquals(expectedUser.getUsername(), actualUser.getUsername());
     Assertions.assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
     Assertions.assertEquals(expectedUser.getLastName(), actualUser.getLastName());
+  }
+
+  public static User getTestDataUser(int userId) {
+    if (userId == 1) {
+      return User.builder()
+          .userId(1)
+          .username("aaron_sisler")
+          .firstName("Aaron")
+          .lastName("Sisler")
+          .build();
+    }
+
+    return User.builder()
+        .userId(2)
+        .username("bridget_sisler")
+        .firstName("Bridget")
+        .lastName("Sisler")
+        .build();
   }
 }

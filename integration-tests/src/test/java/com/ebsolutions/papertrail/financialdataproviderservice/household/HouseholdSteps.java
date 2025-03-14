@@ -1,9 +1,10 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.household;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.BaseStep;
-import com.ebsolutions.papertrail.financialdataproviderservice.common.CommonTestUtil;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.Household;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.CommonTestUtil;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.HouseholdTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
@@ -20,7 +21,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.client.RestClient;
 
 @Slf4j
@@ -28,7 +28,6 @@ public class HouseholdSteps extends BaseStep {
   private final List<Integer> newlyCreateHouseholdIds = new ArrayList<>();
 
   private String requestContent;
-  private MvcResult result;
   private RestClient.ResponseSpec response;
   private Household expectedHouseholdOne;
   private Household expectedHouseholdTwo;
