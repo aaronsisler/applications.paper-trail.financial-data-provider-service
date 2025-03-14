@@ -11,7 +11,7 @@ Feature: Integration: Household
   Scenario Outline: Get By Id and Update Household
     Given application is up
     And the household id provided exists in the database
-      | <householdname> |
+      | <name> |
     And an update for the household is valid and part of the request body for the update household endpoint
     When the update household endpoint is invoked
     Then the updated household is returned from the update household endpoint
