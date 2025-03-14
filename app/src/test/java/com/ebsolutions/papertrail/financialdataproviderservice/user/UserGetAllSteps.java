@@ -7,6 +7,7 @@ import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.UserTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -78,10 +79,10 @@ public class UserGetAllSteps extends BaseTest {
     List<User> users = objectMapper.readerForListOf(User.class).readValue(content);
 
     User userOne = users.getFirst();
-    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserOne, userOne);
+    UserTestUtil.assertExpectedAgainstActual(expectedUserOne, userOne);
 
     User userTwo = users.getLast();
-    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUserTwo, userTwo);
+    UserTestUtil.assertExpectedAgainstActual(expectedUserTwo, userTwo);
   }
 
   @Then("the correct empty users response is returned")

@@ -1,14 +1,12 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.user;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.UserTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -60,13 +58,6 @@ public class UserGetByIdSteps extends BaseTest {
     getUserByIdUrl = Constants.USERS_URI + "/" + invalidUserId;
   }
 
-  @And("the connection to the database fails for the get user by id endpoint")
-  public void theConnectionToTheDatabaseFailsForTheGetUserByIdEndpoint() {
-    DataProcessingException dataProcessingException = new DataProcessingException();
-
-    doThrow(dataProcessingException).when(userRepository).findById(any());
-  }
-
   @When("the get user by id endpoint is invoked")
   public void theGetUserByIdEndpointIsInvoked() throws Exception {
     result = mockMvc
@@ -90,7 +81,7 @@ public class UserGetByIdSteps extends BaseTest {
     String content = mockHttpServletResponse.getContentAsString();
     User user = objectMapper.readValue(content, User.class);
 
-    UserTestUtil.assertExpectedUserAgainstActualUser(expectedUser, user);
+    UserTestUtil.assertExpectedAgainstActual(expectedUser, user);
 
   }
 

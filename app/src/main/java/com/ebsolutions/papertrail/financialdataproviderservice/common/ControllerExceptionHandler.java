@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -168,8 +169,21 @@ public class ControllerExceptionHandler {
       DataProcessingException dataProcessingException) {
     return ResponseEntity.internalServerError()
         .body(ErrorResponse.builder()
-            .messages(Collections.singletonList(dataProcessingException.getMessage()))
+            .messages(Collections
+                .singletonList(dataProcessingException.getMessage()))
             .build());
+  }
+
+
+  @ExceptionHandler(DataIntegrityViolationException.class)
+  public ResponseEntity<?> handleException(
+      DataIntegrityViolationException dataIntegrityViolationException) {
+    log.error("Error", dataIntegrityViolationException);
+    return ResponseEntity.badRequest().body(ErrorResponse.builder()
+        .messages(Collections
+            .singletonList("A provided field is relationally incorrect"))
+        .build()
+    );
   }
 
   /**

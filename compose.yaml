@@ -13,14 +13,14 @@ services:
       - ./storage/db-init-scripts:/docker-entrypoint-initdb.d
     restart: unless-stopped
 
-  storage-admin-ui:
-    container_name: storage-admin-ui
-    image: dpage/pgadmin4
-    depends_on:
-      - storage
-    ports:
-      - "5050:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: root
-    restart: unless-stopped
+#  storage-admin-ui:
+#    container_name: storage-admin-ui
+#    image: dpage/pgadmin4
+#    depends_on:
+#      - storage
+#    ports:
+#      - "5050:80"
+#    environment:
+#      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+#      PGADMIN_DEFAULT_PASSWORD: root
+#    restart: unless-stopped

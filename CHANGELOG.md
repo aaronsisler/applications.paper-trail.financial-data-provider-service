@@ -14,11 +14,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.13.0] Household Member
+
+### Added
+
+- Household Member POST / CREATE with full Cucumber test suite
+- Household Member GET / GET ALL with full Cucumber test suite
+- Household Member GET / GET ALL By User Id with full Cucumber test suite
+
 ## [0.12.0] User Service and Household Service Get By Id
 
 ### Changed
 
---- Return type of the User and Household Service Get By Id to be Optional
+- Return type of the User and Household Service Get By Id to be Optional
 
 ## [0.11.0] Household
 

@@ -1,14 +1,12 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.household;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.HouseholdTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -59,12 +57,6 @@ public class HouseholdGetByIdSteps extends BaseTest {
     getHouseholdByIdUrl = Constants.HOUSEHOLDS_URI + "/" + invalidHouseholdId;
   }
 
-  @And("the connection to the database fails for the get household by id endpoint")
-  public void theConnectionToTheDatabaseFailsForTheGetHouseholdByIdEndpoint() {
-    DataProcessingException dataProcessingException = new DataProcessingException();
-
-    doThrow(dataProcessingException).when(householdRepository).findById(any());
-  }
 
   @When("the get household by id endpoint is invoked")
   public void theGetHouseholdByIdEndpointIsInvoked() throws Exception {
@@ -89,7 +81,7 @@ public class HouseholdGetByIdSteps extends BaseTest {
     String content = mockHttpServletResponse.getContentAsString();
     Household household = objectMapper.readValue(content, Household.class);
 
-    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(expectedHousehold, household);
+    HouseholdTestUtil.assertExpectedAgainstActual(expectedHousehold, household);
   }
 
   @Then("the correct failure response is returned from the get household by id endpoint")
@@ -106,6 +98,4 @@ public class HouseholdGetByIdSteps extends BaseTest {
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
     Assertions.assertEquals(dataTable.column(1).getFirst(), errorResponse.getMessages().getFirst());
   }
-
-
 }
