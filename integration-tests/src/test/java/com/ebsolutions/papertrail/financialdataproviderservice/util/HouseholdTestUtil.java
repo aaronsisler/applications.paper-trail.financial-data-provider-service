@@ -4,14 +4,14 @@ import com.ebsolutions.papertrail.financialdataproviderservice.model.Household;
 import org.junit.jupiter.api.Assertions;
 
 public class HouseholdTestUtil {
-  public static void assertExpectedHouseholdAgainstActualHousehold(Household expectedHousehold,
-                                                                   Household actualHousehold) {
+  public static void assertExpectedAgainstActual(Household expectedHousehold,
+                                                 Household actualHousehold) {
     Assertions.assertEquals(expectedHousehold.getHouseholdId(), actualHousehold.getHouseholdId());
     Assertions.assertEquals(expectedHousehold.getName(), actualHousehold.getName());
   }
 
-  public static void assertExpectedHouseholdAgainstCreatedHousehold(Household expectedHousehold,
-                                                                    Household actualHousehold) {
+  public static void assertExpectedAgainstCreated(Household expectedHousehold,
+                                                  Household actualHousehold) {
     Assertions.assertEquals(expectedHousehold.getName(), actualHousehold.getName());
   }
 

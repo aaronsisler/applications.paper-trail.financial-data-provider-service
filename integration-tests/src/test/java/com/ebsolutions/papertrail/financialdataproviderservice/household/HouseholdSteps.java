@@ -69,12 +69,12 @@ public class HouseholdSteps extends BaseStep {
     Assertions.assertEquals(2, households.size());
 
     Household householdOne = households.getFirst();
-    HouseholdTestUtil.assertExpectedHouseholdAgainstCreatedHousehold(expectedHouseholdOne,
+    HouseholdTestUtil.assertExpectedAgainstCreated(expectedHouseholdOne,
         householdOne);
     newlyCreateHouseholdIds.add(householdOne.getHouseholdId());
 
     Household householdTwo = households.getLast();
-    HouseholdTestUtil.assertExpectedHouseholdAgainstCreatedHousehold(expectedHouseholdTwo,
+    HouseholdTestUtil.assertExpectedAgainstCreated(expectedHouseholdTwo,
         householdTwo);
     newlyCreateHouseholdIds.add(householdTwo.getHouseholdId());
   }
@@ -101,11 +101,11 @@ public class HouseholdSteps extends BaseStep {
     Assertions.assertEquals(2, createdHouseholds.size());
 
     Household householdOne = createdHouseholds.getFirst();
-    HouseholdTestUtil.assertExpectedHouseholdAgainstCreatedHousehold(expectedHouseholdOne,
+    HouseholdTestUtil.assertExpectedAgainstCreated(expectedHouseholdOne,
         householdOne);
 
     Household householdTwo = createdHouseholds.getLast();
-    HouseholdTestUtil.assertExpectedHouseholdAgainstCreatedHousehold(expectedHouseholdTwo,
+    HouseholdTestUtil.assertExpectedAgainstCreated(expectedHouseholdTwo,
         householdTwo);
   }
 
@@ -128,7 +128,7 @@ public class HouseholdSteps extends BaseStep {
     Assertions.assertEquals(1, households.size());
 
     Household createdHousehold = households.getFirst();
-    HouseholdTestUtil.assertExpectedHouseholdAgainstCreatedHousehold(inputHousehold,
+    HouseholdTestUtil.assertExpectedAgainstCreated(inputHousehold,
         createdHousehold);
 
     Assertions.assertNotNull(createdHousehold);
@@ -143,7 +143,7 @@ public class HouseholdSteps extends BaseStep {
 
     Assertions.assertNotNull(retrievedCreatedHousehold);
 
-    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(createdHousehold,
+    HouseholdTestUtil.assertExpectedAgainstActual(createdHousehold,
         retrievedCreatedHousehold);
   }
 
@@ -187,7 +187,7 @@ public class HouseholdSteps extends BaseStep {
 
     Assertions.assertNotNull(returnedUpdatedHousehold);
 
-    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(updatedHousehold,
+    HouseholdTestUtil.assertExpectedAgainstActual(updatedHousehold,
         returnedUpdatedHousehold);
   }
 
@@ -197,7 +197,7 @@ public class HouseholdSteps extends BaseStep {
 
     Assertions.assertNotNull(retrievedUpdatedHousehold);
 
-    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(updatedHousehold,
+    HouseholdTestUtil.assertExpectedAgainstActual(updatedHousehold,
         retrievedUpdatedHousehold);
   }
 

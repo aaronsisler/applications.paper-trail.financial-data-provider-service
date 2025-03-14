@@ -73,11 +73,11 @@ public class UserSteps extends BaseStep {
     Assertions.assertEquals(2, users.size());
 
     User userOne = users.getFirst();
-    UserTestUtil.assertExpectedUserAgainstCreatedUser(expectedUserOne, userOne);
+    UserTestUtil.assertExpectedAgainstCreated(expectedUserOne, userOne);
     newlyCreateUserIds.add(userOne.getUserId());
 
     User userTwo = users.getLast();
-    UserTestUtil.assertExpectedUserAgainstCreatedUser(expectedUserTwo, userTwo);
+    UserTestUtil.assertExpectedAgainstCreated(expectedUserTwo, userTwo);
     newlyCreateUserIds.add(userTwo.getUserId());
   }
 
@@ -101,10 +101,10 @@ public class UserSteps extends BaseStep {
     Assertions.assertEquals(2, createdUsers.size());
 
     User userOne = createdUsers.getFirst();
-    UserTestUtil.assertExpectedUserAgainstCreatedUser(expectedUserOne, userOne);
+    UserTestUtil.assertExpectedAgainstCreated(expectedUserOne, userOne);
 
     User userTwo = createdUsers.getLast();
-    UserTestUtil.assertExpectedUserAgainstCreatedUser(expectedUserTwo, userTwo);
+    UserTestUtil.assertExpectedAgainstCreated(expectedUserTwo, userTwo);
   }
 
   @And("the user id provided exists in the database")
@@ -128,7 +128,7 @@ public class UserSteps extends BaseStep {
     Assertions.assertEquals(1, users.size());
 
     User createdUser = users.getFirst();
-    UserTestUtil.assertExpectedUserAgainstCreatedUser(inputUser, createdUser);
+    UserTestUtil.assertExpectedAgainstCreated(inputUser, createdUser);
 
     Assertions.assertNotNull(createdUser);
     Assertions.assertNotNull(createdUser.getUserId());
@@ -142,7 +142,7 @@ public class UserSteps extends BaseStep {
 
     Assertions.assertNotNull(retrievedCreatedUser);
 
-    UserTestUtil.assertExpectedUserAgainstActualUser(createdUser, retrievedCreatedUser);
+    UserTestUtil.assertExpectedAgainstActual(createdUser, retrievedCreatedUser);
   }
 
   @And("an update for the user is valid and part of the request body for the update user endpoint")
@@ -187,7 +187,7 @@ public class UserSteps extends BaseStep {
 
     Assertions.assertNotNull(returnedUpdatedUser);
 
-    UserTestUtil.assertExpectedUserAgainstActualUser(updatedUser, returnedUpdatedUser);
+    UserTestUtil.assertExpectedAgainstActual(updatedUser, returnedUpdatedUser);
   }
 
   @And("the updated user is correct in the database")
@@ -196,7 +196,7 @@ public class UserSteps extends BaseStep {
 
     Assertions.assertNotNull(retrievedUpdatedUser);
 
-    UserTestUtil.assertExpectedUserAgainstActualUser(updatedUser, retrievedUpdatedUser);
+    UserTestUtil.assertExpectedAgainstActual(updatedUser, retrievedUpdatedUser);
   }
 
   private RestClient.ResponseSpec createUserThroughApi() {
