@@ -127,4 +127,25 @@ public class HouseholdMemberSteps extends BaseStep {
     HouseholdMemberTestUtil
         .assertExpectedAgainstCreated(expectedHouseholdMemberTwo, householdMemberTwo);
   }
+
+  @When("the get all household members endpoint is invoked with the first user id")
+  public void theGetAllHouseholdMembersEndpointIsInvokedWithTheFirstUserId() {
+    response = CommonTestUtil.getThroughApi(restClient,
+        TestConstants.HOUSEHOLD_MEMBERS_URI + "?userId=" + userOne.getUserId());
+  }
+
+  @Then("the correct household members are returned from the get all household members endpoint invoked with the first user id")
+  public void theCorrectHouseholdMembersAreReturnedFromTheGetAllHouseholdMembersEndpointInvokedWithTheFirstUserId() {
+    List<HouseholdMember> householdMembers = response.body(
+        new ParameterizedTypeReference<ArrayList<HouseholdMember>>() {
+        });
+
+    Assertions.assertNotNull(householdMembers);
+
+    Assertions.assertEquals(1, householdMembers.size());
+
+    HouseholdMember householdMemberOne = householdMembers.getFirst();
+    HouseholdMemberTestUtil
+        .assertExpectedAgainstCreated(expectedHouseholdMemberOne, householdMemberOne);
+  }
 }

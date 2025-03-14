@@ -12,3 +12,5 @@ Feature: Integration: Household Member
     Then the newly created household member with the second user id is returned from the create household member endpoint
     When the get all household members endpoint is invoked
     Then the correct household members are returned from the get all household members endpoint
+    When the get all household members endpoint is invoked with the first user id
+    Then the correct household members are returned from the get all household members endpoint invoked with the first user id
