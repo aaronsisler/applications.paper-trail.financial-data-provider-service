@@ -6,8 +6,3 @@ VALUES
 INSERT INTO household (name)
 VALUES
 ('sisler_household');
-
-INSERT INTO household_member (household_id, user_id)
-VALUES
-(1,1),
-(1,2);

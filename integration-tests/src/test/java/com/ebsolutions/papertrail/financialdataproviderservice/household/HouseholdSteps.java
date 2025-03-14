@@ -1,9 +1,10 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.household;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.BaseStep;
-import com.ebsolutions.papertrail.financialdataproviderservice.common.CommonTestUtil;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.Household;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.CommonTestUtil;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.HouseholdTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
@@ -20,7 +21,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.client.RestClient;
 
 @Slf4j
@@ -28,7 +28,6 @@ public class HouseholdSteps extends BaseStep {
   private final List<Integer> newlyCreateHouseholdIds = new ArrayList<>();
 
   private String requestContent;
-  private MvcResult result;
   private RestClient.ResponseSpec response;
   private Household expectedHouseholdOne;
   private Household expectedHouseholdTwo;
@@ -70,12 +69,12 @@ public class HouseholdSteps extends BaseStep {
     Assertions.assertEquals(2, households.size());
 
     Household householdOne = households.getFirst();
-    HouseholdTestUtil.assertExpectedHouseholdAgainstCreatedHousehold(expectedHouseholdOne,
+    HouseholdTestUtil.assertExpectedAgainstCreated(expectedHouseholdOne,
         householdOne);
     newlyCreateHouseholdIds.add(householdOne.getHouseholdId());
 
     Household householdTwo = households.getLast();
-    HouseholdTestUtil.assertExpectedHouseholdAgainstCreatedHousehold(expectedHouseholdTwo,
+    HouseholdTestUtil.assertExpectedAgainstCreated(expectedHouseholdTwo,
         householdTwo);
     newlyCreateHouseholdIds.add(householdTwo.getHouseholdId());
   }
@@ -102,11 +101,11 @@ public class HouseholdSteps extends BaseStep {
     Assertions.assertEquals(2, createdHouseholds.size());
 
     Household householdOne = createdHouseholds.getFirst();
-    HouseholdTestUtil.assertExpectedHouseholdAgainstCreatedHousehold(expectedHouseholdOne,
+    HouseholdTestUtil.assertExpectedAgainstCreated(expectedHouseholdOne,
         householdOne);
 
     Household householdTwo = createdHouseholds.getLast();
-    HouseholdTestUtil.assertExpectedHouseholdAgainstCreatedHousehold(expectedHouseholdTwo,
+    HouseholdTestUtil.assertExpectedAgainstCreated(expectedHouseholdTwo,
         householdTwo);
   }
 
@@ -129,7 +128,7 @@ public class HouseholdSteps extends BaseStep {
     Assertions.assertEquals(1, households.size());
 
     Household createdHousehold = households.getFirst();
-    HouseholdTestUtil.assertExpectedHouseholdAgainstCreatedHousehold(inputHousehold,
+    HouseholdTestUtil.assertExpectedAgainstCreated(inputHousehold,
         createdHousehold);
 
     Assertions.assertNotNull(createdHousehold);
@@ -144,7 +143,7 @@ public class HouseholdSteps extends BaseStep {
 
     Assertions.assertNotNull(retrievedCreatedHousehold);
 
-    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(createdHousehold,
+    HouseholdTestUtil.assertExpectedAgainstActual(createdHousehold,
         retrievedCreatedHousehold);
   }
 
@@ -188,7 +187,7 @@ public class HouseholdSteps extends BaseStep {
 
     Assertions.assertNotNull(returnedUpdatedHousehold);
 
-    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(updatedHousehold,
+    HouseholdTestUtil.assertExpectedAgainstActual(updatedHousehold,
         returnedUpdatedHousehold);
   }
 
@@ -198,7 +197,7 @@ public class HouseholdSteps extends BaseStep {
 
     Assertions.assertNotNull(retrievedUpdatedHousehold);
 
-    HouseholdTestUtil.assertExpectedHouseholdAgainstActualHousehold(updatedHousehold,
+    HouseholdTestUtil.assertExpectedAgainstActual(updatedHousehold,
         retrievedUpdatedHousehold);
   }
 

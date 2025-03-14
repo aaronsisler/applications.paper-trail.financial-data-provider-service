@@ -1,9 +1,10 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.user;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.BaseStep;
-import com.ebsolutions.papertrail.financialdataproviderservice.common.CommonTestUtil;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.User;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.CommonTestUtil;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.UserTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
@@ -20,7 +21,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.client.RestClient;
 
 @Slf4j
@@ -28,7 +28,6 @@ public class UserSteps extends BaseStep {
   private final List<Integer> newlyCreateUserIds = new ArrayList<>();
 
   private String requestContent;
-  private MvcResult result;
   private RestClient.ResponseSpec response;
   private User expectedUserOne;
   private User expectedUserTwo;
@@ -74,11 +73,11 @@ public class UserSteps extends BaseStep {
     Assertions.assertEquals(2, users.size());
 
     User userOne = users.getFirst();
-    UserTestUtil.assertExpectedUserAgainstCreatedUser(expectedUserOne, userOne);
+    UserTestUtil.assertExpectedAgainstCreated(expectedUserOne, userOne);
     newlyCreateUserIds.add(userOne.getUserId());
 
     User userTwo = users.getLast();
-    UserTestUtil.assertExpectedUserAgainstCreatedUser(expectedUserTwo, userTwo);
+    UserTestUtil.assertExpectedAgainstCreated(expectedUserTwo, userTwo);
     newlyCreateUserIds.add(userTwo.getUserId());
   }
 
@@ -102,10 +101,10 @@ public class UserSteps extends BaseStep {
     Assertions.assertEquals(2, createdUsers.size());
 
     User userOne = createdUsers.getFirst();
-    UserTestUtil.assertExpectedUserAgainstCreatedUser(expectedUserOne, userOne);
+    UserTestUtil.assertExpectedAgainstCreated(expectedUserOne, userOne);
 
     User userTwo = createdUsers.getLast();
-    UserTestUtil.assertExpectedUserAgainstCreatedUser(expectedUserTwo, userTwo);
+    UserTestUtil.assertExpectedAgainstCreated(expectedUserTwo, userTwo);
   }
 
   @And("the user id provided exists in the database")
@@ -129,7 +128,7 @@ public class UserSteps extends BaseStep {
     Assertions.assertEquals(1, users.size());
 
     User createdUser = users.getFirst();
-    UserTestUtil.assertExpectedUserAgainstCreatedUser(inputUser, createdUser);
+    UserTestUtil.assertExpectedAgainstCreated(inputUser, createdUser);
 
     Assertions.assertNotNull(createdUser);
     Assertions.assertNotNull(createdUser.getUserId());
@@ -143,7 +142,7 @@ public class UserSteps extends BaseStep {
 
     Assertions.assertNotNull(retrievedCreatedUser);
 
-    UserTestUtil.assertExpectedUserAgainstActualUser(createdUser, retrievedCreatedUser);
+    UserTestUtil.assertExpectedAgainstActual(createdUser, retrievedCreatedUser);
   }
 
   @And("an update for the user is valid and part of the request body for the update user endpoint")
@@ -188,7 +187,7 @@ public class UserSteps extends BaseStep {
 
     Assertions.assertNotNull(returnedUpdatedUser);
 
-    UserTestUtil.assertExpectedUserAgainstActualUser(updatedUser, returnedUpdatedUser);
+    UserTestUtil.assertExpectedAgainstActual(updatedUser, returnedUpdatedUser);
   }
 
   @And("the updated user is correct in the database")
@@ -197,7 +196,7 @@ public class UserSteps extends BaseStep {
 
     Assertions.assertNotNull(retrievedUpdatedUser);
 
-    UserTestUtil.assertExpectedUserAgainstActualUser(updatedUser, retrievedUpdatedUser);
+    UserTestUtil.assertExpectedAgainstActual(updatedUser, retrievedUpdatedUser);
   }
 
   private RestClient.ResponseSpec createUserThroughApi() {
