@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.14.0] Household Member Create and Get All Integration Test
+
+### Added
+
+- Household Member POST / GET ALL with integration test
+
 ## [0.13.0] Household Member
 
 ### Added
