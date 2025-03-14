@@ -38,9 +38,7 @@ public class CommonTestUtil {
     return response
         .onStatus(HttpStatusCode::is4xxClientError,
             (request, retResponse)
-                -> {
-              //              Assertions.assertEquals(HttpStatus.OK, retResponse.getStatusCode());
-            })
+                -> Assertions.assertEquals(HttpStatus.OK, retResponse.getStatusCode()))
         .onStatus(HttpStatusCode::is5xxServerError,
             (request, retResponse)
                 -> Assertions.assertEquals(HttpStatus.OK, retResponse.getStatusCode()));
