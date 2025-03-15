@@ -1,9 +1,9 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.household;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.BaseStep;
+import com.ebsolutions.papertrail.financialdataproviderservice.config.TestConstants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.Household;
-import com.ebsolutions.papertrail.financialdataproviderservice.tooling.HouseholdTestData;
-import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
+import com.ebsolutions.papertrail.financialdataproviderservice.testdata.HouseholdTestData;
 import com.ebsolutions.papertrail.financialdataproviderservice.util.ApiCallTestUtil;
 import com.ebsolutions.papertrail.financialdataproviderservice.util.HouseholdTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;

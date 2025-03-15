@@ -1,7 +1,7 @@
 package com.ebsolutions.papertrail.financialdataproviderservice;
 
+import com.ebsolutions.papertrail.financialdataproviderservice.config.TestConstants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.HealthCheck;
-import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
 import io.cucumber.java.en.Given;
 import java.time.Instant;
 import org.junit.jupiter.api.Assertions;

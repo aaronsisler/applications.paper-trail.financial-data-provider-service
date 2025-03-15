@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataproviderservice.tooling;
+package com.ebsolutions.papertrail.financialdataproviderservice.testdata;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.model.Institution;
 

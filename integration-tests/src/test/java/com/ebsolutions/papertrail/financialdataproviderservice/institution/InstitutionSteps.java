@@ -2,9 +2,9 @@ package com.ebsolutions.papertrail.financialdataproviderservice.institution;
 
 
 import com.ebsolutions.papertrail.financialdataproviderservice.BaseStep;
+import com.ebsolutions.papertrail.financialdataproviderservice.config.TestConstants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.Institution;
-import com.ebsolutions.papertrail.financialdataproviderservice.tooling.InstitutionTestData;
-import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
+import com.ebsolutions.papertrail.financialdataproviderservice.testdata.InstitutionTestData;
 import com.ebsolutions.papertrail.financialdataproviderservice.util.ApiCallTestUtil;
 import com.ebsolutions.papertrail.financialdataproviderservice.util.InstitutionTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;

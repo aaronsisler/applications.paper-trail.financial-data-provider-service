@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataproviderservice.tooling;
+package com.ebsolutions.papertrail.financialdataproviderservice.config;
 
 public class TestConstants {
   public static final int APPLICATION_START_TIME_WAIT_PERIOD_IN_MILLISECONDS = 30000;
