@@ -1,26 +1,22 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.user;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.BaseStep;
+import com.ebsolutions.papertrail.financialdataproviderservice.config.TestConstants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.User;
-import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
-import com.ebsolutions.papertrail.financialdataproviderservice.util.CommonTestUtil;
+import com.ebsolutions.papertrail.financialdataproviderservice.testdata.UserTestData;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.ApiCallTestUtil;
 import com.ebsolutions.papertrail.financialdataproviderservice.util.UserTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 import org.springframework.web.client.RestClient;
 
 @Slf4j
@@ -60,7 +56,8 @@ public class UserSteps extends BaseStep {
 
   @When("the create all users endpoint is invoked")
   public void theCreateAllUsersEndpointIsInvoked() {
-    response = createUserThroughApi();
+    response =
+        ApiCallTestUtil.createThroughApi(restClient, TestConstants.USERS_URI, requestContent);
   }
 
   @Then("the newly created users are returned from the create all users endpoint")
@@ -108,41 +105,24 @@ public class UserSteps extends BaseStep {
   }
 
   @And("the user id provided exists in the database")
-  public void theUserIdProvidedExistsInTheDatabase(DataTable dataTable) throws Exception {
-    User inputUser = User.builder()
-        .username(CommonTestUtil.isEmptyString(dataTable.column(0).getFirst()))
-        .firstName(CommonTestUtil.isEmptyString(dataTable.column(1).getFirst()))
-        .lastName(CommonTestUtil.isEmptyString(dataTable.column(2).getFirst()))
-        .build();
+  public void theUserIdProvidedExistsInTheDatabase() throws Exception {
+    User databaseSetupUser = UserTestData.UPDATE.get();
 
-    requestContent =
-        objectMapper.writeValueAsString(Collections.singletonList(inputUser));
+    Assertions.assertNotNull(databaseSetupUser);
+    if (databaseSetupUser.getUserId() == null) {
+      Assertions.fail("Data setup failed for user");
+    }
 
-    response = createUserThroughApi();
-
-    List<User> users = response.body(
-        new ParameterizedTypeReference<ArrayList<User>>() {
-        });
-
-    Assertions.assertNotNull(users);
-    Assertions.assertEquals(1, users.size());
-
-    User createdUser = users.getFirst();
-    UserTestUtil.assertExpectedAgainstCreated(inputUser, createdUser);
-
-    Assertions.assertNotNull(createdUser);
-    Assertions.assertNotNull(createdUser.getUserId());
-
-    resultUserId = createdUser.getUserId();
+    resultUserId = databaseSetupUser.getUserId();
     userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
 
-    response = getUserThroughApi();
+    response = ApiCallTestUtil.getThroughApi(restClient, userByIdUrl);
 
     User retrievedCreatedUser = response.body(User.class);
 
     Assertions.assertNotNull(retrievedCreatedUser);
 
-    UserTestUtil.assertExpectedAgainstActual(createdUser, retrievedCreatedUser);
+    UserTestUtil.assertExpectedAgainstActual(databaseSetupUser, retrievedCreatedUser);
   }
 
   @And("an update for the user is valid and part of the request body for the update user endpoint")
@@ -159,26 +139,70 @@ public class UserSteps extends BaseStep {
         objectMapper.writeValueAsString(updatedUser);
   }
 
+  @And("the update user id provided exists in the database")
+  public void theUpdateUserIdProvidedExistsInTheDatabase() {
+    User databaseSetupUser = UserTestData.UPDATE.get();
+
+    Assertions.assertNotNull(databaseSetupUser);
+
+    if (databaseSetupUser.getUserId() == null) {
+      Assertions.fail("Data setup failed for user");
+    }
+
+    resultUserId = databaseSetupUser.getUserId();
+    userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
+
+    response = ApiCallTestUtil.getThroughApi(restClient, userByIdUrl);
+
+    User retrievedCreatedUser = response.body(User.class);
+
+    Assertions.assertNotNull(retrievedCreatedUser);
+
+    UserTestUtil.assertExpectedAgainstActual(databaseSetupUser, retrievedCreatedUser);
+  }
+
+  @And("the delete user id provided exists in the database")
+  public void theDeleteUserIdProvidedExistsInTheDatabase() {
+    User databaseSetupUser = UserTestData.DELETE.get();
+
+    Assertions.assertNotNull(databaseSetupUser);
+    if (databaseSetupUser.getUserId() == null) {
+      Assertions.fail("Data setup failed for user");
+    }
+
+    resultUserId = databaseSetupUser.getUserId();
+    userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
+
+    response = ApiCallTestUtil.getThroughApi(restClient, userByIdUrl);
+
+    User retrievedCreatedUser = response.body(User.class);
+
+    Assertions.assertNotNull(retrievedCreatedUser);
+
+    UserTestUtil.assertExpectedAgainstActual(databaseSetupUser, retrievedCreatedUser);
+  }
+
   @When("the update user endpoint is invoked")
   public void theUpdateUserEndpointIsInvoked() {
-    response = updateUserThroughApi();
+    response =
+        ApiCallTestUtil.updateThroughApi(restClient, TestConstants.USERS_URI, requestContent);
   }
 
   @When("the delete user endpoint is invoked")
-  public void theDeleteUserEndpointIsInvoked() throws Exception {
-    response = deleteUserThroughApi();
+  public void theDeleteUserEndpointIsInvoked() {
+    response = ApiCallTestUtil.deleteThroughApi(restClient, userByIdUrl);
   }
 
   @Then("the correct response is returned from the delete user endpoint")
   public void theCorrectResponseIsReturnedFromTheDeleteUserEndpoint() {
-    checkForNoContentStatusCode(response);
+    ApiCallTestUtil.checkForNoContentStatusCode(response);
   }
 
   @And("the correct user is deleted")
-  public void theCorrectUserIsDeleted() throws Exception {
-    response = getUserThroughApi();
+  public void theCorrectUserIsDeleted() {
+    response = ApiCallTestUtil.getThroughApi(restClient, userByIdUrl);
 
-    checkForNoContentStatusCode(response);
+    ApiCallTestUtil.checkForNoContentStatusCode(response);
   }
 
   @Then("the updated user is returned from the update user endpoint")
@@ -197,57 +221,5 @@ public class UserSteps extends BaseStep {
     Assertions.assertNotNull(retrievedUpdatedUser);
 
     UserTestUtil.assertExpectedAgainstActual(updatedUser, retrievedUpdatedUser);
-  }
-
-  private RestClient.ResponseSpec createUserThroughApi() {
-    return checkForErrorStatusCodes(restClient
-        .post()
-        .uri(TestConstants.USERS_URI)
-        .accept(MediaType.APPLICATION_JSON)
-        .body(requestContent)
-        .contentType(MediaType.APPLICATION_JSON)
-        .retrieve());
-  }
-
-  private RestClient.ResponseSpec updateUserThroughApi() {
-    return checkForErrorStatusCodes(restClient
-        .put()
-        .uri(TestConstants.USERS_URI)
-        .accept(MediaType.APPLICATION_JSON)
-        .body(requestContent)
-        .contentType(MediaType.APPLICATION_JSON)
-        .retrieve());
-  }
-
-  private RestClient.ResponseSpec getUserThroughApi() {
-    return checkForErrorStatusCodes(restClient
-        .get()
-        .uri(userByIdUrl)
-        .retrieve());
-  }
-
-  private RestClient.ResponseSpec deleteUserThroughApi() {
-    return checkForErrorStatusCodes(restClient
-        .delete()
-        .uri(userByIdUrl)
-        .retrieve());
-  }
-
-
-  private void checkForNoContentStatusCode(RestClient.ResponseSpec response) {
-    response
-        .onStatus(HttpStatusCode::is2xxSuccessful,
-            (request, retResponse)
-                -> Assertions.assertEquals(HttpStatus.NO_CONTENT, retResponse.getStatusCode()));
-  }
-
-  private RestClient.ResponseSpec checkForErrorStatusCodes(RestClient.ResponseSpec response) {
-    return response
-        .onStatus(HttpStatusCode::is4xxClientError,
-            (request, retResponse)
-                -> Assertions.assertEquals(HttpStatus.OK, retResponse.getStatusCode()))
-        .onStatus(HttpStatusCode::is5xxServerError,
-            (request, retResponse)
-                -> Assertions.assertEquals(HttpStatus.OK, retResponse.getStatusCode()));
   }
 }

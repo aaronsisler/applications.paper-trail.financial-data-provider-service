@@ -2,6 +2,7 @@ package com.ebsolutions.papertrail.financialdataproviderservice.tooling;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.household.HouseholdRepository;
 import com.ebsolutions.papertrail.financialdataproviderservice.householdmember.HouseholdMemberRepository;
+import com.ebsolutions.papertrail.financialdataproviderservice.institution.InstitutionRepository;
 import com.ebsolutions.papertrail.financialdataproviderservice.user.UserRepository;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,6 +16,8 @@ public class MockedIntegrationConfig {
   protected HouseholdMemberRepository householdMemberRepository;
   @MockBean
   protected HouseholdRepository householdRepository;
+  @MockBean
+  protected InstitutionRepository institutionRepository;
   @MockBean
   protected UserRepository userRepository;
 }

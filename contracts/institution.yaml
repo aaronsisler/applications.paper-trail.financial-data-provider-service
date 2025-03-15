@@ -1,0 +1,110 @@
+openapi: 3.0.0
+info:
+  title: Institution REST API
+  version: "1.0"
+servers:
+  - url: http://localhost/
+paths:
+  /institutions:
+    get:
+      operationId: getInstitutions
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Institution"
+        204:
+          description: No content
+    post:
+      operationId: createInstitutions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              $ref: "#/components/schemas/Institution"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/Institution"
+        4XX:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+    put:
+      operationId: updateInstitution
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Institution"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Institution"
+        4XX:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+  /institutions/{institutionId}:
+    parameters:
+      - $ref: "#/components/parameters/InstitutionId"
+    delete:
+      operationId: deleteInstitution
+      responses:
+        204:
+          description: No content
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    Institution:
+      type: object
+      required:
+        - name
+      properties:
+        institutionId:
+          type: integer
+        name:
+          type: string
+          minLength: 1
+  parameters:
+    InstitutionId:
+      in: path
+      name: institutionId
+      required: true
+      schema:
+        type: integer

@@ -88,17 +88,17 @@
 
     <build>
         <plugins>
-            <!-- Used to compile the sources of your project -->
-            <!-- Version: Parent POM PIM -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
             <!-- Maintains strict Code Styles -->
             <!-- Version: Parent POM PIM -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <!-- Used to compile the source and test of project -->
+            <!-- Version: Parent POM PIM -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
             <!-- Generates Java classes from OpenAPI contracts -->
             <!-- Version: Parent POM PIM -->
@@ -151,16 +151,24 @@
                             <inputSpec>${project.parent.basedir}/contracts/household-member.yaml</inputSpec>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>models-institution</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.parent.basedir}/contracts/institution.yaml</inputSpec>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
-            <!-- Used for compiling the Cucumber integration tests but not running them -->
-            <!-- skipTests are true here since they should only be run while Docker is up -->
+            <!-- By default, surefire is running so setting skipTests to true -->
+            <!-- We want to run tests during integration-test phase using failsafe plugin -->
             <!-- Version: Parent POM PIM -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <!-- This is needed since Surefire is running the tests by default, which we don't want -->
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
@@ -175,6 +183,39 @@
             </activation>
             <build>
                 <plugins>
+                    <!-- By default, surefire is running so setting skipTests to true -->
+                    <!-- We want to run tests during integration-test phase using failsafe plugin -->
+                    <!-- Version: Parent POM PIM -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+                    <!-- Used for running the Cucumber integration tests -->
+                    <!-- skipTests is false here since they should run in this profile -->
+                    <!-- Version: Parent POM PIM -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <skipTests>false</skipTests>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>integration-tests</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                </goals>
+                                <configuration>
+                                    <includes>
+                                        <include>**/RunCucumberTests.java</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <!-- Used to execute commands on the command line -->
                     <!-- For this case, it spins up a clean docker environment for running tests-->
                     <!-- Version: Parent POM PIM -->
@@ -182,20 +223,7 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <executions>
-                            <execution>
-                                <id>pre-test-cleanup</id>
-                                <phase>post-clean</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>docker</executable>
-                                    <arguments>
-                                        <argument>compose</argument>
-                                        <argument>down</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
+                            <!-- Brings up the storage and app containers -->
                             <execution>
                                 <id>docker-compose-up</id>
                                 <phase>test-compile</phase>
@@ -212,6 +240,7 @@
                                     </arguments>
                                 </configuration>
                             </execution>
+                            <!-- Tears down the Docker containers even if integration test fail -->
                             <execution>
                                 <id>post-test-cleanup</id>
                                 <phase>post-integration-test</phase>
@@ -227,16 +256,6 @@
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>
-                    <!-- Used for running the Cucumber integration tests -->
-                    <!-- skipTests are false here since they should only be run while Docker is up -->
-                    <!-- Version: Parent POM PIM -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <skipTests>false</skipTests>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>

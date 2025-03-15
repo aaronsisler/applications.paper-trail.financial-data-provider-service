@@ -21,5 +21,5 @@ import org.junit.platform.suite.api.Suite;
         value = "com.ebsolutions.papertrail.financialdataproviderservice")
 
 })
-public class RunCucumberTest {
+public class RunCucumberTests {
 }
