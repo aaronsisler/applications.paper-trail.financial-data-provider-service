@@ -5,7 +5,7 @@ import com.ebsolutions.papertrail.financialdataproviderservice.model.Household;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.HouseholdMember;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.User;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
-import com.ebsolutions.papertrail.financialdataproviderservice.util.CommonTestUtil;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.ApiCallTestUtil;
 import com.ebsolutions.papertrail.financialdataproviderservice.util.HouseholdMemberTestUtil;
 import com.ebsolutions.papertrail.financialdataproviderservice.util.HouseholdTestUtil;
 import com.ebsolutions.papertrail.financialdataproviderservice.util.UserTestUtil;
@@ -59,13 +59,13 @@ public class HouseholdMemberSteps extends BaseStep {
 
   @When("the create household member endpoint is invoked")
   public void theCreateHouseholdMemberEndpointIsInvoked() {
-    response = CommonTestUtil.createThroughApi(restClient, TestConstants.HOUSEHOLD_MEMBERS_URI,
+    response = ApiCallTestUtil.createThroughApi(restClient, TestConstants.HOUSEHOLD_MEMBERS_URI,
         requestContent);
   }
 
   @When("the get all household members endpoint is invoked")
   public void theGetAllHouseholdMembersEndpointIsInvoked() {
-    response = CommonTestUtil.getThroughApi(restClient, TestConstants.HOUSEHOLD_MEMBERS_URI);
+    response = ApiCallTestUtil.getThroughApi(restClient, TestConstants.HOUSEHOLD_MEMBERS_URI);
   }
 
   @Then("the newly created household member with the first user id is returned from the create household member endpoint")
@@ -78,7 +78,6 @@ public class HouseholdMemberSteps extends BaseStep {
         .assertExpectedAgainstCreated(expectedHouseholdMemberOne, householdMember);
 
     newlyCreateHouseholdMemberIds.add(householdMember.getHouseholdMemberId());
-
   }
 
   @And("a valid household member with the second user id is part of the request body for the create household member endpoint")
@@ -130,7 +129,7 @@ public class HouseholdMemberSteps extends BaseStep {
 
   @When("the get all household members endpoint is invoked with the first user id")
   public void theGetAllHouseholdMembersEndpointIsInvokedWithTheFirstUserId() {
-    response = CommonTestUtil.getThroughApi(restClient,
+    response = ApiCallTestUtil.getThroughApi(restClient,
         TestConstants.HOUSEHOLD_MEMBERS_URI + "?userId=" + userOne.getUserId());
   }
 

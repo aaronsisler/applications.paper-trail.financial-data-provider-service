@@ -6,3 +6,7 @@ VALUES
 INSERT INTO household (name)
 VALUES
 ('sisler_household');
+
+INSERT INTO institution (name)
+VALUES
+('my_bank_institution');

@@ -1,13 +1,13 @@
 openapi: 3.0.0
 info:
-  title: Household REST API
+  title: Institution REST API
   version: "1.0"
 servers:
   - url: http://localhost/
 paths:
-  /households:
+  /institutions:
     get:
-      operationId: getHouseholds
+      operationId: getInstitutions
       responses:
         200:
           description: OK
@@ -16,18 +16,18 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Household"
+                  $ref: "#/components/schemas/Institution"
         204:
           description: No content
     post:
-      operationId: createHouseholds
+      operationId: createInstitutions
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: array
-              $ref: "#/components/schemas/Household"
+              $ref: "#/components/schemas/Institution"
       responses:
         200:
           description: OK
@@ -35,7 +35,7 @@ paths:
             application/json:
               schema:
                 type: array
-                $ref: "#/components/schemas/Household"
+                $ref: "#/components/schemas/Institution"
         4XX:
           description: Bad Request
           content:
@@ -49,20 +49,20 @@ paths:
               schema:
                 $ref: "common.yaml#/components/schemas/ErrorResponse"
     put:
-      operationId: updateHousehold
+      operationId: updateInstitution
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Household"
+              $ref: "#/components/schemas/Institution"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Household"
+                $ref: "#/components/schemas/Institution"
         4XX:
           description: Bad Request
           content:
@@ -75,11 +75,11 @@ paths:
             application/json:
               schema:
                 $ref: "common.yaml#/components/schemas/ErrorResponse"
-  /households/{householdId}:
+  /institutions/{institutionId}:
     parameters:
-      - $ref: "#/components/parameters/HouseholdId"
+      - $ref: "#/components/parameters/InstitutionId"
     delete:
-      operationId: deleteHousehold
+      operationId: deleteInstitution
       responses:
         204:
           description: No content
@@ -91,20 +91,20 @@ paths:
                 $ref: "common.yaml#/components/schemas/ErrorResponse"
 components:
   schemas:
-    Household:
+    Institution:
       type: object
       required:
         - name
       properties:
-        householdId:
+        institutionId:
           type: integer
         name:
           type: string
           minLength: 1
   parameters:
-    HouseholdId:
+    InstitutionId:
       in: path
-      name: householdId
+      name: institutionId
       required: true
       schema:
         type: integer

@@ -61,7 +61,6 @@ public class InstitutionController {
         ?
         ResponseEntity.ok(institution.get()) :
         ResponseEntity.noContent().build();
-
   }
 
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
