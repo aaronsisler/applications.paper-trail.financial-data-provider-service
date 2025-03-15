@@ -164,8 +164,11 @@ public class HouseholdSteps extends BaseStep {
 
   @When("the update household endpoint is invoked")
   public void theUpdateHouseholdEndpointIsInvoked() {
+    System.out.println("HERE");
+    System.out.println(householdByIdUrl);
+    System.out.println(requestContent);
     response =
-        ApiCallTestUtil.updateThroughApi(restClient, householdByIdUrl, requestContent);
+        ApiCallTestUtil.updateThroughApi(restClient, TestConstants.HOUSEHOLDS_URI, requestContent);
   }
 
   @When("the delete household endpoint is invoked")

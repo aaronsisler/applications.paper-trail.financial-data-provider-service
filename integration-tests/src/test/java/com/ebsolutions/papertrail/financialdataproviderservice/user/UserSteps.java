@@ -139,6 +139,49 @@ public class UserSteps extends BaseStep {
         objectMapper.writeValueAsString(updatedUser);
   }
 
+  @And("the update user id provided exists in the database")
+  public void theUpdateUserIdProvidedExistsInTheDatabase() {
+    User databaseSetupUser = UserTestData.UPDATE.get();
+
+    Assertions.assertNotNull(databaseSetupUser);
+
+    if (databaseSetupUser.getUserId() == null) {
+      Assertions.fail("Data setup failed for user");
+    }
+
+    resultUserId = databaseSetupUser.getUserId();
+    userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
+
+    response = ApiCallTestUtil.getThroughApi(restClient, userByIdUrl);
+
+    User retrievedCreatedUser = response.body(User.class);
+
+    Assertions.assertNotNull(retrievedCreatedUser);
+
+    UserTestUtil.assertExpectedAgainstActual(databaseSetupUser, retrievedCreatedUser);
+  }
+
+  @And("the delete user id provided exists in the database")
+  public void theDeleteUserIdProvidedExistsInTheDatabase() {
+    User databaseSetupUser = UserTestData.DELETE.get();
+
+    Assertions.assertNotNull(databaseSetupUser);
+    if (databaseSetupUser.getUserId() == null) {
+      Assertions.fail("Data setup failed for user");
+    }
+
+    resultUserId = databaseSetupUser.getUserId();
+    userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
+
+    response = ApiCallTestUtil.getThroughApi(restClient, userByIdUrl);
+
+    User retrievedCreatedUser = response.body(User.class);
+
+    Assertions.assertNotNull(retrievedCreatedUser);
+
+    UserTestUtil.assertExpectedAgainstActual(databaseSetupUser, retrievedCreatedUser);
+  }
+
   @When("the update user endpoint is invoked")
   public void theUpdateUserEndpointIsInvoked() {
     response =
@@ -178,52 +221,5 @@ public class UserSteps extends BaseStep {
     Assertions.assertNotNull(retrievedUpdatedUser);
 
     UserTestUtil.assertExpectedAgainstActual(updatedUser, retrievedUpdatedUser);
-  }
-
-  @And("the update user id provided exists in the database")
-  public void theUpdateUserIdProvidedExistsInTheDatabase() {
-    User databaseSetupUser = UserTestData.UPDATE.get();
-
-    Assertions.assertNotNull(databaseSetupUser);
-
-    if (databaseSetupUser.getUserId() == null) {
-      System.out.println("HERE IN here");
-      Assertions.fail("Data setup failed for user");
-    }
-
-    resultUserId = databaseSetupUser.getUserId();
-    userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
-
-    response = ApiCallTestUtil.getThroughApi(restClient, userByIdUrl);
-
-    User retrievedCreatedUser = response.body(User.class);
-    System.out.println("HERE 4");
-    System.out.println(retrievedCreatedUser);
-
-    Assertions.assertNotNull(retrievedCreatedUser);
-    System.out.println("HERE 5");
-
-    UserTestUtil.assertExpectedAgainstActual(databaseSetupUser, retrievedCreatedUser);
-  }
-
-  @And("the delete user id provided exists in the database")
-  public void theDeleteUserIdProvidedExistsInTheDatabase() {
-    User databaseSetupUser = UserTestData.DELETE.get();
-
-    Assertions.assertNotNull(databaseSetupUser);
-    if (databaseSetupUser.getUserId() == null) {
-      Assertions.fail("Data setup failed for user");
-    }
-
-    resultUserId = databaseSetupUser.getUserId();
-    userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
-
-    response = ApiCallTestUtil.getThroughApi(restClient, userByIdUrl);
-
-    User retrievedCreatedUser = response.body(User.class);
-
-    Assertions.assertNotNull(retrievedCreatedUser);
-
-    UserTestUtil.assertExpectedAgainstActual(databaseSetupUser, retrievedCreatedUser);
   }
 }

@@ -17,6 +17,4 @@ INSERT INTO institution (name)
 VALUES
 ('my_bank_institution'),
 ('update_institution'),
-('delete_institution'),
-('foreign_key_institution');
---
+('delete_institution');

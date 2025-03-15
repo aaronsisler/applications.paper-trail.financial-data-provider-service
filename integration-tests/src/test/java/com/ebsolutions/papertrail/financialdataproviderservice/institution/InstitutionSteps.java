@@ -3,6 +3,7 @@ package com.ebsolutions.papertrail.financialdataproviderservice.institution;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.BaseStep;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.Institution;
+import com.ebsolutions.papertrail.financialdataproviderservice.tooling.InstitutionTestData;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
 import com.ebsolutions.papertrail.financialdataproviderservice.util.ApiCallTestUtil;
 import com.ebsolutions.papertrail.financialdataproviderservice.util.InstitutionTestUtil;
@@ -110,9 +111,30 @@ public class InstitutionSteps extends BaseStep {
         institutionTwo);
   }
 
-  @And("the institution id provided exists in the database")
-  public void theInstitutionIdProvidedExistsInTheDatabase() {
-    Institution databaseSetupInstitution = InstitutionTestUtil.getTestDataInstitution();
+  @And("the update institution id provided exists in the database")
+  public void theUpdateInstitutionIdProvidedExistsInTheDatabase() {
+    Institution databaseSetupInstitution = InstitutionTestData.UPDATE.get();
+
+    Assertions.assertNotNull(databaseSetupInstitution);
+    if (databaseSetupInstitution.getInstitutionId() == null) {
+      Assertions.fail("Data setup failed for institution");
+    }
+    resultInstitutionId = databaseSetupInstitution.getInstitutionId();
+    institutionByIdUrl = TestConstants.INSTITUTIONS_URI + "/" + resultInstitutionId;
+
+    response = ApiCallTestUtil.getThroughApi(restClient, institutionByIdUrl);
+
+    Institution retrievedCreatedInstitution = response.body(Institution.class);
+
+    Assertions.assertNotNull(retrievedCreatedInstitution);
+
+    InstitutionTestUtil.assertExpectedAgainstActual(databaseSetupInstitution,
+        retrievedCreatedInstitution);
+  }
+
+  @And("the delete institution id provided exists in the database")
+  public void theDeleteInstitutionIdProvidedExistsInTheDatabase() {
+    Institution databaseSetupInstitution = InstitutionTestData.DELETE.get();
 
     Assertions.assertNotNull(databaseSetupInstitution);
     if (databaseSetupInstitution.getInstitutionId() == null) {

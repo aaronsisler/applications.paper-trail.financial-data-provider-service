@@ -15,11 +15,4 @@ public class InstitutionTestUtil {
                                                   Institution actualInstitution) {
     Assertions.assertEquals(expectedInstitution.getName(), actualInstitution.getName());
   }
-
-  public static Institution getTestDataInstitution() {
-    return Institution.builder()
-        .institutionId(1)
-        .name("my_bank_institution")
-        .build();
-  }
 }
