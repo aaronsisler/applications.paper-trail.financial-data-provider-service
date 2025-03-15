@@ -2,6 +2,7 @@ package com.ebsolutions.papertrail.financialdataproviderservice.household;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.BaseStep;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.Household;
+import com.ebsolutions.papertrail.financialdataproviderservice.tooling.HouseholdTestData;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.TestConstants;
 import com.ebsolutions.papertrail.financialdataproviderservice.util.ApiCallTestUtil;
 import com.ebsolutions.papertrail.financialdataproviderservice.util.HouseholdTestUtil;
@@ -16,8 +17,6 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.web.client.RestClient;
 
 @Slf4j
@@ -107,9 +106,31 @@ public class HouseholdSteps extends BaseStep {
         householdTwo);
   }
 
-  @And("the household id provided exists in the database")
-  public void theHouseholdIdProvidedExistsInTheDatabase() throws Exception {
-    Household databaseSetupHousehold = HouseholdTestUtil.getTestDataHousehold();
+  @And("the update household id provided exists in the database")
+  public void theUpdateHouseholdIdProvidedExistsInTheDatabase() {
+    Household databaseSetupHousehold = HouseholdTestData.UPDATE.get();
+
+    Assertions.assertNotNull(databaseSetupHousehold);
+    if (databaseSetupHousehold.getHouseholdId() == null) {
+      Assertions.fail("Data setup failed for household");
+    }
+
+    resultHouseholdId = databaseSetupHousehold.getHouseholdId();
+    householdByIdUrl = TestConstants.HOUSEHOLDS_URI + "/" + resultHouseholdId;
+
+    response = ApiCallTestUtil.getThroughApi(restClient, householdByIdUrl);
+
+    Household retrievedCreatedHousehold = response.body(Household.class);
+
+    Assertions.assertNotNull(retrievedCreatedHousehold);
+
+    HouseholdTestUtil.assertExpectedAgainstActual(databaseSetupHousehold,
+        retrievedCreatedHousehold);
+  }
+
+  @And("the delete household id provided exists in the database")
+  public void theDeleteHouseholdIdProvidedExistsInTheDatabase() {
+    Household databaseSetupHousehold = HouseholdTestData.DELETE.get();
 
     Assertions.assertNotNull(databaseSetupHousehold);
     if (databaseSetupHousehold.getHouseholdId() == null) {
@@ -149,19 +170,19 @@ public class HouseholdSteps extends BaseStep {
 
   @When("the delete household endpoint is invoked")
   public void theDeleteHouseholdEndpointIsInvoked() throws Exception {
-    response = deleteHouseholdThroughApi();
+    response = ApiCallTestUtil.deleteThroughApi(restClient, householdByIdUrl);
   }
 
   @Then("the correct response is returned from the delete household endpoint")
   public void theCorrectResponseIsReturnedFromTheDeleteHouseholdEndpoint() {
-    checkForNoContentStatusCode(response);
+    ApiCallTestUtil.checkForNoContentStatusCode(response);
   }
 
   @And("the correct household is deleted")
   public void theCorrectHouseholdIsDeleted() throws Exception {
     response = ApiCallTestUtil.getThroughApi(restClient, householdByIdUrl);
 
-    checkForNoContentStatusCode(response);
+    ApiCallTestUtil.checkForNoContentStatusCode(response);
   }
 
   @Then("the updated household is returned from the update household endpoint")
@@ -182,30 +203,5 @@ public class HouseholdSteps extends BaseStep {
 
     HouseholdTestUtil.assertExpectedAgainstActual(updatedHousehold,
         retrievedUpdatedHousehold);
-  }
-
-  private RestClient.ResponseSpec deleteHouseholdThroughApi() {
-    return checkForErrorStatusCodes(restClient
-        .delete()
-        .uri(householdByIdUrl)
-        .retrieve());
-  }
-
-
-  private void checkForNoContentStatusCode(RestClient.ResponseSpec response) {
-    response
-        .onStatus(HttpStatusCode::is2xxSuccessful,
-            (request, retResponse)
-                -> Assertions.assertEquals(HttpStatus.NO_CONTENT, retResponse.getStatusCode()));
-  }
-
-  private RestClient.ResponseSpec checkForErrorStatusCodes(RestClient.ResponseSpec response) {
-    return response
-        .onStatus(HttpStatusCode::is4xxClientError,
-            (request, retResponse)
-                -> Assertions.assertEquals(HttpStatus.OK, retResponse.getStatusCode()))
-        .onStatus(HttpStatusCode::is5xxServerError,
-            (request, retResponse)
-                -> Assertions.assertEquals(HttpStatus.OK, retResponse.getStatusCode()));
   }
 }

@@ -17,8 +17,6 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.web.client.RestClient;
 
 @Slf4j
@@ -123,7 +121,7 @@ public class InstitutionSteps extends BaseStep {
     resultInstitutionId = databaseSetupInstitution.getInstitutionId();
     institutionByIdUrl = TestConstants.INSTITUTIONS_URI + "/" + resultInstitutionId;
 
-    response = getInstitutionThroughApi();
+    response = ApiCallTestUtil.getThroughApi(restClient, institutionByIdUrl);
 
     Institution retrievedCreatedInstitution = response.body(Institution.class);
 
@@ -153,19 +151,19 @@ public class InstitutionSteps extends BaseStep {
 
   @When("the delete institution endpoint is invoked")
   public void theDeleteInstitutionEndpointIsInvoked() throws Exception {
-    response = deleteInstitutionThroughApi();
+    response = ApiCallTestUtil.deleteThroughApi(restClient, institutionByIdUrl);
   }
 
   @Then("the correct response is returned from the delete institution endpoint")
   public void theCorrectResponseIsReturnedFromTheDeleteInstitutionEndpoint() {
-    checkForNoContentStatusCode(response);
+    ApiCallTestUtil.checkForNoContentStatusCode(response);
   }
 
   @And("the correct institution is deleted")
   public void theCorrectInstitutionIsDeleted() throws Exception {
-    response = getInstitutionThroughApi();
+    response = ApiCallTestUtil.getThroughApi(restClient, institutionByIdUrl);
 
-    checkForNoContentStatusCode(response);
+    ApiCallTestUtil.checkForNoContentStatusCode(response);
   }
 
   @Then("the updated institution is returned from the update institution endpoint")
@@ -186,37 +184,5 @@ public class InstitutionSteps extends BaseStep {
 
     InstitutionTestUtil.assertExpectedAgainstActual(updatedInstitution,
         retrievedUpdatedInstitution);
-  }
-
-  private RestClient.ResponseSpec getInstitutionThroughApi() {
-    return checkForErrorStatusCodes(restClient
-        .get()
-        .uri(institutionByIdUrl)
-        .retrieve());
-  }
-
-  private RestClient.ResponseSpec deleteInstitutionThroughApi() {
-    return checkForErrorStatusCodes(restClient
-        .delete()
-        .uri(institutionByIdUrl)
-        .retrieve());
-  }
-
-
-  private void checkForNoContentStatusCode(RestClient.ResponseSpec response) {
-    response
-        .onStatus(HttpStatusCode::is2xxSuccessful,
-            (request, retResponse)
-                -> Assertions.assertEquals(HttpStatus.NO_CONTENT, retResponse.getStatusCode()));
-  }
-
-  private RestClient.ResponseSpec checkForErrorStatusCodes(RestClient.ResponseSpec response) {
-    return response
-        .onStatus(HttpStatusCode::is4xxClientError,
-            (request, retResponse)
-                -> Assertions.assertEquals(HttpStatus.OK, retResponse.getStatusCode()))
-        .onStatus(HttpStatusCode::is5xxServerError,
-            (request, retResponse)
-                -> Assertions.assertEquals(HttpStatus.OK, retResponse.getStatusCode()));
   }
 }

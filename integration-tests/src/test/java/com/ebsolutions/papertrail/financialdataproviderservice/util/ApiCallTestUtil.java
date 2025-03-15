@@ -41,6 +41,21 @@ public class ApiCallTestUtil {
         .retrieve());
   }
 
+  public static RestClient.ResponseSpec deleteThroughApi(RestClient restClient,
+                                                         String uri) {
+    return checkForErrorStatusCodes(restClient
+        .delete()
+        .uri(uri)
+        .retrieve());
+  }
+
+  public static void checkForNoContentStatusCode(RestClient.ResponseSpec response) {
+    response
+        .onStatus(HttpStatusCode::is2xxSuccessful,
+            (request, retResponse)
+                -> Assertions.assertEquals(HttpStatus.NO_CONTENT, retResponse.getStatusCode()));
+  }
+
   private static RestClient.ResponseSpec checkForErrorStatusCodes(
       RestClient.ResponseSpec response) {
     return response

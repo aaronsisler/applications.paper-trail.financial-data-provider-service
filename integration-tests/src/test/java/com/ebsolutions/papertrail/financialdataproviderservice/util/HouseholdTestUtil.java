@@ -14,11 +14,4 @@ public class HouseholdTestUtil {
                                                   Household actualHousehold) {
     Assertions.assertEquals(expectedHousehold.getName(), actualHousehold.getName());
   }
-
-  public static Household getTestDataHousehold() {
-    return Household.builder()
-        .householdId(1)
-        .name("sisler_household")
-        .build();
-  }
 }

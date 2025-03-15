@@ -16,22 +16,4 @@ public class UserTestUtil {
     Assertions.assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
     Assertions.assertEquals(expectedUser.getLastName(), actualUser.getLastName());
   }
-
-  public static User getTestDataUser(int userId) {
-    if (userId == 1) {
-      return User.builder()
-          .userId(1)
-          .username("aaron_sisler")
-          .firstName("Aaron")
-          .lastName("Sisler")
-          .build();
-    }
-
-    return User.builder()
-        .userId(2)
-        .username("bridget_sisler")
-        .firstName("Bridget")
-        .lastName("Sisler")
-        .build();
-  }
 }
