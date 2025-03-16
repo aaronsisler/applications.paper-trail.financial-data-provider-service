@@ -38,13 +38,13 @@ public class HouseholdUpdateSteps extends BaseTest {
     int validHouseholdId = 1;
 
     Household inputHouseholdOne = Household.builder()
-        .householdId(validHouseholdId)
+        .id(validHouseholdId)
         .name("first_household")
         .build();
 
     expectedHouseholdOne =
         Household.builder()
-            .householdId(validHouseholdId)
+            .id(validHouseholdId)
             .name("first_household")
             .build();
 
@@ -75,7 +75,7 @@ public class HouseholdUpdateSteps extends BaseTest {
         Integer.parseInt(dataTable.column(0).getFirst());
 
     Household inputHouseholdOne = Household.builder()
-        .householdId(householdId)
+        .id(householdId)
         .name(CommonTestUtil.isEmptyString(dataTable.column(1).getFirst()))
         .build();
 

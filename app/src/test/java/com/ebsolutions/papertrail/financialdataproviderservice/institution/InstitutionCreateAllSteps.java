@@ -50,12 +50,12 @@ public class InstitutionCreateAllSteps extends BaseTest {
 
     expectedInstitutionOne =
         Institution.builder()
-            .institutionId(1)
+            .id(1)
             .name("first_institution")
             .build();
 
     expectedInstitutionTwo = Institution.builder()
-        .institutionId(2)
+        .id(2)
         .name("second_institution")
         .build();
 
@@ -73,7 +73,7 @@ public class InstitutionCreateAllSteps extends BaseTest {
         Integer.parseInt(dataTable.column(0).getFirst());
 
     Institution inputInstitutionOne = Institution.builder()
-        .institutionId(institutionId)
+        .id(institutionId)
         .name(CommonTestUtil.isEmptyString(dataTable.column(1).getFirst()))
         .build();
 

@@ -49,8 +49,8 @@ public class HouseholdMemberSteps extends BaseStep {
       throws JsonProcessingException {
     expectedHouseholdMemberOne =
         HouseholdMember.builder()
-            .householdId(household.getHouseholdId())
-            .userId(userOne.getUserId())
+            .householdId(household.getId())
+            .userId(userOne.getId())
             .build();
 
     requestContent = objectMapper.writeValueAsString(expectedHouseholdMemberOne);
@@ -77,15 +77,15 @@ public class HouseholdMemberSteps extends BaseStep {
     HouseholdMemberTestUtil
         .assertExpectedAgainstCreated(expectedHouseholdMemberOne, householdMember);
 
-    newlyCreateHouseholdMemberIds.add(householdMember.getHouseholdMemberId());
+    newlyCreateHouseholdMemberIds.add(householdMember.getId());
   }
 
   @And("a valid household member with the second user id is part of the request body for the create household member endpoint")
   public void aValidHouseholdMemberWithTheSecondUserIdIsPartOfTheRequestBodyForTheCreateHouseholdMemberEndpoint()
       throws JsonProcessingException {
     expectedHouseholdMemberTwo = HouseholdMember.builder()
-        .householdId(household.getHouseholdId())
-        .userId(userTwo.getUserId())
+        .householdId(household.getId())
+        .userId(userTwo.getId())
         .build();
 
     requestContent = objectMapper.writeValueAsString(expectedHouseholdMemberTwo);
@@ -100,7 +100,7 @@ public class HouseholdMemberSteps extends BaseStep {
     HouseholdMemberTestUtil
         .assertExpectedAgainstCreated(expectedHouseholdMemberTwo, householdMember);
 
-    newlyCreateHouseholdMemberIds.add(householdMember.getHouseholdMemberId());
+    newlyCreateHouseholdMemberIds.add(householdMember.getId());
   }
 
   @Then("the correct household members are returned from the get all household members endpoint")
@@ -114,7 +114,7 @@ public class HouseholdMemberSteps extends BaseStep {
     List<HouseholdMember> createdHouseholdMembers =
         householdMembers.stream()
             .filter(householdMember -> newlyCreateHouseholdMemberIds.contains(
-                householdMember.getHouseholdMemberId())).toList();
+                householdMember.getId())).toList();
 
     Assertions.assertEquals(2, createdHouseholdMembers.size());
 
@@ -130,7 +130,7 @@ public class HouseholdMemberSteps extends BaseStep {
   @When("the get all household members endpoint is invoked with the first user id")
   public void theGetAllHouseholdMembersEndpointIsInvokedWithTheFirstUserId() {
     response = ApiCallTestUtil.getThroughApi(restClient,
-        TestConstants.HOUSEHOLD_MEMBERS_URI + "?userId=" + userOne.getUserId());
+        TestConstants.HOUSEHOLD_MEMBERS_URI + "?userId=" + userOne.getId());
   }
 
   @Then("the correct household members are returned from the get all household members endpoint invoked with the first user id")

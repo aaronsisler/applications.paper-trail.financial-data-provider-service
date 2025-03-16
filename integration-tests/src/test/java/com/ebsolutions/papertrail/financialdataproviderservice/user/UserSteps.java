@@ -71,11 +71,11 @@ public class UserSteps extends BaseStep {
 
     User userOne = users.getFirst();
     UserTestUtil.assertExpectedAgainstCreated(expectedUserOne, userOne);
-    newlyCreateUserIds.add(userOne.getUserId());
+    newlyCreateUserIds.add(userOne.getId());
 
     User userTwo = users.getLast();
     UserTestUtil.assertExpectedAgainstCreated(expectedUserTwo, userTwo);
-    newlyCreateUserIds.add(userTwo.getUserId());
+    newlyCreateUserIds.add(userTwo.getId());
   }
 
   @When("the get all users endpoint is invoked")
@@ -94,7 +94,7 @@ public class UserSteps extends BaseStep {
 
     Assertions.assertNotNull(users);
     List<User> createdUsers =
-        users.stream().filter(user -> newlyCreateUserIds.contains(user.getUserId())).toList();
+        users.stream().filter(user -> newlyCreateUserIds.contains(user.getId())).toList();
     Assertions.assertEquals(2, createdUsers.size());
 
     User userOne = createdUsers.getFirst();
@@ -109,11 +109,11 @@ public class UserSteps extends BaseStep {
     User databaseSetupUser = UserTestData.UPDATE.get();
 
     Assertions.assertNotNull(databaseSetupUser);
-    if (databaseSetupUser.getUserId() == null) {
+    if (databaseSetupUser.getId() == null) {
       Assertions.fail("Data setup failed for user");
     }
 
-    resultUserId = databaseSetupUser.getUserId();
+    resultUserId = databaseSetupUser.getId();
     userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
 
     response = ApiCallTestUtil.getThroughApi(restClient, userByIdUrl);
@@ -129,7 +129,7 @@ public class UserSteps extends BaseStep {
   public void anUpdateForTheUserIsValidAndPartOfTheRequestBodyForTheUpdateUserEndpoint()
       throws JsonProcessingException {
     updatedUser = User.builder()
-        .userId(resultUserId)
+        .id(resultUserId)
         .username("updated_username")
         .firstName("updated_firstName")
         .lastName("updated_lastName")
@@ -145,16 +145,26 @@ public class UserSteps extends BaseStep {
 
     Assertions.assertNotNull(databaseSetupUser);
 
-    if (databaseSetupUser.getUserId() == null) {
+    if (databaseSetupUser.getId() == null) {
       Assertions.fail("Data setup failed for user");
     }
 
-    resultUserId = databaseSetupUser.getUserId();
+    System.out.println("HERE 1");
+    System.out.println(databaseSetupUser);
+
+    resultUserId = databaseSetupUser.getId();
     userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
+
+    System.out.println("HERE 2");
+    System.out.println(resultUserId);
+    System.out.println(userByIdUrl);
 
     response = ApiCallTestUtil.getThroughApi(restClient, userByIdUrl);
 
     User retrievedCreatedUser = response.body(User.class);
+
+    System.out.println("HERE");
+    System.out.println(retrievedCreatedUser);
 
     Assertions.assertNotNull(retrievedCreatedUser);
 
@@ -166,11 +176,11 @@ public class UserSteps extends BaseStep {
     User databaseSetupUser = UserTestData.DELETE.get();
 
     Assertions.assertNotNull(databaseSetupUser);
-    if (databaseSetupUser.getUserId() == null) {
+    if (databaseSetupUser.getId() == null) {
       Assertions.fail("Data setup failed for user");
     }
 
-    resultUserId = databaseSetupUser.getUserId();
+    resultUserId = databaseSetupUser.getId();
     userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
 
     response = ApiCallTestUtil.getThroughApi(restClient, userByIdUrl);

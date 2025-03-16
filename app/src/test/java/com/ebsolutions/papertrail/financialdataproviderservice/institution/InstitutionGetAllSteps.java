@@ -34,13 +34,13 @@ public class InstitutionGetAllSteps extends BaseTest {
   public void twoInstitutionsExistInTheDatabase() {
     expectedInstitutionOne =
         Institution.builder()
-            .institutionId(1)
+            .id(1)
             .name("first_institution")
             .build();
 
     expectedInstitutionTwo =
         Institution.builder()
-            .institutionId(2)
+            .id(2)
             .name("second_institution")
             .build();
 

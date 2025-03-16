@@ -7,7 +7,7 @@ public enum InstitutionTestData {
     @Override
     public Institution get() {
       return Institution.builder()
-          .institutionId(1)
+          .id(1)
           .name("my_bank_institution")
           .build();
     }
@@ -16,7 +16,7 @@ public enum InstitutionTestData {
     @Override
     public Institution get() {
       return Institution.builder()
-          .institutionId(2)
+          .id(2)
           .name("update_institution")
           .build();
     }
@@ -25,7 +25,7 @@ public enum InstitutionTestData {
     @Override
     public Institution get() {
       return Institution.builder()
-          .institutionId(3)
+          .id(3)
           .name("delete_institution")
           .build();
     }

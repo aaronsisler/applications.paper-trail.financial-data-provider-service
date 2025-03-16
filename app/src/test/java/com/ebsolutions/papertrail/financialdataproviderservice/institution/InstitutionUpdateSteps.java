@@ -38,13 +38,13 @@ public class InstitutionUpdateSteps extends BaseTest {
     int validInstitutionId = 1;
 
     Institution inputInstitutionOne = Institution.builder()
-        .institutionId(validInstitutionId)
+        .id(validInstitutionId)
         .name("first_institution")
         .build();
 
     expectedInstitutionOne =
         Institution.builder()
-            .institutionId(validInstitutionId)
+            .id(validInstitutionId)
             .name("first_institution")
             .build();
 
@@ -76,7 +76,7 @@ public class InstitutionUpdateSteps extends BaseTest {
         Integer.parseInt(dataTable.column(0).getFirst());
 
     Institution inputInstitutionOne = Institution.builder()
-        .institutionId(institutionId)
+        .id(institutionId)
         .name(CommonTestUtil.isEmptyString(dataTable.column(1).getFirst()))
         .build();
 

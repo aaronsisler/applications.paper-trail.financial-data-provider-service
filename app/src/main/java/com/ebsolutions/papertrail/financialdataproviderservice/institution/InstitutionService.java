@@ -40,15 +40,19 @@ public class InstitutionService {
             Collections.singletonList("Institutions cannot be empty"));
       }
 
-      if (!institutions.stream().filter(institution -> institution.getInstitutionId() > 0).toList()
+      if (!institutions.stream()
+          .filter(institution -> institution.getId() != null)
+          .toList()
           .isEmpty()) {
-        List<String> existingInstitutionsErrorMessages =
+
+        List<String> existingUserErrorMessages =
             institutions.stream()
+                .filter(institution -> institution.getId() != null)
                 .map(institution -> "Institution Id cannot be populated: ".concat(
-                    Integer.toString(institution.getInstitutionId())))
+                    Integer.toString(institution.getId())))
                 .toList();
 
-        throw new DataConstraintException(existingInstitutionsErrorMessages);
+        throw new DataConstraintException(existingUserErrorMessages);
       }
 
       return institutionRepository.saveAll(institutions);
@@ -62,7 +66,7 @@ public class InstitutionService {
 
   public Institution update(Institution institution) {
     try {
-      if (institution.getInstitutionId() <= 0) {
+      if (institution.getId() <= 0) {
         List<String> existingInstitutionsErrorMessages =
             Collections.singletonList("Institution Id must be positive and non-zero");
 
@@ -70,13 +74,13 @@ public class InstitutionService {
       }
 
       boolean doesInstitutionExist =
-          institutionRepository.findById((long) institution.getInstitutionId()).isPresent();
+          institutionRepository.findById((long) institution.getId()).isPresent();
 
       if (!doesInstitutionExist) {
         List<String> existingInstitutionsErrorMessages =
             Collections.singletonList(
                 "Institution Id does not exist: ".concat(
-                    Integer.toString(institution.getInstitutionId())));
+                    Integer.toString(institution.getId())));
 
         throw new DataConstraintException(existingInstitutionsErrorMessages);
       }

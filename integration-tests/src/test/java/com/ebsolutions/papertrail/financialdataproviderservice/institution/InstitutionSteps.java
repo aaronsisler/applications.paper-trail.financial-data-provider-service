@@ -61,7 +61,6 @@ public class InstitutionSteps extends BaseStep {
 
   @Then("the newly created institutions are returned from the create all institutions endpoint")
   public void theNewlyCreatedInstitutionsAreReturnedFromTheCreateAllInstitutionsEndpoint() {
-    System.out.println(response);
     List<Institution> institutions = response.body(
         new ParameterizedTypeReference<ArrayList<Institution>>() {
         });
@@ -72,12 +71,12 @@ public class InstitutionSteps extends BaseStep {
     Institution institutionOne = institutions.getFirst();
     InstitutionTestUtil.assertExpectedAgainstCreated(expectedInstitutionOne,
         institutionOne);
-    newlyCreateInstitutionIds.add(institutionOne.getInstitutionId());
+    newlyCreateInstitutionIds.add(institutionOne.getId());
 
     Institution institutionTwo = institutions.getLast();
     InstitutionTestUtil.assertExpectedAgainstCreated(expectedInstitutionTwo,
         institutionTwo);
-    newlyCreateInstitutionIds.add(institutionTwo.getInstitutionId());
+    newlyCreateInstitutionIds.add(institutionTwo.getId());
   }
 
   @When("the get all institutions endpoint is invoked")
@@ -98,7 +97,7 @@ public class InstitutionSteps extends BaseStep {
     List<Institution> createdInstitutions =
         institutions.stream()
             .filter(
-                institution -> newlyCreateInstitutionIds.contains(institution.getInstitutionId()))
+                institution -> newlyCreateInstitutionIds.contains(institution.getId()))
             .toList();
     Assertions.assertEquals(2, createdInstitutions.size());
 
@@ -116,10 +115,10 @@ public class InstitutionSteps extends BaseStep {
     Institution databaseSetupInstitution = InstitutionTestData.UPDATE.get();
 
     Assertions.assertNotNull(databaseSetupInstitution);
-    if (databaseSetupInstitution.getInstitutionId() == null) {
+    if (databaseSetupInstitution.getId() == null) {
       Assertions.fail("Data setup failed for institution");
     }
-    resultInstitutionId = databaseSetupInstitution.getInstitutionId();
+    resultInstitutionId = databaseSetupInstitution.getId();
     institutionByIdUrl = TestConstants.INSTITUTIONS_URI + "/" + resultInstitutionId;
 
     response = ApiCallTestUtil.getThroughApi(restClient, institutionByIdUrl);
@@ -137,10 +136,10 @@ public class InstitutionSteps extends BaseStep {
     Institution databaseSetupInstitution = InstitutionTestData.DELETE.get();
 
     Assertions.assertNotNull(databaseSetupInstitution);
-    if (databaseSetupInstitution.getInstitutionId() == null) {
+    if (databaseSetupInstitution.getId() == null) {
       Assertions.fail("Data setup failed for institution");
     }
-    resultInstitutionId = databaseSetupInstitution.getInstitutionId();
+    resultInstitutionId = databaseSetupInstitution.getId();
     institutionByIdUrl = TestConstants.INSTITUTIONS_URI + "/" + resultInstitutionId;
 
     response = ApiCallTestUtil.getThroughApi(restClient, institutionByIdUrl);
@@ -157,7 +156,7 @@ public class InstitutionSteps extends BaseStep {
   public void anUpdateForTheInstitutionIsValidAndPartOfTheRequestBodyForTheUpdateInstitutionEndpoint()
       throws JsonProcessingException {
     updatedInstitution = Institution.builder()
-        .institutionId(resultInstitutionId)
+        .id(resultInstitutionId)
         .name("updated_name")
         .build();
 

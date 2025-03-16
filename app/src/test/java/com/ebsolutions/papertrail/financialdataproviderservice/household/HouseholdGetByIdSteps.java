@@ -33,7 +33,7 @@ public class HouseholdGetByIdSteps extends BaseTest {
   public void theRequestedHouseholdExistInTheDatabase() {
     expectedHousehold =
         Household.builder()
-            .householdId(householdId)
+            .id(householdId)
             .name("first_household")
             .build();
 

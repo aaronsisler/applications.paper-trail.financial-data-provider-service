@@ -48,14 +48,14 @@ public class InstitutionMemberGetAllSteps extends BaseTest {
   public void twoHouseholdMembersExistInTheDatabaseForAGivenUserId() {
     expectedHouseholdMemberOne =
         HouseholdMember.builder()
-            .householdMemberId(1)
+            .id(1)
             .householdId(123)
             .userId(USER_ID_TO_BE_FOUND)
             .build();
 
     expectedHouseholdMemberTwo =
         HouseholdMember.builder()
-            .householdMemberId(2)
+            .id(2)
             .householdId(987)
             .userId(USER_ID_TO_BE_FOUND)
             .build();
@@ -65,7 +65,7 @@ public class InstitutionMemberGetAllSteps extends BaseTest {
   public void oneHouseholdMemberExistsInTheDatabaseForADifferentUserId() {
     expectedHouseholdMemberThree =
         HouseholdMember.builder()
-            .householdMemberId(3)
+            .id(3)
             .householdId(123)
             .userId(12345)
             .build();

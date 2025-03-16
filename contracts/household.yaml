@@ -96,7 +96,7 @@ components:
       required:
         - name
       properties:
-        householdId:
+        id:
           type: integer
         name:
           type: string

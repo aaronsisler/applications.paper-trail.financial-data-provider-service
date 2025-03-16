@@ -68,12 +68,12 @@ public class HouseholdSteps extends BaseStep {
     Household householdOne = households.getFirst();
     HouseholdTestUtil.assertExpectedAgainstCreated(expectedHouseholdOne,
         householdOne);
-    newlyCreateHouseholdIds.add(householdOne.getHouseholdId());
+    newlyCreateHouseholdIds.add(householdOne.getId());
 
     Household householdTwo = households.getLast();
     HouseholdTestUtil.assertExpectedAgainstCreated(expectedHouseholdTwo,
         householdTwo);
-    newlyCreateHouseholdIds.add(householdTwo.getHouseholdId());
+    newlyCreateHouseholdIds.add(householdTwo.getId());
   }
 
   @When("the get all households endpoint is invoked")
@@ -93,7 +93,7 @@ public class HouseholdSteps extends BaseStep {
     Assertions.assertNotNull(households);
     List<Household> createdHouseholds =
         households.stream()
-            .filter(household -> newlyCreateHouseholdIds.contains(household.getHouseholdId()))
+            .filter(household -> newlyCreateHouseholdIds.contains(household.getId()))
             .toList();
     Assertions.assertEquals(2, createdHouseholds.size());
 
@@ -111,11 +111,11 @@ public class HouseholdSteps extends BaseStep {
     Household databaseSetupHousehold = HouseholdTestData.UPDATE.get();
 
     Assertions.assertNotNull(databaseSetupHousehold);
-    if (databaseSetupHousehold.getHouseholdId() == null) {
+    if (databaseSetupHousehold.getId() == null) {
       Assertions.fail("Data setup failed for household");
     }
 
-    resultHouseholdId = databaseSetupHousehold.getHouseholdId();
+    resultHouseholdId = databaseSetupHousehold.getId();
     householdByIdUrl = TestConstants.HOUSEHOLDS_URI + "/" + resultHouseholdId;
 
     response = ApiCallTestUtil.getThroughApi(restClient, householdByIdUrl);
@@ -133,11 +133,11 @@ public class HouseholdSteps extends BaseStep {
     Household databaseSetupHousehold = HouseholdTestData.DELETE.get();
 
     Assertions.assertNotNull(databaseSetupHousehold);
-    if (databaseSetupHousehold.getHouseholdId() == null) {
+    if (databaseSetupHousehold.getId() == null) {
       Assertions.fail("Data setup failed for household");
     }
 
-    resultHouseholdId = databaseSetupHousehold.getHouseholdId();
+    resultHouseholdId = databaseSetupHousehold.getId();
     householdByIdUrl = TestConstants.HOUSEHOLDS_URI + "/" + resultHouseholdId;
 
     response = ApiCallTestUtil.getThroughApi(restClient, householdByIdUrl);
@@ -154,7 +154,7 @@ public class HouseholdSteps extends BaseStep {
   public void anUpdateForTheHouseholdIsValidAndPartOfTheRequestBodyForTheUpdateHouseholdEndpoint()
       throws JsonProcessingException {
     updatedHousehold = Household.builder()
-        .householdId(resultHouseholdId)
+        .id(resultHouseholdId)
         .name("updated_name")
         .build();
 
@@ -164,9 +164,6 @@ public class HouseholdSteps extends BaseStep {
 
   @When("the update household endpoint is invoked")
   public void theUpdateHouseholdEndpointIsInvoked() {
-    System.out.println("HERE");
-    System.out.println(householdByIdUrl);
-    System.out.println(requestContent);
     response =
         ApiCallTestUtil.updateThroughApi(restClient, TestConstants.HOUSEHOLDS_URI, requestContent);
   }

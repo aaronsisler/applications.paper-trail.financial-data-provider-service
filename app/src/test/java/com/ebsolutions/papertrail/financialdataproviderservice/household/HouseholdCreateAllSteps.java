@@ -50,12 +50,12 @@ public class HouseholdCreateAllSteps extends BaseTest {
 
     expectedHouseholdOne =
         Household.builder()
-            .householdId(1)
+            .id(1)
             .name("first_household")
             .build();
 
     expectedHouseholdTwo = Household.builder()
-        .householdId(2)
+        .id(2)
         .name("second_household")
         .build();
 
@@ -73,7 +73,7 @@ public class HouseholdCreateAllSteps extends BaseTest {
         Integer.parseInt(dataTable.column(0).getFirst());
 
     Household inputHouseholdOne = Household.builder()
-        .householdId(householdId)
+        .id(householdId)
         .name(CommonTestUtil.isEmptyString(dataTable.column(1).getFirst()))
         .build();
 

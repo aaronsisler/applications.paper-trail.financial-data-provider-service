@@ -97,7 +97,7 @@ public class HouseholdMemberCreateSteps extends BaseTest {
         Integer.parseInt(dataTable.column(2).getFirst());
 
     HouseholdMember inputHouseholdMember = HouseholdMember.builder()
-        .householdMemberId(householdMemberId)
+        .id(householdMemberId)
         .householdId(householdId)
         .userId(userId)
         .build();
