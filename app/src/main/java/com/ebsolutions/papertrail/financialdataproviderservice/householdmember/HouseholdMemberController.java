@@ -42,7 +42,7 @@ public class HouseholdMemberController {
     if (userId == null) {
       householdMembers = householdMemberService.getAll();
     } else {
-      householdMembers = householdMemberService.getAllById(userId);
+      householdMembers = householdMemberService.getAllByUserId(userId);
     }
 
     return !householdMembers.isEmpty() ? ResponseEntity.ok(householdMembers) :

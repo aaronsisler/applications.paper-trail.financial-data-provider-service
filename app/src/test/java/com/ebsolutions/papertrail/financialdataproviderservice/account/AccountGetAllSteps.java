@@ -46,7 +46,7 @@ public class AccountGetAllSteps extends BaseTest {
     expectedHouseholdMemberThree = null;
   }
 
-  @And("two accounts exist in the database for a given user id")
+  @And("two accounts exist in the database for a given household member id")
   public void twoHouseholdMembersExistInTheDatabaseForAGivenUserId() {
     expectedHouseholdMemberOne =
         HouseholdMember.builder()
@@ -63,7 +63,7 @@ public class AccountGetAllSteps extends BaseTest {
             .build();
   }
 
-  @And("one account exists in the database for a different user id")
+  @And("one account exists in the database for a different household member id")
   public void oneHouseholdMemberExistsInTheDatabaseForADifferentUserId() {
     expectedHouseholdMemberThree =
         HouseholdMember.builder()
@@ -73,9 +73,10 @@ public class AccountGetAllSteps extends BaseTest {
             .build();
   }
 
-  @And("the url does contain the user id query param for the get all accounts endpoint")
+  @And("the url does contain the household member id query param for the get all accounts endpoint")
   public void theUrlDoesContainTheUserIdQueryParamForTheGetAllHouseholdMembersEndpoint() {
-    getHouseholdMemberUrl = Constants.HOUSEHOLD_MEMBERS_URI + "?userId=" + USER_ID_TO_BE_FOUND;
+    getHouseholdMemberUrl =
+        Constants.HOUSEHOLD_MEMBERS_URI + "?householdMemberId=" + USER_ID_TO_BE_FOUND;
   }
 
   @And("the database connection succeeds for get all accounts")
@@ -93,7 +94,7 @@ public class AccountGetAllSteps extends BaseTest {
     getHouseholdMemberUrl = Constants.HOUSEHOLD_MEMBERS_URI;
   }
 
-  @And("no accounts exist in the database for a given user id")
+  @And("no accounts exist in the database for a given household member id")
   public void noHouseholdMembersExistInTheDatabaseForAGivenUserId() {
     when(householdMemberRepository.findByUserId(USER_ID_TO_BE_FOUND))
         .thenReturn(Collections.emptyList());
@@ -105,7 +106,7 @@ public class AccountGetAllSteps extends BaseTest {
         .thenReturn(Collections.emptyList());
   }
 
-  @And("the user id provided in the url is the incorrect format for the get household by id endpoint")
+  @And("the household member id provided in the url is the incorrect format for the get accounts by id endpoint")
   public void theUserIdProvidedInTheUrlIsTheIncorrectFormatForTheGetHouseholdByIdEndpoint() {
     String invalidUserId = "abc";
     getHouseholdMemberUrl = Constants.HOUSEHOLD_MEMBERS_URI + "?userId=" + invalidUserId;

@@ -20,9 +20,9 @@ public class AccountService {
   private final HouseholdMemberService householdMemberService;
   private final AccountRepository accountRepository;
 
-  public List<Account> getAllById(Integer userId) {
+  public List<Account> getAllById(Integer householdMemberId) {
     try {
-      return accountRepository.findByUserId(userId);
+      return accountRepository.findByHouseholdMemberId(householdMemberId);
     } catch (Exception exception) {
       log.error("Error getting all", exception);
       throw new DataProcessingException(
@@ -36,7 +36,7 @@ public class AccountService {
     } catch (Exception exception) {
       log.error("Error getting all", exception);
       throw new DataProcessingException(
-          "Something went wrong while fetching household members");
+          "Something went wrong while fetching accounts");
     }
   }
 
@@ -45,7 +45,7 @@ public class AccountService {
     try {
       if (account.getId() != null) {
         throw new DataConstraintException(Collections.singletonList(
-            "Household Member Id cannot be populated: ".concat(
+            "Account Id cannot be populated: ".concat(
                 String.valueOf(account.getId()))));
       }
 
@@ -60,7 +60,11 @@ public class AccountService {
         throw new DataConstraintException(existingUserErrorMessages);
       }
 
-      var householdMember = householdMemberService.getAllById(account.getHouseholdMemberId());
+      System.out.println("HERE");
+      System.out.println(account.getHouseholdMemberId()
+      );
+      var householdMember =
+          householdMemberService.get(account.getHouseholdMemberId());
 
       if (householdMember.isEmpty()) {
         List<String> existingUserErrorMessages =
@@ -79,7 +83,7 @@ public class AccountService {
       throw dataIntegrityViolationException;
     } catch (Exception exception) {
       log.error("Error creating", exception);
-      throw new DataProcessingException("Something went wrong while saving household member");
+      throw new DataProcessingException("Something went wrong while saving account");
     }
   }
 }

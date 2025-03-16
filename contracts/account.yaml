@@ -8,6 +8,8 @@ paths:
   /account:
     get:
       operationId: getAccounts
+      parameters:
+        - $ref: "#/components/parameters/HouseholdMemberId"
       responses:
         200:
           description: OK
@@ -53,8 +55,9 @@ components:
     Account:
       type: object
       required:
-        - householdId
-        - userId
+        - institutionId
+        - householdMemberId
+        - name
       properties:
         id:
           type: integer
@@ -69,3 +72,10 @@ components:
           minLength: 1
         nickname:
           type: string
+  parameters:
+    HouseholdMemberId:
+      in: query
+      name: householdMemberId
+      required: false
+      schema:
+        type: integer

@@ -37,12 +37,12 @@ public class AccountController {
                   array = @ArraySchema(schema = @Schema(implementation = Account.class)))
           }),
       @ApiResponse(responseCode = "204", content = @Content(schema = @Schema(hidden = true)))})
-  public ResponseEntity<?> getAllById(@RequestParam(required = false) Integer userId) {
+  public ResponseEntity<?> getAllById(@RequestParam(required = false) Integer householdMemberId) {
     List<Account> accounts;
-    if (userId == null) {
+    if (householdMemberId == null) {
       accounts = accountService.getAll();
     } else {
-      accounts = accountService.getAllById(userId);
+      accounts = accountService.getAllById(householdMemberId);
     }
 
     return !accounts.isEmpty() ? ResponseEntity.ok(accounts) :

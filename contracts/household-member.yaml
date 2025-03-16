@@ -8,6 +8,8 @@ paths:
   /household-members:
     get:
       operationId: getHouseholdMembers
+      parameters:
+        - $ref: "#/components/parameters/UserId"
       responses:
         200:
           description: OK
@@ -64,3 +66,10 @@ components:
         userId:
           type: integer
           minimum: 1
+  parameters:
+    UserId:
+      in: query
+      name: userId
+      required: false
+      schema:
+        type: integer

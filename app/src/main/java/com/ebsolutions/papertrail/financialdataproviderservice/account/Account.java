@@ -18,7 +18,7 @@ import org.hibernate.validator.constraints.Range;
 @SuperBuilder
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Table(name = DatabaseConstants.HOUSEHOLD_MEMBER_TABLE)
+@Table(name = DatabaseConstants.ACCOUNT_TABLE)
 public class Account extends BaseEntity {
 
   @Range(min = 1, message = "institution id is mandatory")
