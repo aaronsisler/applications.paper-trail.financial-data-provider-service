@@ -1,0 +1,71 @@
+openapi: 3.0.0
+info:
+  title: Household REST API
+  version: "1.0"
+servers:
+  - url: http://localhost/
+paths:
+  /account:
+    get:
+      operationId: getAccounts
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Account"
+        204:
+          description: No content
+    post:
+      operationId: createHouseholdMembers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              $ref: "#/components/schemas/Account"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                $ref: "#/components/schemas/Account"
+        4XX:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+        5XX:
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "common.yaml#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    Account:
+      type: object
+      required:
+        - householdId
+        - userId
+      properties:
+        id:
+          type: integer
+        institutionId:
+          type: integer
+          minimum: 1
+        householdMemberId:
+          type: integer
+          minimum: 1
+        name:
+          type: string
+          minLength: 1
+        nickname:
+          type: string
