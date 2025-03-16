@@ -149,22 +149,12 @@ public class UserSteps extends BaseStep {
       Assertions.fail("Data setup failed for user");
     }
 
-    System.out.println("HERE 1");
-    System.out.println(databaseSetupUser);
-
     resultUserId = databaseSetupUser.getId();
     userByIdUrl = TestConstants.USERS_URI + "/" + resultUserId;
-
-    System.out.println("HERE 2");
-    System.out.println(resultUserId);
-    System.out.println(userByIdUrl);
 
     response = ApiCallTestUtil.getThroughApi(restClient, userByIdUrl);
 
     User retrievedCreatedUser = response.body(User.class);
-
-    System.out.println("HERE");
-    System.out.println(retrievedCreatedUser);
 
     Assertions.assertNotNull(retrievedCreatedUser);
 

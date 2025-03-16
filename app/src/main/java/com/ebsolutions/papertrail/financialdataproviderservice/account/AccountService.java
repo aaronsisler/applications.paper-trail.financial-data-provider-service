@@ -60,9 +60,6 @@ public class AccountService {
         throw new DataConstraintException(existingUserErrorMessages);
       }
 
-      System.out.println("HERE");
-      System.out.println(account.getHouseholdMemberId()
-      );
       var householdMember =
           householdMemberService.get(account.getHouseholdMemberId());
 
