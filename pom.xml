@@ -16,8 +16,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>app</module>
-        <!--        <module>integration-tests</module>-->
+        <!--        <module>app</module>-->
+        <module>integration-tests</module>
     </modules>
 
     <properties>

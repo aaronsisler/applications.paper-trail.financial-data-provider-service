@@ -7,7 +7,7 @@ Feature: Integration: User
     Then the newly created users are returned from the create all users endpoint
     When the get all users endpoint is invoked
     Then the correct users are returned from the get all users endpoint
-
+#
   Scenario: Get By Id and Update User
     Given application is up
     And the update user id provided exists in the database
@@ -15,7 +15,7 @@ Feature: Integration: User
     When the update user endpoint is invoked
     Then the updated user is returned from the update user endpoint
     And the updated user is correct in the database
-
+#
   Scenario: Delete User
     Given application is up
     And the delete user id provided exists in the database

@@ -38,6 +38,15 @@ public enum HouseholdTestData {
           .name("household_member_create_household")
           .build();
     }
+  },
+  ACCOUNT_CREATE {
+    @Override
+    public Household get() {
+      return Household.builder()
+          .id(5)
+          .name("account_create_household")
+          .build();
+    }
   };
 
   public abstract Household get();
