@@ -1,33 +1,33 @@
 Feature: Account: Get All
 
-#  Scenario Outline: Get all accounts endpoint returns correctly when household member id param exists
-#    Given application is up
-#    And two accounts exist in the database for a given household member id
-#    And one account exists in the database for a different household member id
-#    And the url does contain the household member id query param for the get all accounts endpoint
-#    And the database connection succeeds for get all accounts
-#    When the get all accounts endpoint is invoked
-#    Then the correct accounts are returned from the get all accounts endpoint
-#      | <size> |
-#
-#    Examples:
-#      | size |
-#      | 2    |
-#
-#  Scenario Outline: Get all accounts endpoint returns correctly when no query params exist
-#    Given application is up
-#    And two accounts exist in the database for a given household member id
-#    And one account exists in the database for a different household member id
-#    And the url does not contain query params for the get all accounts endpoint
-#    And the database connection succeeds for get all accounts
-#    When the get all accounts endpoint is invoked
-#    Then the correct accounts are returned from the get all accounts endpoint
-#      | <size> |
-#
-#    Examples:
-#      | size |
-#      | 3    |
-#
+  Scenario Outline: Get all accounts endpoint returns correctly when household member id param exists
+    Given application is up
+    And two accounts exist in the database for a given household member id
+    And one account exists in the database for a different household member id
+    And the url does contain the household member id query param for the get all accounts endpoint
+    And the database connection succeeds for get all accounts
+    When the get all accounts endpoint is invoked
+    Then the correct accounts are returned from the get all accounts endpoint
+      | <size> |
+
+    Examples:
+      | size |
+      | 2    |
+
+  Scenario Outline: Get all accounts endpoint returns correctly when no query params exist
+    Given application is up
+    And two accounts exist in the database for a given household member id
+    And one account exists in the database for a different household member id
+    And the url does not contain query params for the get all accounts endpoint
+    And the database connection succeeds for get all accounts
+    When the get all accounts endpoint is invoked
+    Then the correct accounts are returned from the get all accounts endpoint
+      | <size> |
+
+    Examples:
+      | size |
+      | 3    |
+
   Scenario: Get All accounts endpoint returns correctly when no accounts present for a given household member id
     Given application is up
     And no accounts exist in the database for a given household member id
