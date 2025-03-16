@@ -98,7 +98,7 @@ components:
         - firstName
         - lastName
       properties:
-        userId:
+        id:
           type: integer
         username:
           type: string

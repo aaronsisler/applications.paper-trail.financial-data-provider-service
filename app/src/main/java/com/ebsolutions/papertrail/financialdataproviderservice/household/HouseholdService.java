@@ -39,15 +39,19 @@ public class HouseholdService {
         throw new DataConstraintException(Collections.singletonList("Households cannot be empty"));
       }
 
-      if (!households.stream().filter(household -> household.getHouseholdId() > 0).toList()
+      if (!households.stream()
+          .filter(household -> household.getId() != null)
+          .toList()
           .isEmpty()) {
-        List<String> existingHouseholdsErrorMessages =
+
+        List<String> existingUserErrorMessages =
             households.stream()
+                .filter(household -> household.getId() != null)
                 .map(household -> "Household Id cannot be populated: ".concat(
-                    Integer.toString(household.getHouseholdId())))
+                    Integer.toString(household.getId())))
                 .toList();
 
-        throw new DataConstraintException(existingHouseholdsErrorMessages);
+        throw new DataConstraintException(existingUserErrorMessages);
       }
 
       return householdRepository.saveAll(households);
@@ -61,7 +65,7 @@ public class HouseholdService {
 
   public Household update(Household household) {
     try {
-      if (household.getHouseholdId() <= 0) {
+      if (household.getId() <= 0) {
         List<String> existingHouseholdsErrorMessages =
             Collections.singletonList("Household Id must be positive and non-zero");
 
@@ -69,13 +73,13 @@ public class HouseholdService {
       }
 
       boolean doesHouseholdExist =
-          householdRepository.findById((long) household.getHouseholdId()).isPresent();
+          householdRepository.findById((long) household.getId()).isPresent();
 
       if (!doesHouseholdExist) {
         List<String> existingHouseholdsErrorMessages =
             Collections.singletonList(
                 "Household Id does not exist: ".concat(
-                    Integer.toString(household.getHouseholdId())));
+                    Integer.toString(household.getId())));
 
         throw new DataConstraintException(existingHouseholdsErrorMessages);
       }

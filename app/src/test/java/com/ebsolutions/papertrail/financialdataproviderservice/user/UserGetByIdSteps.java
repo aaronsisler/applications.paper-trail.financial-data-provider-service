@@ -33,7 +33,7 @@ public class UserGetByIdSteps extends BaseTest {
   public void theRequestedUserExistInTheDatabase() {
     expectedUser =
         User.builder()
-            .userId(userId)
+            .id(userId)
             .username("first_user")
             .firstName("first")
             .lastName("user")

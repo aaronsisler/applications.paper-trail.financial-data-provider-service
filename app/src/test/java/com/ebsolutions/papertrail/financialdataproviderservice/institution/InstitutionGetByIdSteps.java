@@ -33,7 +33,7 @@ public class InstitutionGetByIdSteps extends BaseTest {
   public void theRequestedInstitutionExistInTheDatabase() {
     expectedInstitution =
         Institution.builder()
-            .institutionId(institutionId)
+            .id(institutionId)
             .name("first_institution")
             .build();
 

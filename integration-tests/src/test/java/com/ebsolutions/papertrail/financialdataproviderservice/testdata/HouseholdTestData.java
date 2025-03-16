@@ -7,7 +7,7 @@ public enum HouseholdTestData {
     @Override
     public Household get() {
       return Household.builder()
-          .householdId(1)
+          .id(1)
           .name("main_household")
           .build();
     }
@@ -16,7 +16,7 @@ public enum HouseholdTestData {
     @Override
     public Household get() {
       return Household.builder()
-          .householdId(2)
+          .id(2)
           .name("update_household")
           .build();
     }
@@ -25,7 +25,7 @@ public enum HouseholdTestData {
     @Override
     public Household get() {
       return Household.builder()
-          .householdId(3)
+          .id(3)
           .name("delete_household")
           .build();
     }
@@ -34,7 +34,7 @@ public enum HouseholdTestData {
     @Override
     public Household get() {
       return Household.builder()
-          .householdId(4)
+          .id(4)
           .name("household_member_create_household")
           .build();
     }

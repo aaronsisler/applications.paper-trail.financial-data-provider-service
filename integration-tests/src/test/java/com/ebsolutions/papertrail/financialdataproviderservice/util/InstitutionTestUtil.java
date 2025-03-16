@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Assertions;
 public class InstitutionTestUtil {
   public static void assertExpectedAgainstActual(Institution expectedInstitution,
                                                  Institution actualInstitution) {
-    Assertions.assertEquals(expectedInstitution.getInstitutionId(),
-        actualInstitution.getInstitutionId());
+    Assertions.assertEquals(expectedInstitution.getId(),
+        actualInstitution.getId());
+
     Assertions.assertEquals(expectedInstitution.getName(), actualInstitution.getName());
   }
 

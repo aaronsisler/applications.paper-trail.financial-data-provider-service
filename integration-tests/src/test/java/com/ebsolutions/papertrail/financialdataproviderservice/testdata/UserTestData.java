@@ -7,7 +7,7 @@ public enum UserTestData {
     @Override
     public User get() {
       return User.builder()
-          .userId(1)
+          .id(1)
           .username("main_user")
           .firstName("Main")
           .lastName("User")
@@ -18,7 +18,7 @@ public enum UserTestData {
     @Override
     public User get() {
       return User.builder()
-          .userId(2)
+          .id(2)
           .username("update_user")
           .firstName("Update")
           .lastName("User")
@@ -29,7 +29,7 @@ public enum UserTestData {
     @Override
     public User get() {
       return User.builder()
-          .userId(3)
+          .id(3)
           .username("delete_user")
           .firstName("Delete")
           .lastName("User")
@@ -40,7 +40,7 @@ public enum UserTestData {
     @Override
     public User get() {
       return User.builder()
-          .userId(4)
+          .id(4)
           .username("household_member_create_user_1")
           .firstName("Household Member Create 1")
           .lastName("User")
@@ -51,7 +51,7 @@ public enum UserTestData {
     @Override
     public User get() {
       return User.builder()
-          .userId(5)
+          .id(5)
           .username("household_member_create_user_2")
           .firstName("Household Member Create 2")
           .lastName("User")

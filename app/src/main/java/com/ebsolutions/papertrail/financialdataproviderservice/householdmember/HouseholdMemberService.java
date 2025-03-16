@@ -42,10 +42,10 @@ public class HouseholdMemberService {
 
   public HouseholdMember create(HouseholdMember householdMember) {
     try {
-      if (householdMember.getHouseholdMemberId() != 0) {
+      if (householdMember.getId() != null) {
         throw new DataConstraintException(Collections.singletonList(
             "Household Member Id cannot be populated: ".concat(
-                String.valueOf(householdMember.getHouseholdMemberId()))));
+                String.valueOf(householdMember.getId()))));
       }
 
       var user = userService.get(householdMember.getUserId());

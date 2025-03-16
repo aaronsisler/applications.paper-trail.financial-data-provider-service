@@ -39,11 +39,16 @@ public class UserService {
         throw new DataConstraintException(Collections.singletonList("Users cannot be empty"));
       }
 
-      if (!users.stream().filter(user -> user.getUserId() > 0).toList().isEmpty()) {
+      if (!users.stream()
+          .filter(user -> user.getId() != null)
+          .toList()
+          .isEmpty()) {
+
         List<String> existingUserErrorMessages =
             users.stream()
+                .filter(user -> user.getId() != null)
                 .map(user -> "User Id cannot be populated: ".concat(
-                    Integer.toString(user.getUserId())))
+                    Integer.toString(user.getId())))
                 .toList();
 
         throw new DataConstraintException(existingUserErrorMessages);
@@ -60,19 +65,19 @@ public class UserService {
 
   public User update(User user) {
     try {
-      if (user.getUserId() <= 0) {
+      if (user.getId() <= 0) {
         List<String> existingUserErrorMessages =
             Collections.singletonList("User Id must be positive and non-zero");
 
         throw new DataConstraintException(existingUserErrorMessages);
       }
 
-      boolean doesUserExist = userRepository.findById((long) user.getUserId()).isPresent();
+      boolean doesUserExist = userRepository.findById((long) user.getId()).isPresent();
 
       if (!doesUserExist) {
         List<String> existingUserErrorMessages =
             Collections.singletonList(
-                "User Id does not exist: ".concat(Integer.toString(user.getUserId())));
+                "User Id does not exist: ".concat(Integer.toString(user.getId())));
 
         throw new DataConstraintException(existingUserErrorMessages);
       }

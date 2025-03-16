@@ -34,13 +34,13 @@ public class HouseholdGetAllSteps extends BaseTest {
   public void twoHouseholdsExistInTheDatabase() {
     expectedHouseholdOne =
         Household.builder()
-            .householdId(1)
+            .id(1)
             .name("first_household")
             .build();
 
     expectedHouseholdTwo =
         Household.builder()
-            .householdId(2)
+            .id(2)
             .name("second_household")
             .build();
 

@@ -34,7 +34,7 @@ public class UserGetAllSteps extends BaseTest {
   public void twoUsersExistInTheDatabase() {
     expectedUserOne =
         User.builder()
-            .userId(1)
+            .id(1)
             .username("first_user")
             .firstName("first")
             .lastName("user")
@@ -42,7 +42,7 @@ public class UserGetAllSteps extends BaseTest {
 
     expectedUserTwo =
         User.builder()
-            .userId(2)
+            .id(2)
             .username("second_user")
             .firstName("second")
             .lastName("user")

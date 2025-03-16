@@ -54,14 +54,14 @@ public class UserCreateAllSteps extends BaseTest {
 
     expectedUserOne =
         User.builder()
-            .userId(1)
+            .id(1)
             .username("first_user")
             .firstName("first")
             .lastName("user")
             .build();
 
     expectedUserTwo = User.builder()
-        .userId(2)
+        .id(2)
         .username("second_user")
         .firstName("second")
         .lastName("user")
@@ -80,7 +80,7 @@ public class UserCreateAllSteps extends BaseTest {
         Integer.parseInt(dataTable.column(0).getFirst());
 
     User inputUserOne = User.builder()
-        .userId(userId)
+        .id(userId)
         .username(CommonTestUtil.isEmptyString(dataTable.column(1).getFirst()))
         .firstName(CommonTestUtil.isEmptyString(dataTable.column(2).getFirst()))
         .lastName(CommonTestUtil.isEmptyString(dataTable.column(3).getFirst()))
@@ -97,9 +97,7 @@ public class UserCreateAllSteps extends BaseTest {
 
   @And("the connection to the database fails for the create all users endpoint")
   public void theConnectionToTheDatabaseFailsForTheCreateAllUsersEndpoint() {
-    DataProcessingException dataProcessingException = new DataProcessingException();
-
-    when(userRepository.saveAll(any())).thenThrow(dataProcessingException);
+    when(userRepository.saveAll(any())).thenThrow(new DataProcessingException());
   }
 
   @When("the create all users endpoint is invoked")

@@ -56,7 +56,7 @@ components:
         - householdId
         - userId
       properties:
-        householdMemberId:
+        id:
           type: integer
         householdId:
           type: integer

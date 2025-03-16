@@ -38,7 +38,7 @@ public class UserUpdateSteps extends BaseTest {
     int validUserId = 1;
 
     User inputUserOne = User.builder()
-        .userId(validUserId)
+        .id(validUserId)
         .username("first_user")
         .firstName("first")
         .lastName("user")
@@ -46,7 +46,7 @@ public class UserUpdateSteps extends BaseTest {
 
     expectedUserOne =
         User.builder()
-            .userId(validUserId)
+            .id(validUserId)
             .username("first_user")
             .firstName("first")
             .lastName("user")
@@ -79,7 +79,7 @@ public class UserUpdateSteps extends BaseTest {
         Integer.parseInt(dataTable.column(0).getFirst());
 
     User inputUserOne = User.builder()
-        .userId(userId)
+        .id(userId)
         .username(CommonTestUtil.isEmptyString(dataTable.column(1).getFirst()))
         .firstName(CommonTestUtil.isEmptyString(dataTable.column(2).getFirst()))
         .lastName(CommonTestUtil.isEmptyString(dataTable.column(3).getFirst()))

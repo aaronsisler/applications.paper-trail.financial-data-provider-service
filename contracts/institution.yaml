@@ -96,7 +96,7 @@ components:
       required:
         - name
       properties:
-        institutionId:
+        id:
           type: integer
         name:
           type: string

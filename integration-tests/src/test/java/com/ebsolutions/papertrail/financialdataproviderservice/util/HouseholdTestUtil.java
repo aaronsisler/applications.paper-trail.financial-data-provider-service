@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Assertions;
 public class HouseholdTestUtil {
   public static void assertExpectedAgainstActual(Household expectedHousehold,
                                                  Household actualHousehold) {
-    Assertions.assertEquals(expectedHousehold.getHouseholdId(), actualHousehold.getHouseholdId());
+    Assertions.assertEquals(expectedHousehold.getId(), actualHousehold.getId());
+
     Assertions.assertEquals(expectedHousehold.getName(), actualHousehold.getName());
   }
 

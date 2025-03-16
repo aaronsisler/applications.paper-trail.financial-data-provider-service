@@ -15,7 +15,7 @@ Feature: Integration: User
     When the update user endpoint is invoked
     Then the updated user is returned from the update user endpoint
     And the updated user is correct in the database
-#
+
   Scenario: Delete User
     Given application is up
     And the delete user id provided exists in the database
