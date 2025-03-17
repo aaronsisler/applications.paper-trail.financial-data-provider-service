@@ -17,7 +17,8 @@ VALUES
 
 INSERT INTO household_member (household_id, user_id)
 VALUES
-(5, 6);
+(5, 6),
+(1, 2);
 
 INSERT INTO institution (name)
 VALUES
