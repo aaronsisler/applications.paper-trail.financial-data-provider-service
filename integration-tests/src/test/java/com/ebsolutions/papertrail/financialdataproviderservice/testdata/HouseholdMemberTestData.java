@@ -8,7 +8,7 @@ public enum HouseholdMemberTestData {
     public HouseholdMember get() {
       return HouseholdMember.builder()
           .id(1)
-          .householdId(4)
+          .householdId(5)
           .userId(6)
           .build();
     }
@@ -18,8 +18,8 @@ public enum HouseholdMemberTestData {
     public HouseholdMember get() {
       return HouseholdMember.builder()
           .id(2)
-          .householdId(4)
-          .userId(6)
+          .householdId(5)
+          .userId(7)
           .build();
     }
   };

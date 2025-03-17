@@ -37,7 +37,8 @@ public class AccountSteps extends BaseStep {
   @And("a user exists in the database related to account creation")
   public void aUserExistsInTheDatabaseRelatedToAccountCreation() {
     // Nothing to do given test data setup, below for reference
-    UserTestData.ACCOUNT_CREATE.get();
+    UserTestData.ACCOUNT_CREATE_ONE.get();
+    UserTestData.ACCOUNT_CREATE_TWO.get();
   }
 
   @And("a household exist in the database related to account creation")

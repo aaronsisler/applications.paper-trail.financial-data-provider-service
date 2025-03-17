@@ -5,7 +5,8 @@ VALUES
 ('delete_user', 'Delete', 'User'),
 ('household_member_create_user_1', 'Household Member Create 1', 'User'),
 ('household_member_create_user_2', 'Household Member Create 2', 'User'),
-('account_create_user', 'Account Create', 'User');
+('account_create_user_1', 'Account Create 1', 'User'),
+('account_create_user_2', 'Account Create 2', 'User');
 
 INSERT INTO household (name)
 VALUES
@@ -18,7 +19,7 @@ VALUES
 INSERT INTO household_member (household_id, user_id)
 VALUES
 (5, 6),
-(1, 2);
+(5, 7);
 
 INSERT INTO institution (name)
 VALUES
