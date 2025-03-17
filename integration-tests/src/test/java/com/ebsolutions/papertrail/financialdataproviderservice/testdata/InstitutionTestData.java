@@ -29,6 +29,15 @@ public enum InstitutionTestData {
           .name("delete_institution")
           .build();
     }
+  },
+  ACCOUNT_CREATE {
+    @Override
+    public Institution get() {
+      return Institution.builder()
+          .id(4)
+          .name("account_create_institution")
+          .build();
+    }
   };
 
   public abstract Institution get();

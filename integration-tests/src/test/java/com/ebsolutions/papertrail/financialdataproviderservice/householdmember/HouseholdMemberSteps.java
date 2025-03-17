@@ -118,11 +118,11 @@ public class HouseholdMemberSteps extends BaseStep {
 
     Assertions.assertEquals(2, createdHouseholdMembers.size());
 
-    HouseholdMember householdMemberOne = householdMembers.getFirst();
+    HouseholdMember householdMemberOne = createdHouseholdMembers.getFirst();
     HouseholdMemberTestUtil
         .assertExpectedAgainstCreated(expectedHouseholdMemberOne, householdMemberOne);
 
-    HouseholdMember householdMemberTwo = householdMembers.getLast();
+    HouseholdMember householdMemberTwo = createdHouseholdMembers.getLast();
     HouseholdMemberTestUtil
         .assertExpectedAgainstCreated(expectedHouseholdMemberTwo, householdMemberTwo);
   }

@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataproviderservice.householdmember;
+package com.ebsolutions.papertrail.financialdataproviderservice.account;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.user.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,39 +24,39 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @AllArgsConstructor
-@RequestMapping("household-members")
-public class HouseholdMemberController {
-  private final HouseholdMemberService householdMemberService;
+@RequestMapping("accounts")
+public class AccountController {
+  private final AccountService accountService;
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  @Operation(summary = "Get all household members")
+  @Operation(summary = "Get all accounts")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200",
           content = {
               @Content(mediaType = "application/json",
-                  array = @ArraySchema(schema = @Schema(implementation = HouseholdMember.class)))
+                  array = @ArraySchema(schema = @Schema(implementation = Account.class)))
           }),
       @ApiResponse(responseCode = "204", content = @Content(schema = @Schema(hidden = true)))})
-  public ResponseEntity<?> getAllById(@RequestParam(required = false) Integer userId) {
-    List<HouseholdMember> householdMembers;
-    if (userId == null) {
-      householdMembers = householdMemberService.getAll();
+  public ResponseEntity<?> getAllById(@RequestParam(required = false) Integer householdMemberId) {
+    List<Account> accounts;
+    if (householdMemberId == null) {
+      accounts = accountService.getAll();
     } else {
-      householdMembers = householdMemberService.getAllByUserId(userId);
+      accounts = accountService.getAllById(householdMemberId);
     }
 
-    return !householdMembers.isEmpty() ? ResponseEntity.ok(householdMembers) :
+    return !accounts.isEmpty() ? ResponseEntity.ok(accounts) :
         ResponseEntity.noContent().build();
   }
 
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  @Operation(summary = "Create household member")
+  @Operation(summary = "Create account")
   @ApiResponse(responseCode = "200",
       content = {
           @Content(mediaType = "application/json",
               schema = @Schema(implementation = User.class))
       })
-  public ResponseEntity<?> post(@Valid @RequestBody HouseholdMember householdMember) {
-    return ResponseEntity.ok(householdMemberService.create(householdMember));
+  public ResponseEntity<?> post(@Valid @RequestBody Account account) {
+    return ResponseEntity.ok(accountService.create(account));
   }
 }

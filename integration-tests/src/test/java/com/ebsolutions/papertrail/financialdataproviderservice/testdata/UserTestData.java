@@ -57,6 +57,28 @@ public enum UserTestData {
           .lastName("User")
           .build();
     }
+  },
+  ACCOUNT_CREATE_ONE {
+    @Override
+    public User get() {
+      return User.builder()
+          .id(6)
+          .username("account_create_user_1")
+          .firstName("Account Create 1")
+          .lastName("User")
+          .build();
+    }
+  },
+  ACCOUNT_CREATE_TWO {
+    @Override
+    public User get() {
+      return User.builder()
+          .id(7)
+          .username("account_create_user_2")
+          .firstName("Account Create 2")
+          .lastName("User")
+          .build();
+    }
   };
 
   public abstract User get();

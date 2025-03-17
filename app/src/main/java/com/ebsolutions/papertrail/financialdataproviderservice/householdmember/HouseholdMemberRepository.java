@@ -7,4 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public interface HouseholdMemberRepository extends JpaRepository<HouseholdMember, Long> {
   List<HouseholdMember> findByUserId(Integer userId);
+
+  List<HouseholdMember> findByHouseholdId(Integer householdId);
 }

@@ -5,11 +5,11 @@ info:
 servers:
   - url: http://localhost/
 paths:
-  /household-members:
+  /account:
     get:
-      operationId: getHouseholdMembers
+      operationId: getAccounts
       parameters:
-        - $ref: "#/components/parameters/UserId"
+        - $ref: "#/components/parameters/HouseholdMemberId"
       responses:
         200:
           description: OK
@@ -18,7 +18,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/HouseholdMember"
+                  $ref: "#/components/schemas/Account"
         204:
           description: No content
     post:
@@ -29,7 +29,7 @@ paths:
           application/json:
             schema:
               type: array
-              $ref: "#/components/schemas/HouseholdMember"
+              $ref: "#/components/schemas/Account"
       responses:
         200:
           description: OK
@@ -37,7 +37,7 @@ paths:
             application/json:
               schema:
                 type: array
-                $ref: "#/components/schemas/HouseholdMember"
+                $ref: "#/components/schemas/Account"
         4XX:
           description: Bad Request
           content:
@@ -52,24 +52,30 @@ paths:
                 $ref: "common.yaml#/components/schemas/ErrorResponse"
 components:
   schemas:
-    HouseholdMember:
+    Account:
       type: object
       required:
-        - householdId
-        - userId
+        - institutionId
+        - householdMemberId
+        - name
       properties:
         id:
           type: integer
-        householdId:
+        institutionId:
           type: integer
           minimum: 1
-        userId:
+        householdMemberId:
           type: integer
           minimum: 1
+        name:
+          type: string
+          minLength: 1
+        nickname:
+          type: string
   parameters:
-    UserId:
+    HouseholdMemberId:
       in: query
-      name: userId
+      name: householdMemberId
       required: false
       schema:
         type: integer

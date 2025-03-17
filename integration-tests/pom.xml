@@ -160,6 +160,15 @@
                             <inputSpec>${project.parent.basedir}/contracts/institution.yaml</inputSpec>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>models-account</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.parent.basedir}/contracts/account.yaml</inputSpec>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <!-- By default, surefire is running so setting skipTests to true -->
