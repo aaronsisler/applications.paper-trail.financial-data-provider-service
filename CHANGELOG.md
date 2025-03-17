@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.15.0] Account Create and Get All Full Test Suite
+
+### Added
+
+- Account POST / GET ALL with full Cucumber test suite
+- Account POST / GET ALL with integration test
+
 ## [0.14.0] Household Member Create and Get All Integration Test
 
 ### Added
