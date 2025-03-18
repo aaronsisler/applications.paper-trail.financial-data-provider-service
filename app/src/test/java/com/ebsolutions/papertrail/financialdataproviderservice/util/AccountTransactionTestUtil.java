@@ -3,7 +3,7 @@ package com.ebsolutions.papertrail.financialdataproviderservice.util;
 import com.ebsolutions.papertrail.financialdataproviderservice.accounttransaction.AccountTransaction;
 import org.junit.jupiter.api.Assertions;
 
-public class TransactionTestUtil {
+public class AccountTransactionTestUtil {
   public static void assertExpectedAgainstActual(AccountTransaction expectedAccountTransaction,
                                                  AccountTransaction actualAccountTransaction) {
     Assertions.assertEquals(

@@ -99,8 +99,7 @@ public class HouseholdMemberGetAllSteps extends BaseTest {
 
   @And("no household members exist in the database")
   public void noHouseholdMembersExistInTheDatabase() {
-    when(householdMemberRepository.findByUserId(USER_ID_TO_BE_FOUND))
-        .thenReturn(Collections.emptyList());
+    when(householdMemberRepository.findAll()).thenReturn(Collections.emptyList());
   }
 
   @And("the user id provided in the url is the incorrect format for the get household by id endpoint")

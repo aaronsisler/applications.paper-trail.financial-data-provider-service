@@ -11,8 +11,8 @@ import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
+import com.ebsolutions.papertrail.financialdataproviderservice.util.AccountTransactionTestUtil;
 import com.ebsolutions.papertrail.financialdataproviderservice.util.CommonTestUtil;
-import com.ebsolutions.papertrail.financialdataproviderservice.util.TransactionTestUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -196,11 +196,11 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
         objectMapper.readerForListOf(AccountTransaction.class).readValue(content);
 
     AccountTransaction accountTransactionOne = accountTransactions.getFirst();
-    TransactionTestUtil.assertExpectedAgainstActual(expectedAccountTransactionOne,
+    AccountTransactionTestUtil.assertExpectedAgainstActual(expectedAccountTransactionOne,
         accountTransactionOne);
 
     AccountTransaction accountTransactionTwo = accountTransactions.getLast();
-    TransactionTestUtil.assertExpectedAgainstActual(expectedAccountTransactionTwo,
+    AccountTransactionTestUtil.assertExpectedAgainstActual(expectedAccountTransactionTwo,
         accountTransactionTwo);
   }
 
