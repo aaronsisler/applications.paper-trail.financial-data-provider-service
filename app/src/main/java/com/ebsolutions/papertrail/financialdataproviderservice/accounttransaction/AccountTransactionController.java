@@ -64,10 +64,10 @@ public class AccountTransactionController {
           }),
       @ApiResponse(responseCode = "204", content = @Content(schema = @Schema(hidden = true)))
   })
-  @GetMapping(value = "/{transactionId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> get(@PathVariable @Valid Integer transactionId) {
+  @GetMapping(value = "/{accountTransactionId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> get(@PathVariable @Valid Integer accountTransactionId) {
 
-    Optional<AccountTransaction> transaction = accountTransactionService.get(transactionId);
+    Optional<AccountTransaction> transaction = accountTransactionService.get(accountTransactionId);
 
     return transaction.isPresent()
         ? ResponseEntity.ok(transaction.get()) :
