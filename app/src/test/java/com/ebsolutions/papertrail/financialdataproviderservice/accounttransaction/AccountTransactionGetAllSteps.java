@@ -1,12 +1,10 @@
-package com.ebsolutions.papertrail.financialdataproviderservice;
+package com.ebsolutions.papertrail.financialdataproviderservice.accounttransaction;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.account.AccountRepository;
-import com.ebsolutions.papertrail.financialdataproviderservice.accounttransaction.AccountTransaction;
-import com.ebsolutions.papertrail.financialdataproviderservice.accounttransaction.AccountTransactionRepository;
 import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
