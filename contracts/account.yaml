@@ -22,13 +22,12 @@ paths:
         204:
           description: No content
     post:
-      operationId: createHouseholdMembers
+      operationId: createAccount
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: array
               $ref: "#/components/schemas/Account"
       responses:
         200:

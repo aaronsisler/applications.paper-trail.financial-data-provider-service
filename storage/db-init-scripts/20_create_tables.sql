@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS account (
 */
 CREATE TABLE IF NOT EXISTS account_transaction (
   id integer primary key generated always as identity,
+  account_id integer REFERENCES account (id),
   amount numeric(12,2) NOT NULL,
-  description varchar(150) NOT NULL,
-  account_id integer REFERENCES account (id)
+  description varchar(150) NOT NULL
 );
