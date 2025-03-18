@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataproviderservice.transaction;
+package com.ebsolutions.papertrail.financialdataproviderservice.accounttransaction;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.user.User;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,9 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @AllArgsConstructor
-@RequestMapping("transactions")
-public class TransactionController {
-  private final TransactionService transactionService;
+@RequestMapping("account-transactions")
+public class AccountTransactionController {
+  private final AccountTransactionService accountTransactionService;
 
   @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(summary = "Get all transactions")
@@ -38,20 +38,20 @@ public class TransactionController {
       @ApiResponse(responseCode = "200",
           content = {
               @Content(mediaType = "application/json",
-                  array = @ArraySchema(schema = @Schema(implementation = Transaction.class)))
+                  array = @ArraySchema(schema = @Schema(implementation = AccountTransaction.class)))
           }),
       @ApiResponse(responseCode = "204", content = @Content(schema = @Schema(hidden = true)))})
   public ResponseEntity<?> getAll(@RequestParam(required = false) Integer accountId) {
-    List<Transaction> transactions;
+    List<AccountTransaction> accountTransactions;
 
     if (accountId == null) {
-      transactions = transactionService.getAll();
+      accountTransactions = accountTransactionService.getAll();
     } else {
-      transactions = transactionService.getAllByAccountId(accountId);
+      accountTransactions = accountTransactionService.getAllByAccountId(accountId);
     }
 
-    return !transactions.isEmpty()
-        ? ResponseEntity.ok(transactions) :
+    return !accountTransactions.isEmpty()
+        ? ResponseEntity.ok(accountTransactions) :
         ResponseEntity.noContent().build();
   }
 
@@ -67,7 +67,7 @@ public class TransactionController {
   @GetMapping(value = "/{transactionId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> get(@PathVariable @Valid Integer transactionId) {
 
-    Optional<Transaction> transaction = transactionService.get(transactionId);
+    Optional<AccountTransaction> transaction = accountTransactionService.get(transactionId);
 
     return transaction.isPresent()
         ? ResponseEntity.ok(transaction.get()) :
@@ -80,10 +80,11 @@ public class TransactionController {
       @ApiResponse(responseCode = "200",
           content = {
               @Content(mediaType = "application/json",
-                  array = @ArraySchema(schema = @Schema(implementation = Transaction.class)))
+                  array = @ArraySchema(schema = @Schema(implementation = AccountTransaction.class)))
           })})
-  public ResponseEntity<?> post(@Valid @RequestBody List<@Valid Transaction> transactions) {
-    return ResponseEntity.ok(transactionService.createAll(transactions));
+  public ResponseEntity<?> post(
+      @Valid @RequestBody List<@Valid AccountTransaction> accountTransactions) {
+    return ResponseEntity.ok(accountTransactionService.createAll(accountTransactions));
   }
 
   @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -94,18 +95,18 @@ public class TransactionController {
               @Content(mediaType = "application/json",
                   schema = @Schema(implementation = User.class))
           })})
-  public ResponseEntity<?> put(@RequestBody @Valid Transaction transaction) {
-    return ResponseEntity.ok().body(transactionService.update(transaction));
+  public ResponseEntity<?> put(@RequestBody @Valid AccountTransaction accountTransaction) {
+    return ResponseEntity.ok().body(accountTransactionService.update(accountTransaction));
   }
 
   @Operation(summary = "Delete transaction")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "204", content = @Content(schema = @Schema(hidden = true)))
   })
-  @DeleteMapping(value = "/{transactionId}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> delete(@PathVariable @Valid Integer transactionId) {
+  @DeleteMapping(value = "/{accountTransactionId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> delete(@PathVariable @Valid Integer accountTransactionId) {
 
-    transactionService.delete(transactionId);
+    accountTransactionService.delete(accountTransactionId);
 
     return ResponseEntity.noContent().build();
   }

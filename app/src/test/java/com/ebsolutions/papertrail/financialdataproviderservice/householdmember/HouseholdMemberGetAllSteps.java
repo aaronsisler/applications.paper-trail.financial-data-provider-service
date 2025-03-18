@@ -26,7 +26,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 
 @RequiredArgsConstructor
-public class TransactionGetAllSteps extends BaseTest {
+public class HouseholdMemberGetAllSteps extends BaseTest {
   private static final int USER_ID_TO_BE_FOUND = 456;
 
   private final HouseholdMemberRepository householdMemberRepository;

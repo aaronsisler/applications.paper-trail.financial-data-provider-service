@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataproviderservice.transaction;
+package com.ebsolutions.papertrail.financialdataproviderservice.accounttransaction;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.common.BaseEntity;
 import com.ebsolutions.papertrail.financialdataproviderservice.common.DatabaseConstants;
@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ import org.hibernate.validator.constraints.Range;
 @SuperBuilder
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Table(name = DatabaseConstants.TRANSACTION_TABLE)
-public class Transaction extends BaseEntity {
+@Table(name = DatabaseConstants.ACCOUNT_TRANSACTION_TABLE)
+public class AccountTransaction extends BaseEntity {
 
   @Range(min = 1, message = "account id is mandatory")
   @JsonProperty("accountId")
@@ -36,11 +37,11 @@ public class Transaction extends BaseEntity {
       example = "125")
   private int amount;
 
-  @Range(min = 1, message = "description is mandatory")
+  @NotBlank(message = "description is mandatory")
   @JsonProperty("description")
   @Schema(name = "description",
       requiredMode = Schema.RequiredMode.REQUIRED,
       description = "Description",
       example = "Place we shopped at")
-  private int description;
+  private String description;
 }

@@ -1,13 +1,13 @@
 openapi: 3.0.0
 info:
-  title: Users REST API
+  title: Account Transactions REST API
   version: "1.0"
 servers:
   - url: http://localhost/
 paths:
-  /transactions:
+  /account-transactions:
     get:
-      operationId: getTransactions
+      operationId: getAccountTransactions
       parameters:
         - $ref: "#/components/parameters/AccountId"
       responses:
@@ -18,18 +18,18 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Transaction"
+                  $ref: "#/components/schemas/AccountTransaction"
         204:
           description: No content
     post:
-      operationId: createTransactions
+      operationId: createAccountTransactions
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: array
-              $ref: "#/components/schemas/Transaction"
+              $ref: "#/components/schemas/AccountTransaction"
       responses:
         200:
           description: OK
@@ -37,7 +37,7 @@ paths:
             application/json:
               schema:
                 type: array
-                $ref: "#/components/schemas/Transaction"
+                $ref: "#/components/schemas/AccountTransaction"
         4XX:
           description: Bad Request
           content:
@@ -51,20 +51,20 @@ paths:
               schema:
                 $ref: "common.yaml#/components/schemas/ErrorResponse"
     put:
-      operationId: updateTransaction
+      operationId: updateAccountTransaction
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Transaction"
+              $ref: "#/components/schemas/AccountTransaction"
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Transaction"
+                $ref: "#/components/schemas/AccountTransaction"
         4XX:
           description: Bad Request
           content:
@@ -77,11 +77,11 @@ paths:
             application/json:
               schema:
                 $ref: "common.yaml#/components/schemas/ErrorResponse"
-  /transactions/{transactionId}:
+  /account-transactions/{accountTransactionId}:
     parameters:
-      - $ref: "#/components/parameters/TransactionId"
+      - $ref: "#/components/parameters/AccountTransactionId"
     delete:
-      operationId: deleteTransaction
+      operationId: deleteAccountTransaction
       responses:
         204:
           description: No content
@@ -92,14 +92,14 @@ paths:
               schema:
                 $ref: "common.yaml#/components/schemas/ErrorResponse"
     get:
-      operationId: getTransaction
+      operationId: getAccountTransaction
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Transaction"
+                $ref: "#/components/schemas/AccountTransaction"
         204:
           description: No content
         4XX:
@@ -116,7 +116,7 @@ paths:
                 $ref: "common.yaml#/components/schemas/ErrorResponse"
 components:
   schemas:
-    Transaction:
+    AccountTransaction:
       type: object
       required:
         - accountId
@@ -141,9 +141,9 @@ components:
       required: false
       schema:
         type: integer
-    TransactionId:
+    AccountTransactionId:
       in: path
-      name: transactionId
+      name: accountTransactionId
       required: true
       schema:
         type: integer

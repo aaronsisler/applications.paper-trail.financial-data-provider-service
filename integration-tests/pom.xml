@@ -170,12 +170,12 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>models-transaction</id>
+                        <id>models-accountTransaction</id>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.parent.basedir}/contracts/transaction.yaml</inputSpec>
+                            <inputSpec>${project.parent.basedir}/contracts/accountTransaction.yaml</inputSpec>
                         </configuration>
                     </execution>
                 </executions>

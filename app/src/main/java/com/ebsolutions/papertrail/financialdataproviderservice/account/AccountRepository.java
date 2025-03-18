@@ -7,6 +7,4 @@ import org.springframework.stereotype.Component;
 @Component
 public interface AccountRepository extends JpaRepository<Account, Long> {
   List<Account> findByHouseholdMemberId(Integer householdMemberId);
-
-  List<Account> findByAccountId(Integer accountId);
 }
