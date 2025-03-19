@@ -63,9 +63,7 @@ public class HouseholdUpdateSteps extends BaseTest {
 
   @And("the connection to the database fails for the update household endpoint")
   public void theConnectionToTheDatabaseFailsForTheUpdateHouseholdEndpoint() {
-    DataProcessingException dataProcessingException = new DataProcessingException();
-
-    when(householdRepository.save(any())).thenThrow(dataProcessingException);
+    when(householdRepository.save(any())).thenThrow(new DataProcessingException());
   }
 
   @And("the household in the update household request body has an invalid input")

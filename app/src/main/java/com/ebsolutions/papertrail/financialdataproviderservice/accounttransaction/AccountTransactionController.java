@@ -67,10 +67,11 @@ public class AccountTransactionController {
   @GetMapping(value = "/{accountTransactionId}", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> get(@PathVariable @Valid Integer accountTransactionId) {
 
-    Optional<AccountTransaction> transaction = accountTransactionService.get(accountTransactionId);
+    Optional<AccountTransaction> accountTransaction =
+        accountTransactionService.get(accountTransactionId);
 
-    return transaction.isPresent()
-        ? ResponseEntity.ok(transaction.get()) :
+    return accountTransaction.isPresent()
+        ? ResponseEntity.ok(accountTransaction.get()) :
         ResponseEntity.noContent().build();
   }
 

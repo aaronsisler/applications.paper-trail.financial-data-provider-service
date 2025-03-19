@@ -49,14 +49,14 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
         AccountTransaction.builder()
             .accountId(1)
             .amount(123)
-            .description("Transaction Description 1")
+            .description("Account Transaction Description 1")
             .build();
 
     AccountTransaction inputAccountTransactionTwo =
         AccountTransaction.builder()
             .accountId(1)
             .amount(456)
-            .description("Transaction Description 2")
+            .description("Account Transaction Description 2")
             .build();
 
     expectedAccountTransactionOne =
@@ -64,14 +64,14 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
             .id(1)
             .accountId(1)
             .amount(123)
-            .description("Transaction Description 1")
+            .description("Account Transaction Description 1")
             .build();
 
     expectedAccountTransactionTwo = AccountTransaction.builder()
         .id(2)
         .accountId(1)
         .amount(456)
-        .description("Transaction Description 2")
+        .description("Account Transaction Description 2")
         .build();
 
     requestContent =
@@ -97,13 +97,13 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
     AccountTransaction inputAccountTransactionOne = AccountTransaction.builder()
         .accountId(1)
         .amount(123)
-        .description("Transaction Description 1")
+        .description("Account Transaction Description 1")
         .build();
 
     AccountTransaction inputAccountTransactionTwo = AccountTransaction.builder()
         .accountId(2)
         .amount(456)
-        .description("Transaction Description 2")
+        .description("Account Transaction Description 2")
         .build();
 
     expectedAccountTransactionOne =
@@ -111,14 +111,14 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
             .id(1)
             .accountId(1)
             .amount(123)
-            .description("Transaction Description 1")
+            .description("Account Transaction Description 1")
             .build();
 
     expectedAccountTransactionTwo = AccountTransaction.builder()
         .id(2)
         .accountId(2)
         .amount(456)
-        .description("Transaction Description 2")
+        .description("Account Transaction Description 2")
         .build();
 
     requestContent =

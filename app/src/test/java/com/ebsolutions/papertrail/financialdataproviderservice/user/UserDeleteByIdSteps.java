@@ -28,10 +28,10 @@ public class UserDeleteByIdSteps extends BaseTest {
   private String userUrl;
   private MvcResult result;
 
-  @And("the user id provided exists in the database")
-  public void theUserIdProvidedExistsInTheDatabase() {
-    // Nothing to do here
-  }
+  //  @And("the user id provided exists in the database")
+  //  public void theUserIdProvidedExistsInTheDatabase() {
+  //     Nothing to do here
+  //  }
 
   @And("the user id provided does not exist in the database")
   public void theUserIdProvidedDoesNotExistInTheDatabase() {

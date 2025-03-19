@@ -3,6 +3,7 @@ Feature: User: Update
   Scenario: Update User endpoint returns correctly when valid user is present
     Given application is up
     And the user is part of the request body for the update user endpoint
+    And the user id provided exists in the database
     When the update user endpoint is invoked
     Then the updated user is returned from the update user endpoint
 

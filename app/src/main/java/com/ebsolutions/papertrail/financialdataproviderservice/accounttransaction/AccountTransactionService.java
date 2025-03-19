@@ -124,16 +124,28 @@ public class AccountTransactionService {
         throw new DataConstraintException(existingUserErrorMessages);
       }
 
-      boolean doesTransactionExist =
+      boolean doesAccountTransactionExist =
           accountTransactionRepository.findById((long) accountTransaction.getId()).isPresent();
 
-      if (!doesTransactionExist) {
-        List<String> existingUserErrorMessages =
+      if (!doesAccountTransactionExist) {
+        List<String> nonExistingAccountTransactionErrorMessages =
             Collections.singletonList(
                 "Account transaction id does not exist: ".concat(
                     Integer.toString(accountTransaction.getId())));
 
-        throw new DataConstraintException(existingUserErrorMessages);
+        throw new DataConstraintException(nonExistingAccountTransactionErrorMessages);
+      }
+
+      boolean doesAccountExist =
+          accountService.get(accountTransaction.getAccountId()).isPresent();
+
+      if (!doesAccountExist) {
+        List<String> nonExistingAccountErrorMessages =
+            Collections.singletonList(
+                "Account id does not exist: ".concat(
+                    Integer.toString(accountTransaction.getAccountId())));
+
+        throw new DataConstraintException(nonExistingAccountErrorMessages);
       }
 
       return accountTransactionRepository.save(accountTransaction);
