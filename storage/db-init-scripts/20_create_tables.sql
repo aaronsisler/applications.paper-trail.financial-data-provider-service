@@ -40,8 +40,8 @@ CREATE TABLE IF NOT EXISTS account (
   id integer primary key generated always as identity,
   institution_id integer REFERENCES institution (id),
   household_member_id integer REFERENCES household_member (id),
-  name varchar(45) NOT NULL,
-  nickname varchar(45)
+  name varchar(50) NOT NULL,
+  nickname varchar(50)
 );
 
 /*

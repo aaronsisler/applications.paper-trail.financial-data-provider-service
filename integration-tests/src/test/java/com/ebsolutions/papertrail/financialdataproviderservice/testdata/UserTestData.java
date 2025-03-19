@@ -79,6 +79,39 @@ public enum UserTestData {
           .lastName("User")
           .build();
     }
+  },
+  ACCOUNT_TRANSACTION_CREATE {
+    @Override
+    public User get() {
+      return User.builder()
+          .id(8)
+          .username("account_transaction_create_user")
+          .firstName("Account Transaction Create")
+          .lastName("User")
+          .build();
+    }
+  },
+  ACCOUNT_TRANSACTION_UPDATE {
+    @Override
+    public User get() {
+      return User.builder()
+          .id(9)
+          .username("account_transaction_update_user")
+          .firstName("Account Transaction Update")
+          .lastName("User")
+          .build();
+    }
+  },
+  ACCOUNT_TRANSACTION_DELETE {
+    @Override
+    public User get() {
+      return User.builder()
+          .id(10)
+          .username("account_transaction_delete_user")
+          .firstName("Account Transaction Delete")
+          .lastName("User")
+          .build();
+    }
   };
 
   public abstract User get();

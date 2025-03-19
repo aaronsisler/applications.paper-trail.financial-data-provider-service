@@ -38,6 +38,33 @@ public enum InstitutionTestData {
           .name("account_create_institution")
           .build();
     }
+  },
+  ACCOUNT_TRANSACTION_CREATE {
+    @Override
+    public Institution get() {
+      return Institution.builder()
+          .id(5)
+          .name("account_transaction_create_institution")
+          .build();
+    }
+  },
+  ACCOUNT_TRANSACTION_UPDATE {
+    @Override
+    public Institution get() {
+      return Institution.builder()
+          .id(6)
+          .name("account_transaction_update_institution")
+          .build();
+    }
+  },
+  ACCOUNT_TRANSACTION_DELETE {
+    @Override
+    public Institution get() {
+      return Institution.builder()
+          .id(7)
+          .name("account_transaction_delete_institution")
+          .build();
+    }
   };
 
   public abstract Institution get();

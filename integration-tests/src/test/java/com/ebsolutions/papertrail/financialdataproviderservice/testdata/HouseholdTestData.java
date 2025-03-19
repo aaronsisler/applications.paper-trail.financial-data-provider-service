@@ -47,6 +47,33 @@ public enum HouseholdTestData {
           .name("account_create_household")
           .build();
     }
+  },
+  ACCOUNT_TRANSACTION_CREATE {
+    @Override
+    public Household get() {
+      return Household.builder()
+          .id(6)
+          .name("account_transaction_create_household")
+          .build();
+    }
+  },
+  ACCOUNT_TRANSACTION_UPDATE {
+    @Override
+    public Household get() {
+      return Household.builder()
+          .id(7)
+          .name("account_transaction_update_household")
+          .build();
+    }
+  },
+  ACCOUNT_TRANSACTION_DELETE {
+    @Override
+    public Household get() {
+      return Household.builder()
+          .id(8)
+          .name("account_transaction_delete_household")
+          .build();
+    }
   };
 
   public abstract Household get();
