@@ -42,7 +42,7 @@ public class AccountController {
     if (householdMemberId == null) {
       accounts = accountService.getAll();
     } else {
-      accounts = accountService.getAllById(householdMemberId);
+      accounts = accountService.getAllByHouseholdMemberId(householdMemberId);
     }
 
     return !accounts.isEmpty() ? ResponseEntity.ok(accounts) :

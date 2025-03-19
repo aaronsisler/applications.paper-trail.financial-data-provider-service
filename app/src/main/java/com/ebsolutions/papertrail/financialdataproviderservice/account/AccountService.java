@@ -6,6 +6,7 @@ import com.ebsolutions.papertrail.financialdataproviderservice.householdmember.H
 import com.ebsolutions.papertrail.financialdataproviderservice.institution.InstitutionService;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,7 +21,16 @@ public class AccountService {
   private final HouseholdMemberService householdMemberService;
   private final AccountRepository accountRepository;
 
-  public List<Account> getAllById(Integer householdMemberId) {
+  public Optional<Account> get(Integer accountId) {
+    try {
+      return accountRepository.findById(accountId.longValue());
+    } catch (Exception exception) {
+      log.error("Error getting by id", exception);
+      throw new DataProcessingException("Something went wrong while fetching the account");
+    }
+  }
+
+  public List<Account> getAllByHouseholdMemberId(Integer householdMemberId) {
     try {
       return accountRepository.findByHouseholdMemberId(householdMemberId);
     } catch (Exception exception) {

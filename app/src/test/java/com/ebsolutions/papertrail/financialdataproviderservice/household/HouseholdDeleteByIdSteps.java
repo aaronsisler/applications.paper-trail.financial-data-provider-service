@@ -1,4 +1,4 @@
-package com.ebsolutions.papertrail.financialdataproviderservice.user;
+package com.ebsolutions.papertrail.financialdataproviderservice.household;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -22,60 +22,60 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 
 @RequiredArgsConstructor
-public class UserDeleteSteps extends BaseTest {
-  protected final UserRepository userRepository;
-  private final Integer validUserId = 1;
-  private String userUrl;
+public class HouseholdDeleteByIdSteps extends BaseTest {
+  protected final HouseholdRepository householdRepository;
+  private final Integer validHouseholdId = 1;
+  private String householdUrl;
   private MvcResult result;
 
-  @And("the user id provided exists in the database")
-  public void theUserIdProvidedExistsInTheDatabase() {
+  @And("the household id provided exists in the database")
+  public void theHouseholdIdProvidedExistsInTheDatabase() {
     // Nothing to do here
   }
 
-  @And("the user id provided does not exist in the database")
-  public void theUserIdProvidedDoesNotExistInTheDatabase() {
+  @And("the household id provided does not exist in the database")
+  public void theHouseholdIdProvidedDoesNotExistInTheDatabase() {
     // Nothing to do here
   }
 
-  @And("the user id provided in the url is the correct format")
-  public void theUserIdProvidedInTheUrlIsTheCorrectFormat() {
-    userUrl = Constants.USERS_URI + "/" + validUserId;
+  @And("the household id provided in the url is the correct format")
+  public void theHouseholdIdProvidedInTheUrlIsTheCorrectFormat() {
+    householdUrl = Constants.HOUSEHOLDS_URI + "/" + validHouseholdId;
   }
 
-  @And("the user id provided in the url is the incorrect format")
-  public void theUserIdProvidedInTheUrlIsTheIncorrectFormat() {
-    String invalidUserId = "abc";
-    userUrl = Constants.USERS_URI + "/" + invalidUserId;
+  @And("the household id provided in the url is the incorrect format")
+  public void theHouseholdIdProvidedInTheUrlIsTheIncorrectFormat() {
+    String invalidHouseholdId = "abc";
+    householdUrl = Constants.HOUSEHOLDS_URI + "/" + invalidHouseholdId;
   }
 
-  @And("the connection to the database fails for the delete user endpoint")
-  public void theConnectionToTheDatabaseFailsForTheDeleteUserEndpoint() {
+  @And("the connection to the database fails for the delete household endpoint")
+  public void theConnectionToTheDatabaseFailsForTheDeleteHouseholdEndpoint() {
     DataProcessingException dataProcessingException = new DataProcessingException();
 
-    doThrow(dataProcessingException).when(userRepository).deleteById(any());
+    doThrow(dataProcessingException).when(householdRepository).deleteById(any());
   }
 
-  @When("the delete user endpoint is invoked")
-  public void theDeleteUserEndpointIsInvoked() throws Exception {
+  @When("the delete household endpoint is invoked")
+  public void theDeleteHouseholdEndpointIsInvoked() throws Exception {
     result = mockMvc
-        .perform(delete(userUrl))
+        .perform(delete(householdUrl))
         .andReturn();
   }
 
-  @Then("the correct response is returned from the delete user endpoint")
-  public void theCorrectResponseIsReturnedFromTheDeleteUserEndpoint() {
+  @Then("the correct response is returned from the delete household endpoint")
+  public void theCorrectResponseIsReturnedFromTheDeleteHouseholdEndpoint() {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
     Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), mockHttpServletResponse.getStatus());
   }
 
-  @And("the correct user is deleted")
-  public void theCorrectUserIsDeleted() {
-    Mockito.verify(userRepository).deleteById(validUserId.longValue());
+  @And("the correct household is deleted")
+  public void theCorrectHouseholdIsDeleted() {
+    Mockito.verify(householdRepository).deleteById(validHouseholdId.longValue());
   }
 
-  @Then("the correct failure response is returned from the delete user endpoint")
-  public void theCorrectFailureResponseIsReturnedFromTheDeleteUserEndpoint(
+  @Then("the correct failure response is returned from the delete household endpoint")
+  public void theCorrectFailureResponseIsReturnedFromTheDeleteHouseholdEndpoint(
       DataTable dataTable) throws UnsupportedEncodingException, JsonProcessingException {
 
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();

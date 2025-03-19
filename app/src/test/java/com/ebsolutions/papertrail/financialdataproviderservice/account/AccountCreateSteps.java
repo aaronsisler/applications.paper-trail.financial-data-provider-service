@@ -105,8 +105,7 @@ public class AccountCreateSteps extends BaseTest {
 
   @And("the database save fails given a institution or household member was deleted during the create account database call")
   public void theDatabaseSaveFailsGivenAInstitutionOrHouseholdMemberWasDeletedDuringTheCreateAccountDatabaseCall() {
-    doThrow(DataIntegrityViolationException.class)
-        .when(accountRepository).save(any());
+    doThrow(DataIntegrityViolationException.class).when(accountRepository).save(any());
   }
 
   @And("the account in the request body has an invalid input")

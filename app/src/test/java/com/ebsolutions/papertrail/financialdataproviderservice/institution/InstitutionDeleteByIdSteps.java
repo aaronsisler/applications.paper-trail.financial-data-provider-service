@@ -22,7 +22,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MvcResult;
 
 @RequiredArgsConstructor
-public class InstitutionDeleteSteps extends BaseTest {
+public class InstitutionDeleteByIdSteps extends BaseTest {
   protected final InstitutionRepository institutionRepository;
   private final Integer validInstitutionId = 1;
   private String institutionUrl;

@@ -1,6 +1,7 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.tooling;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.account.AccountRepository;
+import com.ebsolutions.papertrail.financialdataproviderservice.accounttransaction.AccountTransactionRepository;
 import com.ebsolutions.papertrail.financialdataproviderservice.household.HouseholdRepository;
 import com.ebsolutions.papertrail.financialdataproviderservice.householdmember.HouseholdMemberRepository;
 import com.ebsolutions.papertrail.financialdataproviderservice.institution.InstitutionRepository;
@@ -21,6 +22,8 @@ public class MockedIntegrationConfig {
   protected HouseholdRepository householdRepository;
   @MockBean
   protected InstitutionRepository institutionRepository;
+  @MockBean
+  protected AccountTransactionRepository accountTransactionRepository;
   @MockBean
   protected UserRepository userRepository;
 }
