@@ -121,6 +121,7 @@ components:
       required:
         - accountId
         - amount
+        - description
       properties:
         id:
           type: integer
