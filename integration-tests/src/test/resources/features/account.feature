@@ -1,4 +1,4 @@
-Feature: Integration: Household Member
+Feature: Integration: Account
 
   Scenario: Create and Get All Accounts
     Given application is up

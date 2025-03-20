@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.17.0] Account Transaction Create/Get/Get All/Update/Delete Integration Tests
+
+### Added
+
+- Account Transaction Create/Get/Get All/Update/Delete integration tests
+
 ## [0.16.0] Account Transaction Create/Get/Get All/Update/Delete with Full Test Suite
 
 - Account Transaction GET / GET ALL with behavior test suite
