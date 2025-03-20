@@ -28,8 +28,8 @@ INSERT INTO household_member (household_id, user_id)
 VALUES
 (5, 6), -- 1 account_create with user 1
 (5, 7), -- 2 account_create with user 2
-(6, 8) -- 3 account_transaction_create with single user
-(7, 9) -- 4 account_transaction_update with single user
+(6, 8), -- 3 account_transaction_create with single user
+(7, 9), -- 4 account_transaction_update with single user
 (8, 10) -- 5 account_transaction_delete with single user
 ;
 
@@ -53,7 +53,8 @@ VALUES
 -- 3
 (5, 3, 'account_transaction_update_name', 'account_transaction_update_nickname'),
 -- 4
-(5, 3, 'account_transaction_delete_name', 'account_transaction_delete_nickname');
+(5, 3, 'account_transaction_delete_name', 'account_transaction_delete_nickname')
+;
 
 INSERT INTO account_transaction (account_id, amount, description)
 VALUES

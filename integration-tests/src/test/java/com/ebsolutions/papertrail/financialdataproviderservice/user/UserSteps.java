@@ -216,6 +216,8 @@ public class UserSteps extends BaseStep {
 
   @And("the updated user is correct in the database")
   public void theUpdatedUserIsCorrectInTheDatabase() {
+    response = ApiCallTestUtil.getThroughApi(restClient, userByIdUrl);
+
     User retrievedUpdatedUser = response.body(User.class);
 
     Assertions.assertNotNull(retrievedUpdatedUser);

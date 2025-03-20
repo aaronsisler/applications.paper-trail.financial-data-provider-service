@@ -115,9 +115,11 @@ public class InstitutionSteps extends BaseStep {
     Institution databaseSetupInstitution = InstitutionTestData.UPDATE.get();
 
     Assertions.assertNotNull(databaseSetupInstitution);
+
     if (databaseSetupInstitution.getId() == null) {
       Assertions.fail("Data setup failed for institution");
     }
+
     resultInstitutionId = databaseSetupInstitution.getId();
     institutionByIdUrl = TestConstants.INSTITUTIONS_URI + "/" + resultInstitutionId;
 

@@ -3,7 +3,7 @@ package com.ebsolutions.papertrail.financialdataproviderservice.testdata;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.AccountTransaction;
 
 public enum AccountTransactionTestData {
-  ACCOUNT_TRANSACTION_CREATE_ONE {
+  ACCOUNT_TRANSACTION_UPDATE {
     @Override
     public AccountTransaction get() {
       return AccountTransaction.builder()
@@ -14,7 +14,7 @@ public enum AccountTransactionTestData {
           .build();
     }
   },
-  ACCOUNT_TRANSACTION_CREATE_TWO {
+  ACCOUNT_TRANSACTION_DELETE {
     @Override
     public AccountTransaction get() {
       return AccountTransaction.builder()
