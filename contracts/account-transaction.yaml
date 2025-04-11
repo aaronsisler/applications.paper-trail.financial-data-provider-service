@@ -122,6 +122,7 @@ components:
         - accountId
         - amount
         - description
+        - transactionDate
       properties:
         id:
           type: integer
@@ -135,6 +136,10 @@ components:
         description:
           type: string
           minLength: 1
+        transactionDate:
+          type: string
+          format: local-date
+          example: "2025-04-13"
   parameters:
     AccountId:
       in: query

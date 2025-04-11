@@ -48,18 +48,19 @@ Feature: Account Transaction: Create
   Scenario Outline: Create transactions endpoint returns correct errors when required field is missing
     Given application is up
     And a transaction in the request body has an invalid input
-      | <accountTransactionId> | <accountId> | <amount> | <description> |
+      | <accountTransactionId> | <accountId> | <amount> | <transactionDate> | <description> |
     When the create transactions endpoint is invoked
     Then the correct bad request response is returned from the create transactions endpoint
       | <statusCode> | <responseMessage> |
 
     Examples:
-      | accountTransactionId | accountId | amount | description       | statusCode | responseMessage                                                   |
-      | 1                    | 1         | 1      | valid_description | 400        | Account transaction id cannot be populated: 1                     |
-      |                      |           | 1      | valid_description | 400        | post.accountTransactions[0].accountId::account id is mandatory    |
-      |                      | 1         |        | valid_description | 400        | post.accountTransactions[0].amount::amount is mandatory           |
-      |                      | 1         | 1      |                   | 400        | post.accountTransactions[0].description::description is mandatory |
-      |                      | 1         | 1      | EMPTY_STRING      | 400        | post.accountTransactions[0].description::description is mandatory |
+      | accountTransactionId | accountId | amount | transactionDate | description       | statusCode | responseMessage                                                           |
+      | 1                    | 1         | 1      | 2025-04-13      | valid_description | 400        | Account transaction id cannot be populated: 1                             |
+      |                      |           | 1      | 2025-04-13      | valid_description | 400        | post.accountTransactions[0].accountId::account id is mandatory            |
+      |                      | 1         |        | 2025-04-13      | valid_description | 400        | post.accountTransactions[0].amount::amount is mandatory                   |
+      |                      | 1         | 1      | 2025-04-13      |                   | 400        | post.accountTransactions[0].description::description is mandatory         |
+      |                      | 1         | 1      | 2025-04-13      | EMPTY_STRING      | 400        | post.accountTransactions[0].description::description is mandatory         |
+      |                      | 1         | 1      |                 | valid_description | 400        | post.accountTransactions[0].transactionDate::transactionDate is mandatory |
 
   Scenario Outline: Create transactions endpoint is not able to connect to the database for get account by id
     Given application is up

@@ -51,5 +51,6 @@ CREATE TABLE IF NOT EXISTS account_transaction (
   id integer primary key generated always as identity,
   account_id integer REFERENCES account (id),
   amount numeric(12,2) NOT NULL,
-  description varchar(150) NOT NULL
+  description varchar(150) NOT NULL,
+  transaction_date DATE NOT NULL
 );

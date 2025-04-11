@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -44,4 +46,12 @@ public class AccountTransaction extends BaseEntity {
       description = "Description",
       example = "Place we shopped at")
   private String description;
+
+  @NotNull(message = "transactionDate is mandatory")
+  @JsonProperty("transactionDate")
+  @Schema(name = "transactionDate",
+      requiredMode = Schema.RequiredMode.REQUIRED,
+      description = "transactionDate",
+      example = "2025-04-13")
+  private LocalDate transactionDate;
 }

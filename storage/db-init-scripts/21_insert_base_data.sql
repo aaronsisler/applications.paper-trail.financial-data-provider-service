@@ -46,18 +46,14 @@ VALUES
 
 INSERT INTO account (institution_id, household_member_id, name, nickname)
 VALUES
--- 1
-(5, 3, 'account_transaction_create_name_1', 'account_transaction_create_nickname_1'),
--- 2
-(5, 3, 'account_transaction_create_name_2', 'account_transaction_create_nickname_2'),
--- 3
-(5, 3, 'account_transaction_update_name', 'account_transaction_update_nickname'),
--- 4
-(5, 3, 'account_transaction_delete_name', 'account_transaction_delete_nickname')
+(5, 3, 'account_transaction_create_name_1', 'account_transaction_create_nickname_1'), --1
+(5, 3, 'account_transaction_create_name_2', 'account_transaction_create_nickname_2'), --2
+(5, 3, 'account_transaction_update_name', 'account_transaction_update_nickname'), --3
+(5, 3, 'account_transaction_delete_name', 'account_transaction_delete_nickname') --4
 ;
 
-INSERT INTO account_transaction (account_id, amount, description)
+INSERT INTO account_transaction (account_id, amount, description, transaction_date)
 VALUES
-(3, 123, 'account_transaction_update_description'),
-(4, 456, 'account_transaction_delete_description')
+(3, 123, 'account_transaction_update_description', '2025-04-13'), --1
+(4, 456, 'account_transaction_delete_description', '2025-04-09') --2
 ;

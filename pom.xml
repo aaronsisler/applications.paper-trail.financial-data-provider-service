@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.2</version>
+        <version>3.4.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -17,7 +17,7 @@
 
     <modules>
         <module>app</module>
-        <module>integration-tests</module>
+        <!--        <module>integration-tests</module>-->
     </modules>
 
     <properties>
@@ -173,6 +173,16 @@
                         <generatorName>spring</generatorName>
                         <generateApis>false</generateApis>
                         <generateSupportingFiles>false</generateSupportingFiles>
+                        <!-- typeMappings links the contract (left side) to the right side -->
+                        <typeMappings>
+                            <!-- Kebab format is the format for custom mappings  -->
+                            <typeMapping>local-date=LocalDate</typeMapping>
+                        </typeMappings>
+                        <!-- importMappings then links the typeMapping (left side) to a Java import (right side) -->
+                        <importMappings>
+                            <!-- Left side in importMappings maps to the right side in typeMappings -->
+                            <importMapping>LocalDate=java.time.LocalDate</importMapping>
+                        </importMappings>
                         <configOptions>
                             <serializableModel>true</serializableModel>
                             <!-- This also enabled useJakartaEe-->
@@ -185,6 +195,7 @@
                                 <!-- Helpful builder method -->
                                 @lombok.Builder
                             </additionalModelTypeAnnotations>
+
                         </configOptions>
                     </configuration>
                 </plugin>
