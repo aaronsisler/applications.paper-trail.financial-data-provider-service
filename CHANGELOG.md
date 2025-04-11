@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.19.0] Adding in Account Transaction -> Transaction Date
+
+### Added
+
+- Account Transaction -> Transaction Date
+
 ## [0.18.0] Testing in IDE
 
 ### Changed
