@@ -194,7 +194,7 @@ public class ControllerExceptionHandler {
                   schema = @Schema(implementation = ErrorResponse.class))
           }),
   })
-  public ResponseEntity<?> handleDataProcessingException(
+  public ResponseEntity<ErrorResponse> handleDataProcessingException(
       DataProcessingException dataProcessingException) {
     return ResponseEntity.internalServerError()
         .body(ErrorResponse.builder()
@@ -205,7 +205,7 @@ public class ControllerExceptionHandler {
 
 
   @ExceptionHandler(DataIntegrityViolationException.class)
-  public ResponseEntity<?> handleException(
+  public ResponseEntity<ErrorResponse> handleException(
       DataIntegrityViolationException dataIntegrityViolationException) {
     log.error("Error", dataIntegrityViolationException);
     return ResponseEntity.badRequest().body(ErrorResponse.builder()
@@ -220,7 +220,7 @@ public class ControllerExceptionHandler {
    * @return custom response with descriptive error messages
    */
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<?> handleException(
+  public ResponseEntity<Exception> handleException(
       Exception exception) {
     log.error("You need to see what exception was actually thrown");
     log.error("Error", exception);
