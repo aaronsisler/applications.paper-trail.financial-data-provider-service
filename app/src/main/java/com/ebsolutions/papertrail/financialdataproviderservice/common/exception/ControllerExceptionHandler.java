@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -88,6 +89,44 @@ public class ControllerExceptionHandler {
             ErrorResponse.builder()
                 .messages(Collections.singletonList(
                     "Invalid parameter type: " + methodArgumentTypeMismatchException.getName()
+                ))
+                .build()
+        );
+  }
+
+  /**
+   * This will be called when a body field does not meet constraints
+   *
+   * @param methodArgumentNotValidException caught in controller as thrown from service
+   * @return custom response with descriptive error messages
+   */
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "400",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorResponse.class))
+          }),
+  })
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ErrorResponse> handle(
+      MethodArgumentNotValidException methodArgumentNotValidException) {
+
+    if (methodArgumentNotValidException.getFieldError() != null) {
+      return ResponseEntity.badRequest()
+          .body(
+              ErrorResponse.builder()
+                  .messages(Collections.singletonList(
+                      methodArgumentNotValidException.getFieldError().getDefaultMessage()
+                  ))
+                  .build()
+          );
+    }
+
+    return ResponseEntity.badRequest()
+        .body(
+            ErrorResponse.builder()
+                .messages(Collections.singletonList(
+                    "Invalid input for a field"
                 ))
                 .build()
         );

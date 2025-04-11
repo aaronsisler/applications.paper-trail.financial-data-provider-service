@@ -23,7 +23,7 @@ import org.hibernate.validator.constraints.Range;
 @Table(name = DatabaseConstants.ACCOUNT_TRANSACTION_TABLE)
 public class AccountTransaction extends BaseEntity {
 
-  @Range(min = 1, message = "account id is mandatory")
+  @Range(min = 1, message = "account id is mandatory and must be greater than zero")
   @JsonProperty("accountId")
   @Schema(name = "accountId",
       requiredMode = Schema.RequiredMode.REQUIRED,
@@ -31,7 +31,7 @@ public class AccountTransaction extends BaseEntity {
       example = "12")
   private int accountId;
 
-  @Range(min = 1, message = "amount is mandatory")
+  @Range(min = 1, message = "amount is mandatory and must be greater than zero")
   @JsonProperty("amount")
   @Schema(name = "amount",
       requiredMode = Schema.RequiredMode.REQUIRED,

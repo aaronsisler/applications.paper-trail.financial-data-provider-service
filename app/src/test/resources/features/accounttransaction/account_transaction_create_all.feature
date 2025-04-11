@@ -54,13 +54,13 @@ Feature: Account Transaction: Create
       | <statusCode> | <responseMessage> |
 
     Examples:
-      | accountTransactionId | accountId | amount | transactionDate | description       | statusCode | responseMessage                                                           |
-      | 1                    | 1         | 1      | 2025-04-13      | valid_description | 400        | Account transaction id cannot be populated: 1                             |
-      |                      |           | 1      | 2025-04-13      | valid_description | 400        | post.accountTransactions[0].accountId::account id is mandatory            |
-      |                      | 1         |        | 2025-04-13      | valid_description | 400        | post.accountTransactions[0].amount::amount is mandatory                   |
-      |                      | 1         | 1      | 2025-04-13      |                   | 400        | post.accountTransactions[0].description::description is mandatory         |
-      |                      | 1         | 1      | 2025-04-13      | EMPTY_STRING      | 400        | post.accountTransactions[0].description::description is mandatory         |
-      |                      | 1         | 1      |                 | valid_description | 400        | post.accountTransactions[0].transactionDate::transactionDate is mandatory |
+      | accountTransactionId | accountId | amount | transactionDate | description       | statusCode | responseMessage                                                                              |
+      | 1                    | 1         | 1      | 2025-04-13      | valid_description | 400        | Account transaction id cannot be populated: 1                                                |
+      |                      |           | 1      | 2025-04-13      | valid_description | 400        | post.accountTransactions[0].accountId::account id is mandatory and must be greater than zero |
+      |                      | 1         |        | 2025-04-13      | valid_description | 400        | post.accountTransactions[0].amount::amount is mandatory and must be greater than zero        |
+      |                      | 1         | 1      | 2025-04-13      |                   | 400        | post.accountTransactions[0].description::description is mandatory                            |
+      |                      | 1         | 1      | 2025-04-13      | EMPTY_STRING      | 400        | post.accountTransactions[0].description::description is mandatory                            |
+      |                      | 1         | 1      |                 | valid_description | 400        | post.accountTransactions[0].transactionDate::transactionDate is mandatory                    |
 
   Scenario Outline: returns correct errors when transaction date is invalid
     Given application is up

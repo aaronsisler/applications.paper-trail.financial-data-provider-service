@@ -248,8 +248,6 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
 
     String content = mockHttpServletResponse.getContentAsString();
 
-    System.out.println(content);
-
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
     Assertions.assertEquals(dataTable.column(1).getFirst(), errorResponse.getMessages().getFirst());
 

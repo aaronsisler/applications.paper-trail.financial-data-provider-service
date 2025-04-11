@@ -42,16 +42,16 @@ Feature: Account Transaction: Update
     When the update account transaction endpoint is invoked
     Then the correct failure response and message is returned from the update account transaction endpoint
       | <statusCode> | <responseMessage> |
-
+#
     Examples:
-      | accountTransactionId | accountId | amount | transactionDate | description       | statusCode | responseMessage                                      |
-      | -1                   | 147       | 123    | 2025-04-13      | valid_description | 400        | Account transaction id must be positive and non-zero |
-      | 0                    | 147       | 123    | 2025-04-13      | valid_description | 400        | Account transaction id must be positive and non-zero |
-      |                      | 147       | 123    | 2025-04-13      | valid_description | 400        | Account transaction id must be positive and non-zero |
-      | 1                    |           | 123    | 2025-04-13      | valid_description | 400        | account id is mandatory                              |
-      | 1                    | 147       |        | 2025-04-13      | valid_description | 400        | amount is mandatory                                  |
-      | 1                    | 147       | 123    | 2025-04-13      |                   | 400        | description is mandatory                             |
-      | 1                    | 147       | 123    | 2025-04-13      | EMPTY_STRING      | 400        | description is mandatory                             |
+      | accountTransactionId | accountId | amount | transactionDate | description       | statusCode | responseMessage                                       |
+      | -1                   | 147       | 123    | 2025-04-13      | valid_description | 400        | Account transaction id must be positive and non-zero  |
+      | 0                    | 147       | 123    | 2025-04-13      | valid_description | 400        | Account transaction id must be positive and non-zero  |
+      |                      | 147       | 123    | 2025-04-13      | valid_description | 400        | Account transaction id must be positive and non-zero  |
+      | 1                    |           | 123    | 2025-04-13      | valid_description | 400        | account id is mandatory and must be greater than zero |
+      | 1                    | 147       |        | 2025-04-13      | valid_description | 400        | amount is mandatory and must be greater than zero     |
+      | 1                    | 147       | 123    | 2025-04-13      |                   | 400        | description is mandatory                              |
+      | 1                    | 147       | 123    | 2025-04-13      | EMPTY_STRING      | 400        | description is mandatory                              |
 
   Scenario Outline: Update Account Transaction endpoint is not able to connect to the database
     Given application is up

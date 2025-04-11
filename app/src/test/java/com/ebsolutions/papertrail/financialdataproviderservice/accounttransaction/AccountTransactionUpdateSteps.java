@@ -109,7 +109,6 @@ public class AccountTransactionUpdateSteps extends BaseTest {
 
     String description = CommonTestUtil.isEmptyString(dataTable.column(4).getFirst());
 
-
     AccountTransaction inputAccountTransaction =
         AccountTransaction.builder()
             .id(accountTransactionId)
