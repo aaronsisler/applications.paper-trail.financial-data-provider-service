@@ -1,7 +1,5 @@
-package com.ebsolutions.papertrail.financialdataproviderservice.common;
+package com.ebsolutions.papertrail.financialdataproviderservice.common.exception;
 
-import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataConstraintException;
-import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,6 +14,7 @@ import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -96,6 +95,8 @@ public class ControllerExceptionHandler {
   }
 
   /**
+   * This will be called when a body field does not meet constraints
+   *
    * @param methodArgumentNotValidException caught in controller as thrown from service
    * @return custom response with descriptive error messages
    */
@@ -107,23 +108,51 @@ public class ControllerExceptionHandler {
           }),
   })
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
+  public ResponseEntity<ErrorResponse> handle(
       MethodArgumentNotValidException methodArgumentNotValidException) {
 
-    List<String> messages;
-
-    if (methodArgumentNotValidException.getFieldError() != null
-        && methodArgumentNotValidException.getFieldError().getDefaultMessage() != null) {
-      messages = Collections.singletonList(
-          methodArgumentNotValidException.getFieldError().getDefaultMessage());
-    } else {
-      messages = Collections.singletonList("A mandatory field is missing");
+    if (methodArgumentNotValidException.getFieldError() != null) {
+      return ResponseEntity.badRequest()
+          .body(
+              ErrorResponse.builder()
+                  .messages(Collections.singletonList(
+                      methodArgumentNotValidException.getFieldError().getDefaultMessage()
+                  ))
+                  .build()
+          );
     }
 
     return ResponseEntity.badRequest()
         .body(
             ErrorResponse.builder()
-                .messages(messages)
+                .messages(Collections.singletonList(
+                    "Invalid input for a field"
+                ))
+                .build()
+        );
+  }
+
+  /**
+   * @param httpMessageNotReadableException caught in controller as thrown from service
+   * @return custom response with descriptive error messages
+   */
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "400",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = ErrorResponse.class))
+          }),
+  })
+
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<ErrorResponse> handleDateTimeParseException(
+      HttpMessageNotReadableException httpMessageNotReadableException) {
+
+    return ResponseEntity.badRequest()
+        .body(
+            ErrorResponse.builder()
+                .messages(Collections.singletonList(
+                    httpMessageNotReadableException.getMostSpecificCause().getMessage()))
                 .build()
         );
   }
@@ -165,7 +194,7 @@ public class ControllerExceptionHandler {
                   schema = @Schema(implementation = ErrorResponse.class))
           }),
   })
-  public ResponseEntity<?> handleDataProcessingException(
+  public ResponseEntity<ErrorResponse> handleDataProcessingException(
       DataProcessingException dataProcessingException) {
     return ResponseEntity.internalServerError()
         .body(ErrorResponse.builder()
@@ -176,7 +205,7 @@ public class ControllerExceptionHandler {
 
 
   @ExceptionHandler(DataIntegrityViolationException.class)
-  public ResponseEntity<?> handleException(
+  public ResponseEntity<ErrorResponse> handleException(
       DataIntegrityViolationException dataIntegrityViolationException) {
     log.error("Error", dataIntegrityViolationException);
     return ResponseEntity.badRequest().body(ErrorResponse.builder()
@@ -191,7 +220,7 @@ public class ControllerExceptionHandler {
    * @return custom response with descriptive error messages
    */
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<?> handleException(
+  public ResponseEntity<Exception> handleException(
       Exception exception) {
     log.error("You need to see what exception was actually thrown");
     log.error("Error", exception);

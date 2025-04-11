@@ -78,6 +78,13 @@
             <artifactId>jackson-databind-nullable</artifactId>
         </dependency>
 
+        <!-- Used for Swagger and serialization of Local Date -->
+        <!-- Version: Spring Parent -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+
         <!-- Testing framework for starting Spring context and MockMVC -->
         <!-- Version: Spring Parent -->
         <dependency>

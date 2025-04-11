@@ -19,6 +19,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -50,6 +51,7 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
             .accountId(1)
             .amount(123)
             .description("Account Transaction Description 1")
+            .transactionDate(TEST_LOCAL_DATE)
             .build();
 
     AccountTransaction inputAccountTransactionTwo =
@@ -57,6 +59,7 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
             .accountId(1)
             .amount(456)
             .description("Account Transaction Description 2")
+            .transactionDate(TEST_LOCAL_DATE)
             .build();
 
     expectedAccountTransactionOne =
@@ -65,6 +68,7 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
             .accountId(1)
             .amount(123)
             .description("Account Transaction Description 1")
+            .transactionDate(TEST_LOCAL_DATE)
             .build();
 
     expectedAccountTransactionTwo = AccountTransaction.builder()
@@ -72,6 +76,7 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
         .accountId(1)
         .amount(456)
         .description("Account Transaction Description 2")
+        .transactionDate(TEST_LOCAL_DATE)
         .build();
 
     requestContent =
@@ -98,12 +103,14 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
         .accountId(1)
         .amount(123)
         .description("Account Transaction Description 1")
+        .transactionDate(TEST_LOCAL_DATE)
         .build();
 
     AccountTransaction inputAccountTransactionTwo = AccountTransaction.builder()
         .accountId(2)
         .amount(456)
         .description("Account Transaction Description 2")
+        .transactionDate(TEST_LOCAL_DATE)
         .build();
 
     expectedAccountTransactionOne =
@@ -112,6 +119,7 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
             .accountId(1)
             .amount(123)
             .description("Account Transaction Description 1")
+            .transactionDate(TEST_LOCAL_DATE)
             .build();
 
     expectedAccountTransactionTwo = AccountTransaction.builder()
@@ -119,6 +127,7 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
         .accountId(2)
         .amount(456)
         .description("Account Transaction Description 2")
+        .transactionDate(TEST_LOCAL_DATE)
         .build();
 
     requestContent =
@@ -153,16 +162,41 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
     int amount = dataTable.column(2).getFirst() == null ? 0 :
         Integer.parseInt(dataTable.column(2).getFirst());
 
+    LocalDate localDate = dataTable.column(3).getFirst() == null ? null :
+        LocalDate.parse(dataTable.column(3).getFirst());
+
+    String description = CommonTestUtil.isEmptyString(dataTable.column(4).getFirst());
+
     AccountTransaction inputAccountTransaction =
         AccountTransaction.builder()
             .id(accountTransactionId)
             .accountId(accountId)
             .amount(amount)
-            .description(CommonTestUtil.isEmptyString(dataTable.column(3).getFirst()))
+            .description(description)
+            .transactionDate(localDate)
             .build();
 
     requestContent =
         objectMapper.writeValueAsString(Collections.singletonList(inputAccountTransaction));
+  }
+
+  @And("a transaction in the request body has an invalid input for the transaction date")
+  public void aTransactionInTheRequestBodyHasAnInvalidInputForTheTransactionDate(
+      DataTable dataTable)
+      throws JsonProcessingException {
+    AccountTransaction inputAccountTransactionOne = AccountTransaction.builder()
+        .accountId(1)
+        .amount(123)
+        .description("Account Transaction Description 1")
+        .transactionDate(TEST_LOCAL_DATE)
+        .build();
+
+    String invalidDate = dataTable.column(0).getFirst();
+
+    requestContent =
+        objectMapper
+            .writeValueAsString(Collections.singletonList(inputAccountTransactionOne))
+            .replace("[2025,4,13]", invalidDate);
   }
 
   @And("the connection to the database fails for the get account by id")

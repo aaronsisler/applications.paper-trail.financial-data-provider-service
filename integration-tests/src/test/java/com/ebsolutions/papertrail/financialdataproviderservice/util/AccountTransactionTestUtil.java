@@ -19,5 +19,6 @@ public class AccountTransactionTestUtil {
     Assertions.assertEquals(expected.getAccountId(), actual.getAccountId());
     Assertions.assertEquals(expected.getAmount(), actual.getAmount());
     Assertions.assertEquals(expected.getDescription(), actual.getDescription());
+    Assertions.assertEquals(expected.getTransactionDate(), actual.getTransactionDate());
   }
 }

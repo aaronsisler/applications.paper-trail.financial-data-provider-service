@@ -8,6 +8,7 @@ import com.ebsolutions.papertrail.financialdataproviderservice.institution.Insti
 import com.ebsolutions.papertrail.financialdataproviderservice.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.spring.CucumberContextConfiguration;
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,8 +20,9 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 @CucumberContextConfiguration
 public class BaseTest {
-  protected final ObjectMapper objectMapper = new ObjectMapper();
+  protected static final LocalDate TEST_LOCAL_DATE = LocalDate.of(2025, 4, 13);
 
+  protected final ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
   @Autowired
   protected MockMvc mockMvc;
 

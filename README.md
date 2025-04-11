@@ -2,6 +2,7 @@
 
 ## TODOs
 
+- Make UTs in the Int Test module that make sure that fields for contract or Entity are the same
 - Updated POST to have "created" instead of "ok"
 - Check out what the "data" type is instead of "class" for User
 

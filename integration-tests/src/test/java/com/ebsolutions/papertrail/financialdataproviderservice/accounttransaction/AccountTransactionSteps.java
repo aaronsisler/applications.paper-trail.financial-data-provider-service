@@ -1,5 +1,6 @@
-package com.ebsolutions.papertrail.financialdataproviderservice;
+package com.ebsolutions.papertrail.financialdataproviderservice.accounttransaction;
 
+import com.ebsolutions.papertrail.financialdataproviderservice.BaseStep;
 import com.ebsolutions.papertrail.financialdataproviderservice.config.TestConstants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.Account;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.AccountTransaction;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -77,6 +79,7 @@ public class AccountTransactionSteps extends BaseStep {
             .accountId(accountOne.getId())
             .amount(123)
             .description("Account Transaction 1")
+            .transactionDate(LocalDate.of(2025, 4, 13))
             .build();
 
     requestContent =
@@ -91,6 +94,7 @@ public class AccountTransactionSteps extends BaseStep {
             .accountId(accountTwo.getId())
             .amount(456)
             .description("Account Transaction 2")
+            .transactionDate(LocalDate.of(2025, 4, 13))
             .build();
 
     requestContent =
@@ -224,6 +228,7 @@ public class AccountTransactionSteps extends BaseStep {
             .accountId(accountOne.getId())
             .amount(789)
             .description("updated_description")
+            .transactionDate(LocalDate.of(2025, 4, 27))
             .build();
 
     requestContent =

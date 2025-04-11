@@ -19,6 +19,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
@@ -46,6 +47,7 @@ public class AccountTransactionUpdateSteps extends BaseTest {
             .accountId(147)
             .amount(123)
             .description("Account Transaction Description 1")
+            .transactionDate(TEST_LOCAL_DATE)
             .build();
 
     expectedAccountTransaction =
@@ -54,6 +56,7 @@ public class AccountTransactionUpdateSteps extends BaseTest {
             .accountId(147)
             .amount(123)
             .description("Updated Account Transaction Description 1")
+            .transactionDate(TEST_LOCAL_DATE)
             .build();
 
     requestContent =
@@ -101,12 +104,18 @@ public class AccountTransactionUpdateSteps extends BaseTest {
     int amount = dataTable.column(2).getFirst() == null ? 0 :
         Integer.parseInt(dataTable.column(2).getFirst());
 
+    LocalDate localDate = dataTable.column(3).getFirst() == null ? null :
+        LocalDate.parse(dataTable.column(3).getFirst());
+
+    String description = CommonTestUtil.isEmptyString(dataTable.column(4).getFirst());
+
     AccountTransaction inputAccountTransaction =
         AccountTransaction.builder()
             .id(accountTransactionId)
             .accountId(accountId)
             .amount(amount)
-            .description(CommonTestUtil.isEmptyString(dataTable.column(3).getFirst()))
+            .transactionDate(localDate)
+            .description(description)
             .build();
 
     requestContent =
