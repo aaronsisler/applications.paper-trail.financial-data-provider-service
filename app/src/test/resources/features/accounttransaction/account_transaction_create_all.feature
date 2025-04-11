@@ -62,6 +62,21 @@ Feature: Account Transaction: Create
       |                      | 1         | 1      | 2025-04-13      | EMPTY_STRING      | 400        | post.accountTransactions[0].description::description is mandatory         |
       |                      | 1         | 1      |                 | valid_description | 400        | post.accountTransactions[0].transactionDate::transactionDate is mandatory |
 
+  Scenario Outline: returns correct errors when transaction date is invalid
+    Given application is up
+    And a transaction in the request body has an invalid input for the transaction date
+      | <transactionDate> |
+    When the create transactions endpoint is invoked
+    Then the correct bad request response is returned from the create transactions endpoint
+      | <statusCode> | <responseMessage> |
+    And the transaction is not created
+
+    Examples:
+      | transactionDate | statusCode | responseMessage                                           |
+      | "NOT_A_DATE"    | 400        | Text 'NOT_A_DATE' could not be parsed at index 0          |
+      | "2025-13-25"    | 400        | Invalid value for MonthOfYear (valid values 1 - 12): 13   |
+      | "2025-10-32"    | 400        | Invalid value for DayOfMonth (valid values 1 - 28/31): 32 |
+
   Scenario Outline: Create transactions endpoint is not able to connect to the database for get account by id
     Given application is up
     And valid transactions with the same account id are part of the request body for the create transaction endpoint

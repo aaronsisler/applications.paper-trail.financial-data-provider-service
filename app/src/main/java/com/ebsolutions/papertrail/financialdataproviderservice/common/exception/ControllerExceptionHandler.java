@@ -1,7 +1,5 @@
-package com.ebsolutions.papertrail.financialdataproviderservice.common;
+package com.ebsolutions.papertrail.financialdataproviderservice.common.exception;
 
-import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataConstraintException;
-import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,7 +14,7 @@ import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -96,7 +94,7 @@ public class ControllerExceptionHandler {
   }
 
   /**
-   * @param methodArgumentNotValidException caught in controller as thrown from service
+   * @param httpMessageNotReadableException caught in controller as thrown from service
    * @return custom response with descriptive error messages
    */
   @ApiResponses(value = {
@@ -106,24 +104,16 @@ public class ControllerExceptionHandler {
                   schema = @Schema(implementation = ErrorResponse.class))
           }),
   })
-  @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
-      MethodArgumentNotValidException methodArgumentNotValidException) {
 
-    List<String> messages;
-
-    if (methodArgumentNotValidException.getFieldError() != null
-        && methodArgumentNotValidException.getFieldError().getDefaultMessage() != null) {
-      messages = Collections.singletonList(
-          methodArgumentNotValidException.getFieldError().getDefaultMessage());
-    } else {
-      messages = Collections.singletonList("A mandatory field is missing");
-    }
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<ErrorResponse> handleDateTimeParseException(
+      HttpMessageNotReadableException httpMessageNotReadableException) {
 
     return ResponseEntity.badRequest()
         .body(
             ErrorResponse.builder()
-                .messages(messages)
+                .messages(Collections.singletonList(
+                    httpMessageNotReadableException.getMostSpecificCause().getMessage()))
                 .build()
         );
   }

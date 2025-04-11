@@ -180,6 +180,25 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
         objectMapper.writeValueAsString(Collections.singletonList(inputAccountTransaction));
   }
 
+  @And("a transaction in the request body has an invalid input for the transaction date")
+  public void aTransactionInTheRequestBodyHasAnInvalidInputForTheTransactionDate(
+      DataTable dataTable)
+      throws JsonProcessingException {
+    AccountTransaction inputAccountTransactionOne = AccountTransaction.builder()
+        .accountId(1)
+        .amount(123)
+        .description("Account Transaction Description 1")
+        .transactionDate(TEST_LOCAL_DATE)
+        .build();
+
+    String invalidDate = dataTable.column(0).getFirst();
+
+    requestContent =
+        objectMapper
+            .writeValueAsString(Collections.singletonList(inputAccountTransactionOne))
+            .replace("[2025,4,13]", invalidDate);
+  }
+
   @And("the connection to the database fails for the get account by id")
   public void theConnectionToTheDatabaseFailsForTheGetAccountById() {
     when(accountRepository.findById(any())).thenThrow(new DataProcessingException());
@@ -228,6 +247,8 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
         mockHttpServletResponse.getStatus());
 
     String content = mockHttpServletResponse.getContentAsString();
+
+    System.out.println(content);
 
     ErrorResponse errorResponse = objectMapper.readValue(content, ErrorResponse.class);
     Assertions.assertEquals(dataTable.column(1).getFirst(), errorResponse.getMessages().getFirst());
