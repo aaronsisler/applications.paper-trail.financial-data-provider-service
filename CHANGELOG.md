@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.18.0] Testing in IDE
+
+### Changed
+
+- Moved the TestConfiguration from a standalone class to a static inner class of the BaseTest
+
 ## [0.17.0] Account Transaction Create/Get/Get All/Update/Delete Integration Tests
 
 ### Added
