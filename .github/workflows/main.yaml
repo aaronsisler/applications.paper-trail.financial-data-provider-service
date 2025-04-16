@@ -1,12 +1,12 @@
-name: Pull Request
+name: Pull Request Merge
 on:
-  pull_request:
+  push:
     branches:
       - main
 
 jobs:
-  Pull-Request:
-    name: Pull Request
+  Pull-Request-Merge:
+    name: Pull Request Merge
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
@@ -19,8 +19,8 @@ jobs:
           distribution: "corretto"
           cache: "maven"
 
-      - name: Build and Test Application
-        run: mvn clean install --activate-profiles docker --no-transfer-progress --batch-mode
+      - name: Build Application
+        run: mvn clean install --no-transfer-progress
 
       - name: SonarQubeScan
         uses: SonarSource/sonarqube-scan-action@v4
