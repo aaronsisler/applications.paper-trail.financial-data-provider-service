@@ -51,7 +51,6 @@ public class AccountTransactionSubscriber {
     List<AccountTransaction> accountTransactions = new ArrayList<>();
 
     for (Message message : messages) {
-      System.out.println("Thread: " + Thread.currentThread().threadId());
       System.out.println("Message");
       System.out.println(message.body());
       AccountTransaction accountTransaction =
