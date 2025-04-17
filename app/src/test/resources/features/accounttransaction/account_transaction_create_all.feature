@@ -8,16 +8,24 @@ Feature: Account Transaction: Create
     When the create transactions endpoint is invoked
     Then the newly created transactions are returned from the create transaction endpoint
 
-  Scenario Outline: Create transactions endpoint returns correct error when multiple account ids are present
+  Scenario: Create transactions endpoint returns correctly when multiple account ids are present
     Given application is up
     And valid transactions with different account ids are part of the request body for the create transaction endpoint
+    And account ids exists in the database for the transactions
+    And the database connection succeeds for create transactions
     When the create transactions endpoint is invoked
-    Then the correct bad request response is returned from the create transactions endpoint
-      | <statusCode> | <responseMessage> |
+    Then the newly created transactions are returned from the create transaction endpoint
+    And the newly created transactions exist in the data store
 
-    Examples:
-      | statusCode | responseMessage                                                     |
-      | 400        | Account transactions cannot contain more than one account id : 1, 2 |
+#  Scenario: Create transactions endpoint returns correctly when multiple account ids are present but one account doesn't exist
+#    Given application is up
+#    And valid transactions with different account ids are part of the request body for the create transaction endpoint
+#    And the first transaction's account id exists in the database
+#    And the second transaction's account id does not exist in the database
+#    And account ids exists in the database for the transactions
+#    When the create transactions endpoint is invoked
+#    Then the newly created transactions are returned from the create transaction endpoint
+#    And the newly created transactions exist in the data store
 
   Scenario Outline: Create transactions endpoint returns correct error when account id does not exist
     Given application is up

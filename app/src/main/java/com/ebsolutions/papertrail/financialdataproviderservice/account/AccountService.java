@@ -40,6 +40,19 @@ public class AccountService {
     }
   }
 
+  public List<Account> getAllByAccountIds(List<Integer> accountIds) {
+    try {
+      List<Long> longAccountIds =
+          accountIds.stream().map(Long::valueOf).toList();
+
+      return accountRepository.findAllById(longAccountIds);
+    } catch (Exception exception) {
+      log.error("Error getting all", exception);
+      throw new DataProcessingException(
+          "Something went wrong while fetching accounts");
+    }
+  }
+
   public List<Account> getAll() {
     try {
       return accountRepository.findAll();
