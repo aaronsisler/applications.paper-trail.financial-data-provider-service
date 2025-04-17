@@ -86,7 +86,7 @@ public class AccountTransactionService {
         List<String> missingAccounts = accountIds.stream()
             .filter(
                 accountId -> accounts.stream()
-                    .anyMatch(account ->
+                    .noneMatch(account ->
                         Objects.equals(account.getId(), accountId)))
             .map(Object::toString)
             .toList();
