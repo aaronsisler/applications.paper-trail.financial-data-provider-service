@@ -47,7 +47,7 @@ public class BaseTest {
     @MockBean
     protected InstitutionRepository institutionRepository;
     //    @MockBean
-//    protected ObjectMapper objectMapper;
+    //    protected ObjectMapper objectMapper;
     @MockBean
     protected SqsClient sqsClient;
     @MockBean
