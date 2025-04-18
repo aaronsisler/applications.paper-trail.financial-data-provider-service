@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountService {
 
+  private static final String ERROR_GETTING_ALL_MESSAGE = "Error getting all";
+
   private final InstitutionService institutionService;
   private final HouseholdMemberService householdMemberService;
   private final AccountRepository accountRepository;
@@ -34,7 +36,20 @@ public class AccountService {
     try {
       return accountRepository.findByHouseholdMemberId(householdMemberId);
     } catch (Exception exception) {
-      log.error("Error getting all", exception);
+      log.error(ERROR_GETTING_ALL_MESSAGE, exception);
+      throw new DataProcessingException(
+          "Something went wrong while fetching accounts");
+    }
+  }
+
+  public List<Account> getAllByAccountIds(List<Integer> accountIds) {
+    try {
+      List<Long> longAccountIds =
+          accountIds.stream().map(Long::valueOf).toList();
+
+      return accountRepository.findAllById(longAccountIds);
+    } catch (Exception exception) {
+      log.error(ERROR_GETTING_ALL_MESSAGE, exception);
       throw new DataProcessingException(
           "Something went wrong while fetching accounts");
     }
@@ -44,7 +59,7 @@ public class AccountService {
     try {
       return accountRepository.findAll();
     } catch (Exception exception) {
-      log.error("Error getting all", exception);
+      log.error(ERROR_GETTING_ALL_MESSAGE, exception);
       throw new DataProcessingException(
           "Something went wrong while fetching accounts");
     }

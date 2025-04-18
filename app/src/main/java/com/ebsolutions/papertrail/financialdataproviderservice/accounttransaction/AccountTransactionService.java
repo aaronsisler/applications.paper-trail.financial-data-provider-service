@@ -1,10 +1,12 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.accounttransaction;
 
+import com.ebsolutions.papertrail.financialdataproviderservice.account.Account;
 import com.ebsolutions.papertrail.financialdataproviderservice.account.AccountService;
 import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataConstraintException;
 import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -72,33 +74,29 @@ public class AccountTransactionService {
         throw new DataConstraintException(existingUserErrorMessages);
       }
 
-      if (accountTransactions.stream().map(AccountTransaction::getAccountId).distinct().toList()
-          .size() > 1) {
+      List<Integer> accountIds =
+          accountTransactions
+              .stream().map(AccountTransaction::getAccountId)
+              .distinct()
+              .toList();
 
-        List<String> accountIds =
-            accountTransactions.stream()
-                .map(AccountTransaction::getAccountId)
-                .distinct()
-                .map(Object::toString)
-                .toList();
+      List<Account> accounts = accountService.getAllByAccountIds(accountIds);
 
-        String accountIdString = String.join(", ", accountIds);
+      if (accounts.size() != accountIds.size()) {
+        List<String> missingAccounts = accountIds.stream()
+            .filter(
+                accountId -> accounts.stream()
+                    .noneMatch(account ->
+                        Objects.equals(account.getId(), accountId)))
+            .map(Object::toString)
+            .toList();
 
-        List<String> indistinctAccountsErrorMessages =
-            Collections.singletonList(
-                "Account transactions cannot contain more than one account id : "
-                    .concat(accountIdString));
+        String accountIdsString = String.join(", ", missingAccounts);
 
-        throw new DataConstraintException(indistinctAccountsErrorMessages);
-      }
 
-      var account = accountService.get(accountTransactions.getFirst().getAccountId());
-
-      if (account.isEmpty()) {
         List<String> nonExistingAccountErrorMessages =
             Collections.singletonList(
-                "Account Id does not exist: ".concat(
-                    Integer.toString(accountTransactions.getFirst().getAccountId())));
+                "Account Ids do not exist: ".concat(accountIdsString));
 
         throw new DataConstraintException(nonExistingAccountErrorMessages);
       }

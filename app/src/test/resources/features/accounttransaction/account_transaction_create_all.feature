@@ -8,29 +8,27 @@ Feature: Account Transaction: Create
     When the create transactions endpoint is invoked
     Then the newly created transactions are returned from the create transaction endpoint
 
-  Scenario Outline: Create transactions endpoint returns correct error when multiple account ids are present
+  Scenario: Create transactions endpoint returns correctly when multiple account ids are present
     Given application is up
     And valid transactions with different account ids are part of the request body for the create transaction endpoint
+    And both account ids exist in the database for the transactions
+    And the database connection succeeds for create transactions
     When the create transactions endpoint is invoked
-    Then the correct bad request response is returned from the create transactions endpoint
-      | <statusCode> | <responseMessage> |
-
-    Examples:
-      | statusCode | responseMessage                                                     |
-      | 400        | Account transactions cannot contain more than one account id : 1, 2 |
+    Then the newly created transactions are returned from the create transaction endpoint
+    And the newly created transactions exist in the data store
 
   Scenario Outline: Create transactions endpoint returns correct error when account id does not exist
     Given application is up
-    And valid transactions with the same account id are part of the request body for the create transaction endpoint
-    And account id does not exist in the database for the transactions
+    And valid transactions with different account ids are part of the request body for the create transaction endpoint
+    And one of the account transaction's account id does not exist in the database
     And the database connection succeeds for create transactions
     When the create transactions endpoint is invoked
     Then the correct bad request response is returned from the create transactions endpoint
       | <statusCode> | <responseMessage> |
 
     Examples:
-      | statusCode | responseMessage              |
-      | 400        | Account Id does not exist: 1 |
+      | statusCode | responseMessage             |
+      | 400        | Account Ids do not exist: 2 |
 
   Scenario Outline: Create transactions endpoint returns correct error when relational issues occur
     Given application is up
@@ -80,7 +78,7 @@ Feature: Account Transaction: Create
   Scenario Outline: Create transactions endpoint is not able to connect to the database for get account by id
     Given application is up
     And valid transactions with the same account id are part of the request body for the create transaction endpoint
-    And the connection to the database fails for the get account by id
+    And the connection to the database fails for the get account by ids
     When the create transactions endpoint is invoked
     Then the correct bad request response is returned from the create transactions endpoint
       | <statusCode> | <responseMessage> |

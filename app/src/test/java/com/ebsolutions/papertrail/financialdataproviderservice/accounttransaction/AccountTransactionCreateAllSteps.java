@@ -2,6 +2,8 @@ package com.ebsolutions.papertrail.financialdataproviderservice.accounttransacti
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -20,10 +22,10 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.mockito.Mockito;
@@ -37,11 +39,11 @@ import org.springframework.test.web.servlet.MvcResult;
 public class AccountTransactionCreateAllSteps extends BaseTest {
   private final AccountRepository accountRepository;
   private final AccountTransactionRepository accountTransactionRepository;
-
   private String requestContent;
   private MvcResult result;
   private AccountTransaction expectedAccountTransactionOne;
   private AccountTransaction expectedAccountTransactionTwo;
+
 
   @And("valid transactions with the same account id are part of the request body for the create transaction endpoint")
   public void validTransactionsWithTheSameAccountIdArePartOfTheRequestBodyForTheCreateTransactionEndpoint()
@@ -86,7 +88,23 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
 
   @And("account id exists in the database for the transactions")
   public void accountIdExistsInTheDatabaseForTheTransactions() {
-    when(accountRepository.findById(any())).thenReturn(Optional.of(Account.builder().build()));
+    when(accountRepository.findAllById(any())).thenReturn(
+        Collections.singletonList(Account.builder().build()));
+  }
+
+  @And("both account ids exist in the database for the transactions")
+  public void bothAccountIdsExistInTheDatabaseForTheTransactions() {
+    List<Account> accounts = new ArrayList<>();
+    accounts.add(Account.builder().build());
+    accounts.add(Account.builder().build());
+    when(accountRepository.findAllById(any())).thenReturn(accounts);
+  }
+
+  @And("one of the account transaction's account id does not exist in the database")
+  public void oneOfTheAccountTransactionSAccountIdDoesNotExistInTheDatabase() {
+    List<Account> accounts = new ArrayList<>();
+    accounts.add(Account.builder().id(1).build());
+    when(accountRepository.findAllById(any())).thenReturn(accounts);
   }
 
   @And("the database connection succeeds for create transactions")
@@ -137,11 +155,6 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
     when(accountTransactionRepository.saveAll(any())).thenReturn(Arrays.asList(
         expectedAccountTransactionOne,
         expectedAccountTransactionTwo));
-  }
-
-  @And("account id does not exist in the database for the transactions")
-  public void accountIdDoesNotExistInTheDatabaseForTheTransactions() {
-    when(accountRepository.findById(any())).thenReturn(Optional.empty());
   }
 
   @And("the database save fails given a account id was deleted during the create transaction database call")
@@ -199,9 +212,9 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
             .replace("[2025,4,13]", invalidDate);
   }
 
-  @And("the connection to the database fails for the get account by id")
-  public void theConnectionToTheDatabaseFailsForTheGetAccountById() {
-    when(accountRepository.findById(any())).thenThrow(new DataProcessingException());
+  @And("the connection to the database fails for the get account by ids")
+  public void theConnectionToTheDatabaseFailsForTheGetAccountByIds() {
+    when(accountRepository.findAllById(any())).thenThrow(new DataProcessingException());
   }
 
   @And("the connection to the database fails for the create transactions endpoint")
@@ -257,4 +270,10 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
   public void theTransactionIsNotCreated() {
     Mockito.verifyNoInteractions(accountTransactionRepository);
   }
+
+  @And("the newly created transactions exist in the data store")
+  public void theNewlyCreatedTransactionsExistInTheDataStore() {
+    verify(accountTransactionRepository, times(1)).saveAll(any());
+  }
+
 }
