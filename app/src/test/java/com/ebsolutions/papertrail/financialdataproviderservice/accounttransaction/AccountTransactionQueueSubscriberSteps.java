@@ -3,8 +3,10 @@ package com.ebsolutions.papertrail.financialdataproviderservice.accounttransacti
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.ebsolutions.papertrail.financialdataproviderservice.account.Account;
 import com.ebsolutions.papertrail.financialdataproviderservice.account.AccountRepository;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -21,6 +23,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.DeleteMessageBatchRequest;
+import software.amazon.awssdk.services.sqs.model.DeleteMessageBatchResponse;
 import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
@@ -87,7 +90,6 @@ public class AccountTransactionQueueSubscriberSteps extends BaseTest {
       throws JsonProcessingException {
 
     AccountTransaction accountTransaction = AccountTransaction.builder()
-        .id(123)
         .accountId(123456)
         .transactionDate(LocalDate.now())
         .amount(123)
@@ -101,7 +103,41 @@ public class AccountTransactionQueueSubscriberSteps extends BaseTest {
     messages.add(message);
     receiveMessageResponse = ReceiveMessageResponse.builder().messages(messages).build();
 
-    when(accountRepository.findAllById(any())).thenReturn(Collections.emptyList());
+    when(accountRepository.findAllById(Collections.singletonList(123456L))).thenReturn(
+        Collections.emptyList());
+  }
+
+  @And("the account transaction queue has a valid message that has a matching account id")
+  public void theAccountTransactionQueueHasAValidMessageThatHasAMatchingAccountId()
+      throws JsonProcessingException {
+    AccountTransaction accountTransaction = AccountTransaction.builder()
+        .accountId(1)
+        .transactionDate(LocalDate.now())
+        .amount(123)
+        .description("Valid description")
+        .build();
+
+    String messageContent = objectMapper.writeValueAsString(accountTransaction);
+
+    Message message = Message.builder().body(messageContent).build();
+
+    messages.add(message);
+    receiveMessageResponse = ReceiveMessageResponse.builder().messages(messages).build();
+
+    when(accountRepository.findAllById(Collections.singletonList(1L))).thenReturn(
+        Collections.singletonList(Account.builder().build()));
+  }
+
+  @And("the message can be deleted from the account transaction queue")
+  public void theMessageCanBeDeletedFromTheAccountTransactionQueue() {
+    when(sqsClient.deleteMessageBatch(any(DeleteMessageBatchRequest.class)))
+        .thenReturn(DeleteMessageBatchResponse.builder().build());
+  }
+
+  @And("the message cannot be deleted from the account transaction queue")
+  public void theMessageCannotBeDeletedFromTheAccountTransactionQueue() {
+    doThrow(SqsException.builder().build())
+        .when(sqsClient).deleteMessageBatch(any(DeleteMessageBatchRequest.class));
   }
 
   @When("the application tries to process the account transaction queue")
@@ -124,5 +160,10 @@ public class AccountTransactionQueueSubscriberSteps extends BaseTest {
     Assertions.assertEquals("correct_queue_url", argumentCaptor.getValue().queueUrl());
 
     Assertions.assertEquals(1, argumentCaptor.getValue().entries().size());
+  }
+
+  @Then("the application saves the account transaction")
+  public void theApplicationSavesTheAccountTransaction() {
+    verify(accountTransactionRepository, times(1)).saveAll(any());
   }
 }

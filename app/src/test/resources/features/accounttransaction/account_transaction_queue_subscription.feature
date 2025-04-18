@@ -37,15 +37,19 @@ Feature: Account Transaction: Queue Subscription
     Then the application does not save any account transaction
     And the message is deleted from the account transaction queue
 
-#  Scenario: Account transaction message on the queue is not able to be deleted
-#    Given application is up
-#    And the application is able to receive messages from the account transaction queue
-#    And the account transaction queue has a message that
-#    When the application tries to process the account transaction queue
+  Scenario: Account transaction message on the queue is not able to be deleted
+    Given application is up
+    And the account transaction queue has a valid message that has a matching account id
+    And the application is able to receive messages from the account transaction queue
+    And the message cannot be deleted from the account transaction queue
+    When the application tries to process the account transaction queue
+    Then the application saves the account transaction
 
-#  Happy path
-#  Scenario: Account transaction message on the queue is able to be saved and deleted from queue
-#    Given application is up
-#    And the application is able to receive messages from the account transaction queue
-#    And the account transaction queue has a message that
-#    When the application tries to process the account transaction queue
+  Scenario: Account transaction message on the queue is able to be saved and deleted from queue
+    Given application is up
+    And the account transaction queue has a valid message that has a matching account id
+    And the application is able to receive messages from the account transaction queue
+    And the message can be deleted from the account transaction queue
+    When the application tries to process the account transaction queue
+    Then the application saves the account transaction
+

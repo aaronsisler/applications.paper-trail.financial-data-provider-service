@@ -1,12 +1,13 @@
 Feature: Account Transaction: Create
 
-  Scenario: Create account transactions endpoint returns correctly when valid transactions present
+  Scenario: Create account transactions endpoint returns correctly when valid transactions with the same account ids are present
     Given application is up
     And valid transactions with the same account id are part of the request body for the create transaction endpoint
     And account id exists in the database for the transactions
     And the database connection succeeds for create transactions
     When the create transactions endpoint is invoked
     Then the newly created transactions are returned from the create transaction endpoint
+    And the newly created transactions exist in the data store
 
   Scenario: Create transactions endpoint returns correctly when multiple account ids are present
     Given application is up
