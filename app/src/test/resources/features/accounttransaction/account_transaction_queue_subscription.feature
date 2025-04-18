@@ -8,11 +8,13 @@ Feature: Account Transaction: Queue Subscription
     Then the application does not save any account transaction
 #
 #  Messages are empty
-#  Scenario: Account transaction queue is does not have any messages during polling
-#    Given application is up
-#    And the application is able to receive messages from the account transaction queue
-#    And the account transaction queue does not have any messages
-#    When the application tries to process the account transaction queue
+  Scenario: Account transaction queue is does not have any messages during polling
+    Given application is up
+    And the account transaction queue does not have any messages
+    And the application is able to receive messages from the account transaction queue
+    When the application tries to process the account transaction queue
+    Then the application does not save any account transaction
+
 
 #  Scenario: Account transaction message on the queue is not able to be parsed
 #    Given application is up
