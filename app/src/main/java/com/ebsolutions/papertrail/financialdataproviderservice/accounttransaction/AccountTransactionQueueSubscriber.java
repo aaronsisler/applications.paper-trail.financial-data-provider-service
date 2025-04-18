@@ -77,15 +77,12 @@ public class AccountTransactionQueueSubscriber {
         );
       }
     }
-    System.out.println("HERE 1");
     if (accountTransactions.isEmpty()) {
-      System.out.println("HERE 1 inside");
       deleteQueueMessages(deleteMessageBatchRequestEntries);
       return;
     }
 
     try {
-      System.out.println("HERE 2");
       accountTransactionService.createAll(accountTransactions);
     } catch (DataConstraintException dataConstraintException) {
       log.error("There is a data constraint issue");
@@ -101,28 +98,19 @@ public class AccountTransactionQueueSubscriber {
       return;
     }
 
-    //    deleteQueueMessages(deleteMessageBatchRequestEntries);
+    deleteQueueMessages(deleteMessageBatchRequestEntries);
   }
 
   private void deleteQueueMessages(
       List<DeleteMessageBatchRequestEntry> deleteMessageBatchRequestEntries) {
     try {
-      System.out.println("ATQ");
-      System.out.println(accountTransactionQueue);
-      System.out.println(accountTransactionQueue.getQueueUrl());
       DeleteMessageBatchRequest deleteMessageBatchRequest =
           DeleteMessageBatchRequest.builder().queueUrl(accountTransactionQueue.getQueueUrl())
               .entries(deleteMessageBatchRequestEntries)
               .build();
 
-      System.out.println("HERE post request");
-      System.out.println(deleteMessageBatchRequest);
-
       sqsClient.deleteMessageBatch(deleteMessageBatchRequest);
-      System.out.println("POST DELETE");
     } catch (Exception exception) {
-      System.out.println("HERE 2");
-      System.out.println(exception.getMessage());
       log.error("Cannot delete account transactions from the queue");
       log.error(exception.getMessage());
     }
