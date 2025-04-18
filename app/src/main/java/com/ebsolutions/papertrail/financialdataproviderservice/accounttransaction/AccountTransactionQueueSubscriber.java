@@ -36,6 +36,7 @@ public class AccountTransactionQueueSubscriber {
   public void consumeMessages() throws InterruptedException {
     List<Message> messages;
 
+    System.out.println("WHERE AM I");
     try {
       ReceiveMessageRequest receiveMessageRequest = ReceiveMessageRequest.builder()
           .queueUrl(accountTransactionQueue.getQueueUrl())
@@ -54,6 +55,8 @@ public class AccountTransactionQueueSubscriber {
     if (messages.isEmpty()) {
       return;
     }
+
+    System.out.println("WHERE AM I");
 
     List<DeleteMessageBatchRequestEntry> deleteMessageBatchRequestEntries = new ArrayList<>();
     List<AccountTransaction> accountTransactions = new ArrayList<>();
@@ -77,13 +80,16 @@ public class AccountTransactionQueueSubscriber {
         );
       }
     }
+
     if (accountTransactions.isEmpty()) {
       deleteQueueMessages(deleteMessageBatchRequestEntries);
       return;
     }
 
     try {
+      System.out.println("HERE 1");
       accountTransactionService.createAll(accountTransactions);
+      System.out.println("HERE 2");
     } catch (DataConstraintException dataConstraintException) {
       log.error("There is a data constraint issue");
     } catch (DataIntegrityViolationException dataIntegrityViolationException) {
@@ -97,7 +103,7 @@ public class AccountTransactionQueueSubscriber {
       log.error(exception.getMessage());
       return;
     }
-
+    System.out.println("HERE 3");
     deleteQueueMessages(deleteMessageBatchRequestEntries);
   }
 

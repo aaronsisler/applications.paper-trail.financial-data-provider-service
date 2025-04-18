@@ -7,10 +7,13 @@ import static org.mockito.Mockito.when;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.account.AccountRepository;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
@@ -32,9 +35,6 @@ public class AccountTransactionQueueSubscriberSteps extends BaseTest {
   protected final SqsClient sqsClient;
   protected ReceiveMessageResponse receiveMessageResponse;
   protected List<Message> messages = new ArrayList<>();
-
-
-  private String queueContent;
 
   @And("the application is not able to receive messages from the account transaction queue")
   public void theApplicationIsNotAbleToReceiveMessagesFromTheAccountTransactionQueue() {
@@ -60,6 +60,48 @@ public class AccountTransactionQueueSubscriberSteps extends BaseTest {
 
     messages.add(message);
     receiveMessageResponse = ReceiveMessageResponse.builder().messages(messages).build();
+  }
+
+  @And("the account transaction queue has a message that has a populated account transaction id")
+  public void theAccountTransactionQueueHasAMessageThatHasAPopulatedAccountTransactionId()
+      throws JsonProcessingException {
+
+    AccountTransaction accountTransaction = AccountTransaction.builder()
+        .id(123)
+        .accountId(1)
+        .transactionDate(LocalDate.now())
+        .amount(123)
+        .description("Valid description")
+        .build();
+
+    String messageContent = objectMapper.writeValueAsString(accountTransaction);
+
+    Message message = Message.builder().body(messageContent).build();
+
+    messages.add(message);
+    receiveMessageResponse = ReceiveMessageResponse.builder().messages(messages).build();
+  }
+
+  @And("the account transaction queue has a message that does not have a matching account id")
+  public void theAccountTransactionQueueHasAMessageThatDoesNotHaveAMatchingAccountId()
+      throws JsonProcessingException {
+
+    AccountTransaction accountTransaction = AccountTransaction.builder()
+        .id(123)
+        .accountId(123456)
+        .transactionDate(LocalDate.now())
+        .amount(123)
+        .description("Valid description")
+        .build();
+
+    String messageContent = objectMapper.writeValueAsString(accountTransaction);
+
+    Message message = Message.builder().body(messageContent).build();
+
+    messages.add(message);
+    receiveMessageResponse = ReceiveMessageResponse.builder().messages(messages).build();
+
+    when(accountRepository.findAllById(any())).thenReturn(Collections.emptyList());
   }
 
   @When("the application tries to process the account transaction queue")
