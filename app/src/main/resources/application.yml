@@ -15,11 +15,18 @@ management:
 spring:
   config:
     activate:
-      on-profile: local, default
+      on-profile: local
   datasource:
     url: jdbc:postgresql://localhost:5432/paper_trail
     username: admin
     password: root
+    jpa:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+infrastructure:
+  endpoint: http://sqs.us-east-1.localhost.localstack.cloud:4566
+  messaging:
+    queue-url: ${infrastructure.endpoint}/000000000000/ACCOUNT_TRANSACTION_INGESTION_DATAFLOW
 
 ---
 
@@ -34,3 +41,8 @@ spring:
     password: root
     jpa:
       database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+infrastructure:
+  endpoint: http://infrastructure:4566
+  messaging:
+    queue-url: ${infrastructure.endpoint}/000000000000/ACCOUNT_TRANSACTION_INGESTION_DATAFLOW

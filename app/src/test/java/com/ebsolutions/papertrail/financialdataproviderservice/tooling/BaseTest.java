@@ -1,6 +1,7 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.tooling;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.account.AccountRepository;
+import com.ebsolutions.papertrail.financialdataproviderservice.accounttransaction.AccountTransactionQueue;
 import com.ebsolutions.papertrail.financialdataproviderservice.accounttransaction.AccountTransactionRepository;
 import com.ebsolutions.papertrail.financialdataproviderservice.household.HouseholdRepository;
 import com.ebsolutions.papertrail.financialdataproviderservice.householdmember.HouseholdMemberRepository;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import software.amazon.awssdk.services.sqs.SqsClient;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -35,13 +37,19 @@ public class BaseTest {
     @MockBean
     protected AccountRepository accountRepository;
     @MockBean
+    protected AccountTransactionQueue accountTransactionQueue;
+    @MockBean
+    protected AccountTransactionRepository accountTransactionRepository;
+    @MockBean
     protected HouseholdMemberRepository householdMemberRepository;
     @MockBean
     protected HouseholdRepository householdRepository;
     @MockBean
     protected InstitutionRepository institutionRepository;
+    //    @MockBean
+    //    protected ObjectMapper objectMapper;
     @MockBean
-    protected AccountTransactionRepository accountTransactionRepository;
+    protected SqsClient sqsClient;
     @MockBean
     protected UserRepository userRepository;
   }

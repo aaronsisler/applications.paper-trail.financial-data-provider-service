@@ -3,8 +3,6 @@ services:
     container_name: storage
     image: postgres
     hostname: localhost
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: root
@@ -12,3 +10,33 @@ services:
     volumes:
       - ./storage/db-init-scripts:/docker-entrypoint-initdb.d
     restart: unless-stopped
+
+  infrastructure:
+    container_name: infrastructure
+    image: localstack/localstack:latest
+    #    Leaving this port open so the ingestion can connect for local testing
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sqs
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      # This is called when Localstack container is starting up.
+      # Using this for AWS CLI commands currently.
+      - ./integration-tests/init-scripts/init-localstack-setup.sh:/etc/localstack/init/ready.d/script.sh
+      - ./integration-tests/init-scripts/sqs-topic-definition.json:/opt/code/localstack/sqs-topic-definition.json
+
+  app:
+    depends_on:
+      - infrastructure
+      - storage
+    container_name: app
+    build: # "context" and "dockerfile" fields have to be under "build"
+      context: .
+      dockerfile: app/Dockerfile.dev
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - AWS_REGION=us-east-1
+      - AWS_EC2_METADATA_DISABLED=true
