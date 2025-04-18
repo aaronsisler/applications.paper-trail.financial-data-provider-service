@@ -21,7 +21,7 @@ public class QueueConfig {
   protected String queueUrl;
 
   @Bean
-  @Profile({"local"})
+  @Profile({"local", "dev"})
   public SqsClient localSqsClientInstantiation() {
     return SqsClient.builder()
         .region(Region.US_EAST_1)
@@ -31,7 +31,7 @@ public class QueueConfig {
   }
 
   @Bean
-  @Profile({"local"})
+  @Profile({"local", "dev"})
   public AccountTransactionQueue accountTransactionQueue() {
     return AccountTransactionQueue.builder()
         .queueUrl(queueUrl)

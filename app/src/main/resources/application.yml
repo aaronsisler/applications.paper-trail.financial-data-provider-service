@@ -41,3 +41,8 @@ spring:
     password: root
     jpa:
       database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+infrastructure:
+  endpoint: http://infrastructure:4566
+  messaging:
+    queue-url: ${infrastructure.endpoint}/000000000000/ACCOUNT_TRANSACTION_INGESTION_DATAFLOW
