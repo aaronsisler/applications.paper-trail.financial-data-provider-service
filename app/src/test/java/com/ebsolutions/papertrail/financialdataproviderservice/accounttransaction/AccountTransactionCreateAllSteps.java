@@ -89,14 +89,22 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
 
   @And("account id exists in the database for the transactions")
   public void accountIdExistsInTheDatabaseForTheTransactions() {
-    when(accountRepository.findById(any())).thenReturn(Optional.of(Account.builder().build()));
+    when(accountRepository.findAllById(any())).thenReturn(
+        Collections.singletonList(Account.builder().build()));
   }
 
-  @And("account ids exists in the database for the transactions")
-  public void accountIdsExistsInTheDatabaseForTheTransactions() {
+  @And("both account ids exist in the database for the transactions")
+  public void bothAccountIdsExistInTheDatabaseForTheTransactions() {
     List<Account> accounts = new ArrayList<>();
     accounts.add(Account.builder().build());
     accounts.add(Account.builder().build());
+    when(accountRepository.findAllById(any())).thenReturn(accounts);
+  }
+
+  @And("one of the account transaction's account id does not exist in the database")
+  public void oneOfTheAccountTransactionSAccountIdDoesNotExistInTheDatabase() {
+    List<Account> accounts = new ArrayList<>();
+    accounts.add(Account.builder().id(1).build());
     when(accountRepository.findAllById(any())).thenReturn(accounts);
   }
 
@@ -210,9 +218,9 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
             .replace("[2025,4,13]", invalidDate);
   }
 
-  @And("the connection to the database fails for the get account by id")
-  public void theConnectionToTheDatabaseFailsForTheGetAccountById() {
-    when(accountRepository.findById(any())).thenThrow(new DataProcessingException());
+  @And("the connection to the database fails for the get account by ids")
+  public void theConnectionToTheDatabaseFailsForTheGetAccountByIds() {
+    when(accountRepository.findAllById(any())).thenThrow(new DataProcessingException());
   }
 
   @And("the connection to the database fails for the create transactions endpoint")
@@ -273,4 +281,5 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
   public void theNewlyCreatedTransactionsExistInTheDataStore() {
     verify(accountTransactionRepository, times(1)).saveAll(any());
   }
+
 }
