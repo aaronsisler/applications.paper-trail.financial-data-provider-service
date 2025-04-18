@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.account.Account;
 import com.ebsolutions.papertrail.financialdataproviderservice.account.AccountRepository;
+import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import io.cucumber.java.en.And;
@@ -145,7 +146,7 @@ public class AccountTransactionQueueSubscriberSteps extends BaseTest {
   @And("the application cannot save the account transaction to the data store due to a general exception")
   public void theApplicationCannotSaveTheAccountTransactionToTheDataStoreDueToAGeneralException() {
     when(accountTransactionRepository.saveAll(anyList()))
-        .thenThrow(new RuntimeException("Something went wrong"));
+        .thenThrow(new DataProcessingException());
   }
 
   @And("the message cannot be deleted from the account transaction queue")
