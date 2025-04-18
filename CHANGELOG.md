@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.20.0] Adding in Account Transaction Queue Subscriber
+
+### Added
+
+- Account Transaction is now pulled into the data store from queue
+
 ## [0.19.0] Adding in Account Transaction -> Transaction Date
 
 ### Added
