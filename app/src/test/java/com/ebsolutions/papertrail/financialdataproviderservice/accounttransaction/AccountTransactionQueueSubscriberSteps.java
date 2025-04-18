@@ -1,5 +1,6 @@
 package com.ebsolutions.papertrail.financialdataproviderservice.accounttransaction;
 
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.springframework.dao.DataIntegrityViolationException;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.DeleteMessageBatchRequest;
 import software.amazon.awssdk.services.sqs.model.DeleteMessageBatchResponse;
@@ -134,6 +136,18 @@ public class AccountTransactionQueueSubscriberSteps extends BaseTest {
         .thenReturn(DeleteMessageBatchResponse.builder().build());
   }
 
+  @And("the application cannot save the account transaction to the data store due to a data integrity issue")
+  public void theApplicationCannotSaveTheAccountTransactionToTheDataStoreDueToADataIntegrityIssue() {
+    when(accountTransactionRepository.saveAll(anyList()))
+        .thenThrow(new DataIntegrityViolationException("Something went wrong"));
+  }
+
+  @And("the application cannot save the account transaction to the data store due to a general exception")
+  public void theApplicationCannotSaveTheAccountTransactionToTheDataStoreDueToAGeneralException() {
+    when(accountTransactionRepository.saveAll(anyList()))
+        .thenThrow(new RuntimeException("Something went wrong"));
+  }
+
   @And("the message cannot be deleted from the account transaction queue")
   public void theMessageCannotBeDeletedFromTheAccountTransactionQueue() {
     doThrow(SqsException.builder().build())
@@ -165,5 +179,10 @@ public class AccountTransactionQueueSubscriberSteps extends BaseTest {
   @Then("the application saves the account transaction")
   public void theApplicationSavesTheAccountTransaction() {
     verify(accountTransactionRepository, times(1)).saveAll(any());
+  }
+
+  @Then("the message is not deleted from the account transaction queue")
+  public void theMessageIsNotDeletedFromTheAccountTransactionQueue() {
+    Mockito.verify(sqsClient, times(0)).deleteMessageBatch(any(DeleteMessageBatchRequest.class));
   }
 }
