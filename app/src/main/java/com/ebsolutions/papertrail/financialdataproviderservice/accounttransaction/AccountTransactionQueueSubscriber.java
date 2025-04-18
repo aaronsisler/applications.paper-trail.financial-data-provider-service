@@ -35,7 +35,7 @@ public class AccountTransactionQueueSubscriber {
 
   @Async
   @Scheduled(fixedRate = 1000, initialDelay = 1000)
-  public void consumeMessages() throws JsonProcessingException {
+  public void consumeMessages() {
     List<Message> messages;
 
     try {
@@ -63,16 +63,21 @@ public class AccountTransactionQueueSubscriber {
     for (Message message : messages) {
       System.out.println("Message");
       System.out.println(message.body());
-      AccountTransaction accountTransaction =
-          objectMapper.readValue(message.body(), AccountTransaction.class);
-      accountTransactions.add(accountTransaction);
-
-      deleteMessageBatchRequestEntries.add(
-          DeleteMessageBatchRequestEntry.builder()
-              .id(message.messageId())
-              .receiptHandle(message.receiptHandle())
-              .build()
-      );
+      try {
+        AccountTransaction accountTransaction =
+            objectMapper.readValue(message.body(), AccountTransaction.class);
+        accountTransactions.add(accountTransaction);
+      } catch (JsonProcessingException e) {
+        log.error("Cannot process account transaction");
+        log.error(e.getMessage());
+      } finally {
+        deleteMessageBatchRequestEntries.add(
+            DeleteMessageBatchRequestEntry.builder()
+                .id(message.messageId())
+                .receiptHandle(message.receiptHandle())
+                .build()
+        );
+      }
     }
 
     try {
