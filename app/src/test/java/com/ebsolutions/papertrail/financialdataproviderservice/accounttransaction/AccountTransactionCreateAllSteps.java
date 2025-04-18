@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.mockito.Mockito;
@@ -156,11 +155,6 @@ public class AccountTransactionCreateAllSteps extends BaseTest {
     when(accountTransactionRepository.saveAll(any())).thenReturn(Arrays.asList(
         expectedAccountTransactionOne,
         expectedAccountTransactionTwo));
-  }
-
-  @And("account id does not exist in the database for the transactions")
-  public void accountIdDoesNotExistInTheDatabaseForTheTransactions() {
-    when(accountRepository.findById(any())).thenReturn(Optional.empty());
   }
 
   @And("the database save fails given a account id was deleted during the create transaction database call")
