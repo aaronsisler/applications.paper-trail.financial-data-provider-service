@@ -2,6 +2,7 @@ package com.ebsolutions.papertrail.financialdataproviderservice.accounttransacti
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 import com.ebsolutions.papertrail.financialdataproviderservice.account.AccountRepository;
@@ -12,8 +13,11 @@ import io.cucumber.java.en.When;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Assertions;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.DeleteMessageBatchRequest;
 import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageResponse;
@@ -23,6 +27,7 @@ import software.amazon.awssdk.services.sqs.model.SqsException;
 public class AccountTransactionQueueSubscriberSteps extends BaseTest {
   protected final AccountTransactionRepository accountTransactionRepository;
   protected final AccountRepository accountRepository;
+  protected final AccountTransactionQueue accountTransactionQueue;
   protected final AccountTransactionQueueSubscriber accountTransactionQueueSubscriber;
   protected final SqsClient sqsClient;
   protected ReceiveMessageResponse receiveMessageResponse;
@@ -39,6 +44,7 @@ public class AccountTransactionQueueSubscriberSteps extends BaseTest {
 
   @And("the application is able to receive messages from the account transaction queue")
   public void theApplicationIsAbleToReceiveMessagesFromTheAccountTransactionQueue() {
+    when(accountTransactionQueue.getQueueUrl()).thenReturn("correct_queue_url");
     when(sqsClient.receiveMessage(any(ReceiveMessageRequest.class)))
         .thenReturn(receiveMessageResponse);
   }
@@ -48,13 +54,33 @@ public class AccountTransactionQueueSubscriberSteps extends BaseTest {
     receiveMessageResponse = ReceiveMessageResponse.builder().messages(messages).build();
   }
 
+  @And("the account transaction queue has a message that is not able to be parsed")
+  public void theAccountTransactionQueueHasAMessageThatIsNotAbleToBeParsed() {
+    Message message = Message.builder().body("I AM A BAD MESSAGE").build();
+
+    messages.add(message);
+    receiveMessageResponse = ReceiveMessageResponse.builder().messages(messages).build();
+  }
+
   @When("the application tries to process the account transaction queue")
-  public void theApplicationTriesToProcessTheAccountTransactionQueue() {
+  public void theApplicationTriesToProcessTheAccountTransactionQueue() throws InterruptedException {
     accountTransactionQueueSubscriber.consumeMessages();
   }
 
   @Then("the application does not save any account transaction")
   public void theApplicationDoesNotSaveAnyAccountTransaction() {
     Mockito.verifyNoInteractions(accountTransactionRepository);
+  }
+
+  @And("the message is deleted from the account transaction queue")
+  public void theMessageIsDeletedFromTheAccountTransactionQueue() {
+    ArgumentCaptor<DeleteMessageBatchRequest> argumentCaptor =
+        ArgumentCaptor.forClass(DeleteMessageBatchRequest.class);
+
+    Mockito.verify(sqsClient, times(1)).deleteMessageBatch(argumentCaptor.capture());
+
+    Assertions.assertEquals("correct_queue_url", argumentCaptor.getValue().queueUrl());
+
+    Assertions.assertEquals(1, argumentCaptor.getValue().entries().size());
   }
 }

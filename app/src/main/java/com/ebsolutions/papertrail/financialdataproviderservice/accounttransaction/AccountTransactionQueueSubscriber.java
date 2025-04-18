@@ -9,7 +9,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,9 +32,8 @@ public class AccountTransactionQueueSubscriber {
   private final AccountTransactionService accountTransactionService;
 
 
-  @Async
   @Scheduled(fixedRate = 1000, initialDelay = 1000)
-  public void consumeMessages() {
+  public void consumeMessages() throws InterruptedException {
     List<Message> messages;
 
     try {
@@ -79,15 +77,20 @@ public class AccountTransactionQueueSubscriber {
         );
       }
     }
+    System.out.println("HERE 1");
+    if (accountTransactions.isEmpty()) {
+      System.out.println("HERE 1 inside");
+      deleteQueueMessages(deleteMessageBatchRequestEntries);
+      return;
+    }
 
     try {
+      System.out.println("HERE 2");
       accountTransactionService.createAll(accountTransactions);
     } catch (DataConstraintException dataConstraintException) {
       log.error("There is a data constraint issue");
-      return;
     } catch (DataIntegrityViolationException dataIntegrityViolationException) {
       log.error("There is a data issue with a missing account");
-      return;
     } catch (DataProcessingException dataProcessingException) {
       log.error("Cannot save account transactions to data store - DataProcessingException");
       log.error(dataProcessingException.getMessage());
@@ -98,14 +101,28 @@ public class AccountTransactionQueueSubscriber {
       return;
     }
 
+    //    deleteQueueMessages(deleteMessageBatchRequestEntries);
+  }
+
+  private void deleteQueueMessages(
+      List<DeleteMessageBatchRequestEntry> deleteMessageBatchRequestEntries) {
     try {
+      System.out.println("ATQ");
+      System.out.println(accountTransactionQueue);
+      System.out.println(accountTransactionQueue.getQueueUrl());
       DeleteMessageBatchRequest deleteMessageBatchRequest =
           DeleteMessageBatchRequest.builder().queueUrl(accountTransactionQueue.getQueueUrl())
               .entries(deleteMessageBatchRequestEntries)
               .build();
 
+      System.out.println("HERE post request");
+      System.out.println(deleteMessageBatchRequest);
+
       sqsClient.deleteMessageBatch(deleteMessageBatchRequest);
+      System.out.println("POST DELETE");
     } catch (Exception exception) {
+      System.out.println("HERE 2");
+      System.out.println(exception.getMessage());
       log.error("Cannot delete account transactions from the queue");
       log.error(exception.getMessage());
     }
