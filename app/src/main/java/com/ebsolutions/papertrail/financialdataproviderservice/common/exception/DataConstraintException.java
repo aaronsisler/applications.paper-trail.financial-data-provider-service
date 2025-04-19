@@ -10,13 +10,9 @@ public class DataConstraintException extends IllegalArgumentException {
   @Serial
   private static final long serialVersionUID = 1L;
 
-  private List<String> messages = new ArrayList<>();
+  private final List<String> errorMessages = new ArrayList<>();
 
   public DataConstraintException(List<String> errorMessages) {
-    this.messages = errorMessages;
-  }
-
-  public void addMessage(String message) {
-    messages.add(message);
+    this.errorMessages.addAll(errorMessages);
   }
 }

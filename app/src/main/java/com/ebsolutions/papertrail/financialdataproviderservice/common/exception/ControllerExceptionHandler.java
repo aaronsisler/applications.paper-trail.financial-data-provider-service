@@ -177,7 +177,7 @@ public class ControllerExceptionHandler {
     return ResponseEntity.badRequest()
         .body(
             ErrorResponse.builder()
-                .messages(dataConstraintException.getMessages())
+                .messages(dataConstraintException.getErrorMessages())
                 .build()
         );
   }
