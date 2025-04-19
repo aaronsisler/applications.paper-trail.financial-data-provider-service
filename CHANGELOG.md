@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.21.0] Cleaning up Sonar issues from pre-Sonar builds
+
+### Changed
+
+- Making an exception have final based constructor
+- Removing @Data from BaseEntity
+
 ## [0.20.0] Adding in Account Transaction Queue Subscriber
 
 ### Added
