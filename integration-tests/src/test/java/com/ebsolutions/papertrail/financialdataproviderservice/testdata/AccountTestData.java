@@ -31,7 +31,7 @@ public enum AccountTestData {
     @Override
     public Account get() {
       return Account.builder()
-          .id(2)
+          .id(3)
           .institutionId(5)
           .householdMemberId(7)
           .name("account_transaction_update_name")
@@ -43,11 +43,23 @@ public enum AccountTestData {
     @Override
     public Account get() {
       return Account.builder()
-          .id(2)
+          .id(4)
           .institutionId(5)
           .householdMemberId(7)
           .name("account_transaction_delete_name")
           .nickname("account_transaction_delete_nickname")
+          .build();
+    }
+  },
+  ACCOUNT_TRANSACTION_INGESTION {
+    @Override
+    public Account get() {
+      return Account.builder()
+          .id(5)
+          .institutionId(6)
+          .householdMemberId(8)
+          .name("account_transaction_ingestion_name")
+          .nickname("account_transaction_ingestion_nickname")
           .build();
     }
   };
