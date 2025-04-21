@@ -19,6 +19,7 @@ import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.client.RestClient;
+import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
 public class AccountTransactionQueueSteps extends BaseStep {
@@ -98,7 +99,21 @@ public class AccountTransactionQueueSteps extends BaseStep {
   }
 
   @And("the application removes the message from the queue")
-  public void theApplicationRemovesTheMessageFromTheQueue() {
-    // Check that the queue is empty
+  public void theApplicationRemovesTheMessageFromTheQueue() throws InterruptedException {
+    Instant pollingEnd =
+        Instant.now().plusMillis(TestConstants.QUEUE_POLLING_WAIT_PERIOD_IN_MILLISECONDS);
+
+    do {
+      // Wait between each polling since consumer is fast
+      Thread.sleep(100);
+      // Check if any messages
+      List<Message> messages = queueMessageUtil.consume();
+      // If messages are found, break for the assertions
+      if (messages.isEmpty()) {
+        return;
+      }
+    } while (!Instant.now().isAfter(pollingEnd));
+
+    Assertions.fail("The messages did not get cleared from the queue");
   }
 }

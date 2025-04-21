@@ -11,9 +11,25 @@ services:
       - ../storage/db-init-scripts:/docker-entrypoint-initdb.d
     restart: unless-stopped
 
+  infrastructure:
+    container_name: infrastructure
+    image: localstack/localstack:latest
+    #    Leaving this port open so the ingestion can connect for local testing
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sqs
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      # This is called when Localstack container is starting up.
+      # Using this for AWS CLI commands currently.
+      - ./init-scripts/init-localstack-setup.sh:/etc/localstack/init/ready.d/script.sh
+      - ./init-scripts/sqs-topic-definition.json:/opt/code/localstack/sqs-topic-definition.json
+
   app:
     depends_on:
       - storage
+      - infrastructure
     container_name: app
     build: ../app
     ports:
