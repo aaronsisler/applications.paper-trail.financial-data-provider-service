@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.22.0] Account transaction queue integration test
+
+### Added
+
+- Account integration test which checks the message was saved correctly and queue was cleared
+
 ## [0.21.0] Cleaning up Sonar issues from pre-Sonar builds
 
 ### Changed
