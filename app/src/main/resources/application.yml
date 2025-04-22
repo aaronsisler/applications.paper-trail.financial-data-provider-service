@@ -55,9 +55,9 @@ spring:
       on-profile: default
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://paper-trail-database.cluster-c2qboyuulbcj.us-east-1.rds.amazonaws.com
-    username: postgresadmin
-    password: changeit
+    url: jdbc:postgresql://paper-trail.cluster-c2qboyuulbcj.us-east-1.rds.amazonaws.com:5432/postgres
+    username: postgres
+    password: changeit123
     jpa:
       database-platform: org.hibernate.dialect.PostgreSQLDialect
 
