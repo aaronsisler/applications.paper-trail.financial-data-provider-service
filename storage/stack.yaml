@@ -1,0 +1,29 @@
+Description: API Gateway and lambda
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  S3KeyPath:
+    Type: String
+  HostedZoneId:
+    Type: String
+    Description: 'Route 53 Hosted Zone ID for the domain'
+    Default: 'ZR2VAHLVW389H'
+
+Resources:
+  LambdaFunctionCreate:
+    Type: "AWS::Lambda::Function"
+    Description: Handles scaling up of ECS and ALB stacks
+    Properties:
+      FunctionName: "task-master-service-create"
+      Handler: app/src/handler/stack_handler.handle_create
+      Runtime: python3.13
+      MemorySize: 128
+      Code:
+        S3Bucket: "eb-solutions-code-deployment"
+        S3Key: !Sub "services/task-master/${S3KeyPath}/service.zip"
+      Role: arn:aws:iam::654918520080:role/task-master-role
+      Timeout: 60
+      Tags:
+        - Key: CostCenter
+          Value: services.task-master
+
