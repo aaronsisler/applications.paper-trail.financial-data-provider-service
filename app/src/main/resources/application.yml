@@ -17,7 +17,7 @@ spring:
     activate:
       on-profile: local
   datasource:
-    url: jdbc:postgresql://localhost:5432/paper_trail
+    url: jdbc:postgresql://localhost:5432/papertrail
     username: admin
     password: root
     jpa:
@@ -36,7 +36,7 @@ spring:
       on-profile: dev
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://storage:5432/paper_trail
+    url: jdbc:postgresql://storage:5432/papertrail
     username: admin
     password: root
     jpa:

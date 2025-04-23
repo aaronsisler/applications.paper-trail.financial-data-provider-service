@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: root
-      POSTGRES_DB: paper-trail
+      POSTGRES_DB: papertrail
     volumes:
       - ../storage/db-init-scripts:/docker-entrypoint-initdb.d
     restart: unless-stopped
