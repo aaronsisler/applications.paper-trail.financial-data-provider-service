@@ -32,7 +32,7 @@ public class AccountTransactionQueueSubscriber {
   private final AccountTransactionService accountTransactionService;
 
 
-  @Scheduled(fixedRate = 1000, initialDelay = 1000)
+  @Scheduled(fixedRate = 10000, initialDelay = 1000)
   public void consumeMessages() throws InterruptedException {
     List<Message> messages;
 
