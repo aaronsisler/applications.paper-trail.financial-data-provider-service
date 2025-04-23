@@ -17,7 +17,7 @@ spring:
     activate:
       on-profile: local
   datasource:
-    url: jdbc:postgresql://localhost:5432/paper_trail
+    url: jdbc:postgresql://localhost:5432/papertrail
     username: admin
     password: root
     jpa:
@@ -36,7 +36,7 @@ spring:
       on-profile: dev
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://storage:5432/paper_trail
+    url: jdbc:postgresql://storage:5432/papertrail
     username: admin
     password: root
     jpa:
@@ -46,3 +46,31 @@ infrastructure:
   endpoint: http://infrastructure:4566
   messaging:
     queue-url: ${infrastructure.endpoint}/000000000000/ACCOUNT_TRANSACTION_INGESTION_DATAFLOW
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: default
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://data.otterandcow.com:5432/papertrail
+    username: postgresadmin
+    password: changeit123
+    jpa:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    key-store: classpath:otterandcow.com.p12
+    key-store-password: changeit
+    key-store-type: PKCS12
+    key-alias: otterandcow.com
+
+infrastructure:
+  endpoint: https://sqs.us-east-1.amazonaws.com
+  messaging:
+    queue-url: ${infrastructure.endpoint}/654918520080/ACCOUNT_TRANSACTION_INGESTION_DATAFLOW

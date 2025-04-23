@@ -1,0 +1,85 @@
+Description: API Gateway and lambda
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  SecurityGroupIds:
+    Type: CommaDelimitedList
+    Default: sg-003e6ce74c0ec695d, sg-039879afee519f8a8
+  SubnetIds:
+    Type: CommaDelimitedList
+    Default: subnet-01405f62e49e3721d, subnet-03a2d434cd2925e93, subnet-095ddd203f02bcfa2, subnet-0cc9d8c14b31e5042, subnet-0f9184e762d15e064, subnet-0a11cbaf3d16480a1
+  VpcId:
+    Type: String
+    Default: vpc-0836c2a075ecb38cc
+  CostCenterTag:
+    Type: String
+    Default: "applications.paper-trail.financial-data-provider-service"
+  AutoPause:
+    Description: 'Enable automatic pause for the cluster.'
+    Type: String
+    AllowedValues: [ 'true', 'false' ]
+    Default: 'true'
+  EnableDataApi:
+    Description: 'Enable the Data API.'
+    Type: String
+    AllowedValues: [ 'true', 'false' ]
+    Default: 'false'
+  Engine:
+    Type: String
+    Default: "aurora-postgresql"
+  EngineVersion:
+    Description: 'Aurora Serverless PostgreSQL version.'
+    Type: String
+    Default: '16.6'
+    AllowedValues: [ '16.6' ]
+  EnvironmentName:
+    Description: Environment name for the application (dev/staging/uat/production)
+    Type: String
+    Default: dev
+  MaxCapacity:
+    Description: 'The maximum capacity units for the cluster.'
+    Type: String
+    AllowedValues: [ 2, 4, 8, 16, 32, 64, 192, 384 ]
+    Default: 2
+  MinCapacity:
+    Description: 'The minimum capacity units for the cluster.'
+    Type: String
+    AllowedValues: [ 1, 2, 4, 8, 16, 32, 64, 192, 384 ]
+    Default: 1
+
+Resources:
+  DbCluster:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      DBClusterIdentifier: !Sub "${EnvironmentName}-paper-trail"
+      MasterUsername: "postgresadmin"
+      MasterUserPassword: "changeit123"
+      # This will keep the backup 1 day when deleting stack
+      BackupRetentionPeriod: 1
+      DatabaseName: "papertrail"
+      Engine: !Ref Engine
+      EngineVersion: !Ref EngineVersion
+      EnableHttpEndpoint: !Ref EnableDataApi
+      Port: 5432
+      ServerlessV2ScalingConfiguration:
+        MinCapacity: !Ref MinCapacity
+        MaxCapacity: !Ref MaxCapacity
+      StorageEncrypted: true
+      VpcSecurityGroupIds: !Ref SecurityGroupIds
+      Tags:
+        - Key: "CostCenter"
+          Value: !Ref CostCenterTag
+
+  RdsDbInstance:
+    DependsOn: [ DbCluster ]
+    Type: 'AWS::RDS::DBInstance'
+    Properties:
+      Engine: !Ref Engine
+      DBClusterIdentifier: !Ref DbCluster
+      DBInstanceClass: "db.serverless"
+      DBInstanceIdentifier: !Sub "${EnvironmentName}-paper-trail-database-instance"
+      PubliclyAccessible: 'true'
+      Tags:
+        - Key: "CostCenter"
+          Value: !Ref CostCenterTag
+
