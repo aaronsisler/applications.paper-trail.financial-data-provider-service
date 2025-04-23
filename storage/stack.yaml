@@ -51,7 +51,7 @@ Resources:
   DbCluster:
     Type: AWS::RDS::DBCluster
     Properties:
-      DBClusterIdentifier: !Sub ${EnvironmentName}-paper-trail
+      DBClusterIdentifier: !Sub "${EnvironmentName}-paper-trail"
       MasterUsername: "postgresadmin"
       MasterUserPassword: "changeit123"
       # This will keep the backup 1 day when deleting stack
@@ -77,7 +77,7 @@ Resources:
       Engine: !Ref Engine
       DBClusterIdentifier: !Ref DbCluster
       DBInstanceClass: "db.serverless"
-      DBInstanceIdentifier: "paper-trail-database-instance"
+      DBInstanceIdentifier: !Sub "${EnvironmentName}-paper-trail-database-instance"
       PubliclyAccessible: 'true'
       Tags:
         - Key: "CostCenter"
