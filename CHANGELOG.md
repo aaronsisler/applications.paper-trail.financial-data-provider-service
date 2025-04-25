@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.25.0] Deployment to ECS
+
+### Added
+
+- SQS Config for default
+
 ## [0.24.0] Deployment to ECS
 
 ### Changed
