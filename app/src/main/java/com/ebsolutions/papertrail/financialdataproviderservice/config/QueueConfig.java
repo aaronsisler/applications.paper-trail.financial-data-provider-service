@@ -40,7 +40,7 @@ public class QueueConfig {
   }
 
   @Bean
-  @Profile({"local", "dev"})
+  @Profile({"local", "dev", "default"})
   public AccountTransactionQueue accountTransactionQueue() {
     return AccountTransactionQueue.builder()
         .queueUrl(queueUrl)
