@@ -1,0 +1,100 @@
+{
+  "taskDefinitionArn": "arn:aws:ecs:us-east-1:654918520080:task-definition/financial-data-provider-service-task:1",
+  "containerDefinitions": [
+    {
+      "name": "financial-data-provider-service-container",
+      "image": "654918520080.dkr.ecr.us-east-1.amazonaws.com/applications.paper-trail.financial-data-provider-service:latest",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "name": "financial-data-provider-service-443-tcp",
+          "containerPort": 8443,
+          "hostPort": 8443,
+          "protocol": "tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "environmentFiles": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "ulimits": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/financial-data-provider-service-task",
+          "mode": "non-blocking",
+          "awslogs-create-group": "true",
+          "max-buffer-size": "25m",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        },
+        "secretOptions": []
+      },
+      "systemControls": []
+    }
+  ],
+  "family": "financial-data-provider-service-task",
+  "taskRoleArn": "arn:aws:iam::654918520080:role/financial-data-provider-service-role",
+  "executionRoleArn": "arn:aws:iam::654918520080:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "revision": 1,
+  "volumes": [],
+  "status": "ACTIVE",
+  "requiresAttributes": [
+    {
+      "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+    },
+    {
+      "name": "ecs.capability.execution-role-awslogs"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.28"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.task-iam-role"
+    },
+    {
+      "name": "ecs.capability.execution-role-ecr-pull"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+    },
+    {
+      "name": "ecs.capability.task-eni"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+    }
+  ],
+  "placementConstraints": [],
+  "compatibilities": [
+    "EC2",
+    "FARGATE"
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "1024",
+  "memory": "3072",
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "registeredAt": "2025-04-22T00:52:57.258Z",
+  "registeredBy": "arn:aws:iam::654918520080:user/aaron.sisler",
+  "enableFaultInjection": false,
+  "tags": [
+    {
+      "key": "CostCenter",
+      "value": "applications.paper-trail.financial-data-provider-service"
+    }
+  ]
+}
