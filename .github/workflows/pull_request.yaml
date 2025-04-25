@@ -22,6 +22,9 @@ jobs:
       - name: Build and Test Application
         run: mvn clean install --activate-profiles docker --no-transfer-progress --batch-mode
 
+      - name: Build Docker image
+        run: docker build . --tag financial-data-provider-service --file app/Dockerfile
+
       - name: SonarQubeScan
         uses: SonarSource/sonarqube-scan-action@v4
         env:
