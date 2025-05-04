@@ -94,7 +94,7 @@ public class AccountTransactionController {
       @ApiResponse(responseCode = "200",
           content = {
               @Content(mediaType = "application/json",
-                  schema = @Schema(implementation = User.class))
+                  schema = @Schema(implementation = AccountTransaction.class))
           })})
   public ResponseEntity<?> put(@RequestBody @Valid AccountTransaction accountTransaction) {
     return ResponseEntity.ok().body(accountTransactionService.update(accountTransaction));

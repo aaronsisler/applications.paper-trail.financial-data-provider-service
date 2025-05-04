@@ -77,24 +77,24 @@ public class AccountService {
       var institution = institutionService.get(account.getInstitutionId());
 
       if (institution.isEmpty()) {
-        List<String> existingUserErrorMessages =
+        List<String> nonExistentInstitutionsErrorMessages =
             Collections.singletonList(
                 "Institution Id does not exist: ".concat(
                     Integer.toString(account.getInstitutionId())));
 
-        throw new DataConstraintException(existingUserErrorMessages);
+        throw new DataConstraintException(nonExistentInstitutionsErrorMessages);
       }
 
       var householdMember =
           householdMemberService.get(account.getHouseholdMemberId());
 
       if (householdMember.isEmpty()) {
-        List<String> existingUserErrorMessages =
+        List<String> nonExistentHouseholdMembersErrorMessages =
             Collections.singletonList(
                 "Household Member Id does not exist: ".concat(
                     Integer.toString(account.getHouseholdMemberId())));
 
-        throw new DataConstraintException(existingUserErrorMessages);
+        throw new DataConstraintException(nonExistentHouseholdMembersErrorMessages);
       }
 
       return accountRepository.save(account);
@@ -107,5 +107,44 @@ public class AccountService {
       log.error("Error creating", exception);
       throw new DataProcessingException("Something went wrong while saving account");
     }
+  }
+
+  public Account update(Account account) {
+    // Check the account's id is valid before querying database
+    if (account.getId() <= 0) {
+
+      throw new DataConstraintException(
+          Collections.singletonList("Account id must be positive and non-zero")
+      );
+    }
+
+    // Pull the record using account id and make sure it exists
+    Optional<Account> persistedAccountCheck = accountRepository.findById((long) account.getId());
+
+    if (persistedAccountCheck.isEmpty()) {
+      throw new DataConstraintException(
+          Collections.singletonList("Account id does not exist")
+      );
+    }
+
+    Account persistedAccount = persistedAccountCheck.get();
+    // Check the raw and persisted householdMemberId match
+    if (account.getHouseholdMemberId() != persistedAccount.getHouseholdMemberId()) {
+      throw new DataConstraintException(
+          Collections.singletonList("Account's household member id cannot be modified")
+      );
+    }
+    // Check the raw and persisted institutionId match
+    if (account.getInstitutionId() != persistedAccount.getInstitutionId()) {
+      throw new DataConstraintException(
+          Collections.singletonList("Account's institution id cannot be modified")
+      );
+    }
+
+    // Make the call to update (which should just be the name and nickname
+    Account account1 = accountRepository.save(account);
+    System.out.println("Account");
+    System.out.println(account1);
+    return account1;
   }
 }

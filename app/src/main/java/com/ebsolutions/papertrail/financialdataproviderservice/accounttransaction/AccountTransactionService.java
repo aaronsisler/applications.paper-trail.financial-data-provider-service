@@ -116,10 +116,10 @@ public class AccountTransactionService {
   public AccountTransaction update(AccountTransaction accountTransaction) {
     try {
       if (accountTransaction.getId() <= 0) {
-        List<String> existingUserErrorMessages =
-            Collections.singletonList("Account transaction id must be positive and non-zero");
 
-        throw new DataConstraintException(existingUserErrorMessages);
+        throw new DataConstraintException(
+            Collections.singletonList("Account transaction id must be positive and non-zero")
+        );
       }
 
       boolean doesAccountTransactionExist =
