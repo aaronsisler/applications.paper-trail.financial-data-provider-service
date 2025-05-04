@@ -54,7 +54,7 @@ VALUES
 
 INSERT INTO account (institution_id, household_member_id, name, nickname)
 VALUES
-(5, 3, 'account_update_name_1', 'account_update_nickname_1'), --1
+(5, 3, 'account_update_name', 'account_update_nickname'), --1
 (6, 4, 'account_transaction_create_name_1', 'account_transaction_create_nickname_1'), --1
 (6, 4, 'account_transaction_create_name_2', 'account_transaction_create_nickname_2'), --2
 (7, 5, 'account_transaction_update_name', 'account_transaction_update_nickname'), --3

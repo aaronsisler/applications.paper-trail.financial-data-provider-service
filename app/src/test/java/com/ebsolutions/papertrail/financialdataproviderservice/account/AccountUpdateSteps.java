@@ -146,8 +146,6 @@ public class AccountUpdateSteps extends BaseTest {
   public void theUpdatedAccountIsReturnedFromTheUpdateAccountEndpoint()
       throws UnsupportedEncodingException, JsonProcessingException {
     MockHttpServletResponse mockHttpServletResponse = result.getResponse();
-    System.out.println(mockHttpServletResponse);
-    System.out.println(mockHttpServletResponse.getStatus());
 
     Assertions.assertEquals(HttpStatus.OK.value(), mockHttpServletResponse.getStatus());
 
