@@ -2,9 +2,11 @@ package com.ebsolutions.papertrail.financialdataproviderservice.account;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
+import com.ebsolutions.papertrail.financialdataproviderservice.common.exception.DataProcessingException;
 import com.ebsolutions.papertrail.financialdataproviderservice.config.Constants;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.ErrorResponse;
 import com.ebsolutions.papertrail.financialdataproviderservice.tooling.BaseTest;
@@ -19,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -45,15 +48,6 @@ public class AccountUpdateSteps extends BaseTest {
         .nickname("Update Input Account Nickname")
         .build();
 
-    persistedAccount = Account
-        .builder()
-        .id(123)
-        .householdMemberId(456)
-        .institutionId(789)
-        .name("Input Account Name")
-        .nickname("Input Account Nickname")
-        .build();
-
     expectedAccount =
         Account.builder()
             .id(123)
@@ -66,8 +60,8 @@ public class AccountUpdateSteps extends BaseTest {
     requestContent = objectMapper.writeValueAsString(inputAccount);
   }
 
-  @And("the account in the update account request body has an invalid input")
-  public void theAccountInTheUpdateAccountRequestBodyHasAnInvalidInput(DataTable dataTable)
+  @And("the account in the update account request body has input values")
+  public void theAccountInTheUpdateAccountRequestBodyHasInputValues(DataTable dataTable)
       throws JsonProcessingException {
     int accountId = dataTable.column(0).getFirst() == null ? 0 :
         Integer.parseInt(dataTable.column(0).getFirst());
@@ -97,14 +91,46 @@ public class AccountUpdateSteps extends BaseTest {
 
   @And("a record with a matching account id resides in the database")
   public void aRecordWithAMatchingAccountIdResidesInTheDatabase() {
+    persistedAccount = Account
+        .builder()
+        .id(123)
+        .householdMemberId(456)
+        .institutionId(789)
+        .name("Input Account Name")
+        .nickname("Input Account Nickname")
+        .build();
+
     when(accountRepository.findById(anyLong()))
         .thenReturn(Optional.of(persistedAccount));
   }
 
+  @And("a record with a matching account id does not reside in the database")
+  public void aRecordWithAMatchingAccountIdDoesNotResideInTheDatabase() {
+    when(accountRepository.findById(anyLong()))
+        .thenReturn(Optional.empty());
+  }
+
+  @And("retrieving the record with a matching account id throws an error")
+  public void retrievingTheRecordWithAMatchingAccountIdThrowsAnError() {
+    when(accountRepository.findById(anyLong()))
+        .thenThrow(new DataProcessingException());
+  }
 
   @And("the database connection succeeds for update account")
   public void theDatabaseConnectionSucceedsForUpdateAccount() {
     when(accountRepository.save(any())).thenReturn(expectedAccount);
+  }
+
+  @And("the database connection fails for update account")
+  public void theDatabaseConnectionFailsForUpdateAccount() {
+    when(accountRepository.save(any()))
+        .thenThrow(new DataProcessingException());
+  }
+
+  @And("the database connection fails for update account due to a relational integrity issue")
+  public void theDatabaseConnectionFailsForUpdateAccountDueToARelationalIntegrityIssue() {
+    doThrow(DataIntegrityViolationException.class)
+        .when(accountRepository).save(any());
   }
 
   @When("the update account endpoint is invoked")

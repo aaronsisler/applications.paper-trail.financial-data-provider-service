@@ -118,33 +118,39 @@ public class AccountService {
       );
     }
 
-    // Pull the record using account id and make sure it exists
-    Optional<Account> persistedAccountCheck = accountRepository.findById((long) account.getId());
+    try {
+      // Pull the record using account id and make sure it exists
+      Optional<Account> persistedAccountCheck = accountRepository.findById((long) account.getId());
 
-    if (persistedAccountCheck.isEmpty()) {
-      throw new DataConstraintException(
-          Collections.singletonList("Account id does not exist")
-      );
-    }
+      if (persistedAccountCheck.isEmpty()) {
+        throw new DataConstraintException(
+            Collections.singletonList("Account does not exist for id: "
+                .concat(String.valueOf(account.getId())))
+        );
+      }
 
-    Account persistedAccount = persistedAccountCheck.get();
-    // Check the raw and persisted householdMemberId match
-    if (account.getHouseholdMemberId() != persistedAccount.getHouseholdMemberId()) {
-      throw new DataConstraintException(
-          Collections.singletonList("Account's household member id cannot be modified")
-      );
-    }
-    // Check the raw and persisted institutionId match
-    if (account.getInstitutionId() != persistedAccount.getInstitutionId()) {
-      throw new DataConstraintException(
-          Collections.singletonList("Account's institution id cannot be modified")
-      );
-    }
+      Account persistedAccount = persistedAccountCheck.get();
+      // Check the raw and persisted householdMemberId match
+      if (account.getHouseholdMemberId() != persistedAccount.getHouseholdMemberId()) {
+        throw new DataConstraintException(
+            Collections.singletonList("Account's household member id cannot be modified")
+        );
+      }
+      // Check the raw and persisted institutionId match
+      if (account.getInstitutionId() != persistedAccount.getInstitutionId()) {
+        throw new DataConstraintException(
+            Collections.singletonList("Account's institution id cannot be modified")
+        );
+      }
 
-    // Make the call to update (which should just be the name and nickname
-    Account account1 = accountRepository.save(account);
-    System.out.println("Account");
-    System.out.println(account1);
-    return account1;
+      // Make the call to update (which should just be the name and nickname
+      return accountRepository.save(account);
+    } catch (DataConstraintException dataConstraintException) {
+      throw dataConstraintException;
+    } catch (Exception exception) {
+      log.error("Error saving", exception);
+      throw new DataProcessingException(
+          "Something went wrong while saving the account");
+    }
   }
 }
