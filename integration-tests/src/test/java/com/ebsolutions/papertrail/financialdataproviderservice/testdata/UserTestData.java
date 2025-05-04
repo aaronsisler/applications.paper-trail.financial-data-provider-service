@@ -80,11 +80,22 @@ public enum UserTestData {
           .build();
     }
   },
-  ACCOUNT_TRANSACTION_CREATE {
+  ACCOUNT_UPDATE {
     @Override
     public User get() {
       return User.builder()
           .id(8)
+          .username("account_update_user")
+          .firstName("Account Update")
+          .lastName("User")
+          .build();
+    }
+  },
+  ACCOUNT_TRANSACTION_CREATE {
+    @Override
+    public User get() {
+      return User.builder()
+          .id(9)
           .username("account_transaction_create_user")
           .firstName("Account Transaction Create")
           .lastName("User")
@@ -95,7 +106,7 @@ public enum UserTestData {
     @Override
     public User get() {
       return User.builder()
-          .id(9)
+          .id(10)
           .username("account_transaction_update_user")
           .firstName("Account Transaction Update")
           .lastName("User")
@@ -106,9 +117,20 @@ public enum UserTestData {
     @Override
     public User get() {
       return User.builder()
-          .id(10)
+          .id(11)
           .username("account_transaction_delete_user")
           .firstName("Account Transaction Delete")
+          .lastName("User")
+          .build();
+    }
+  },
+  ACCOUNT_TRANSACTION_INGESTION {
+    @Override
+    public User get() {
+      return User.builder()
+          .id(12)
+          .username("account_transaction_ingestion_user")
+          .firstName("Account Transaction Ingestion")
           .lastName("User")
           .build();
     }

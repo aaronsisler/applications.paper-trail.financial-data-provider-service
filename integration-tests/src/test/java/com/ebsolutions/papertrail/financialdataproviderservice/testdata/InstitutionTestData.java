@@ -39,11 +39,20 @@ public enum InstitutionTestData {
           .build();
     }
   },
-  ACCOUNT_TRANSACTION_CREATE {
+  ACCOUNT_UPDATE {
     @Override
     public Institution get() {
       return Institution.builder()
           .id(5)
+          .name("account_update_institution")
+          .build();
+    }
+  },
+  ACCOUNT_TRANSACTION_CREATE {
+    @Override
+    public Institution get() {
+      return Institution.builder()
+          .id(6)
           .name("account_transaction_create_institution")
           .build();
     }
@@ -52,7 +61,7 @@ public enum InstitutionTestData {
     @Override
     public Institution get() {
       return Institution.builder()
-          .id(6)
+          .id(7)
           .name("account_transaction_update_institution")
           .build();
     }
@@ -61,8 +70,17 @@ public enum InstitutionTestData {
     @Override
     public Institution get() {
       return Institution.builder()
-          .id(7)
+          .id(8)
           .name("account_transaction_delete_institution")
+          .build();
+    }
+  },
+  ACCOUNT_TRANSACTION_INGESTION {
+    @Override
+    public Institution get() {
+      return Institution.builder()
+          .id(9)
+          .name("account_transaction_ingestion_institution")
           .build();
     }
   };

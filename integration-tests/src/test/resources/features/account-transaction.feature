@@ -17,7 +17,7 @@ Feature: Integration: Account Transaction
     Then the correct account transactions are returned from the get all account transactions endpoint
     When the get all account transactions endpoint is invoked with the first account id
     Then the correct account transactions are returned from the get all account transactions endpoint invoked with the first account id
-#
+
   Scenario: Get By Id and Update Account Transaction
     Given application is up
     And two accounts with different account ids for the institution and household member exists in the database
