@@ -14,6 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * `Fixed` for any bug fixes.
 * `Security` in case of vulnerabilities.
 
+## [0.26.0] Account Update and Get By Id Full Test Suite
+
+### Added
+
+- Account GET BY ID with behavior test suite
+- Account PUT / UPDATE with behavior test suite
+
 ## [0.25.0] Deployment to ECS
 
 ### Added
