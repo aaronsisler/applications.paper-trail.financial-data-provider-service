@@ -9,11 +9,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,6 +49,22 @@ public class AccountController {
     }
 
     return !accounts.isEmpty() ? ResponseEntity.ok(accounts) :
+        ResponseEntity.noContent().build();
+  }
+
+  @Operation(summary = "Get account")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = Account.class))
+          })})
+  @GetMapping(value = "/{accountId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> get(@PathVariable @Valid Integer accountId) {
+
+    Optional<Account> account = accountService.get(accountId);
+
+    return account.isPresent() ? ResponseEntity.ok(account.get()) :
         ResponseEntity.noContent().build();
   }
 

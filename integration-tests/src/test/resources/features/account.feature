@@ -17,12 +17,11 @@ Feature: Integration: Account
     When the get all accounts endpoint is invoked with the first household member id
     Then the correct accounts are returned from the get all accounts endpoint invoked with the first household member id
 
-#  Scenario: Update Account and Get Updated Account By Id
-#    Given application is up
-#    And an account exists in the database
-#    And the update account id provided exists in the database
-#    And an update for the account is valid and part of the request body for the update account endpoint
-#    When the update account endpoint is invoked
-#    Then the updated account is returned from the update account endpoint
-#    And the updated account is correct in the database
+  Scenario: Update Account and Get Updated Account By Id
+    Given application is up
+    And the update account id provided exists in the database
+    And an update for the account is valid and part of the request body for the update account endpoint
+    When the update account endpoint is invoked
+    Then the updated account is returned from the update account endpoint
+    And the updated account is correct in the database
 #
