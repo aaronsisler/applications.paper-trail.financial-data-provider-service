@@ -9,12 +9,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,6 +52,22 @@ public class AccountController {
         ResponseEntity.noContent().build();
   }
 
+  @Operation(summary = "Get account")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = Account.class))
+          })})
+  @GetMapping(value = "/{accountId}", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> get(@PathVariable @Valid Integer accountId) {
+
+    Optional<Account> account = accountService.get(accountId);
+
+    return account.isPresent() ? ResponseEntity.ok(account.get()) :
+        ResponseEntity.noContent().build();
+  }
+
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   @Operation(summary = "Create account")
   @ApiResponse(responseCode = "200",
@@ -58,5 +77,17 @@ public class AccountController {
       })
   public ResponseEntity<?> post(@Valid @RequestBody Account account) {
     return ResponseEntity.ok(accountService.create(account));
+  }
+
+  @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+  @Operation(summary = "Update account")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200",
+          content = {
+              @Content(mediaType = "application/json",
+                  schema = @Schema(implementation = Account.class))
+          })})
+  public ResponseEntity<?> put(@RequestBody @Valid Account account) {
+    return ResponseEntity.ok().body(accountService.update(account));
   }
 }

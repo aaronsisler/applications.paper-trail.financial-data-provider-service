@@ -38,7 +38,6 @@ public class AccountCreateSteps extends BaseTest {
   private final InstitutionRepository institutionRepository;
   private final AccountRepository accountRepository;
 
-
   private String requestContent;
   private MvcResult result;
   private Account expectedAccount;

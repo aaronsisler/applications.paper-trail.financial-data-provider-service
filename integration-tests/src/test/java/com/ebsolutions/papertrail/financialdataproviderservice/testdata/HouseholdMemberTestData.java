@@ -23,13 +23,23 @@ public enum HouseholdMemberTestData {
           .build();
     }
   },
+  ACCOUNT_UPDATE {
+    @Override
+    public HouseholdMember get() {
+      return HouseholdMember.builder()
+          .id(3)
+          .householdId(6)
+          .userId(8)
+          .build();
+    }
+  },
   ACCOUNT_TRANSACTION_CREATE {
     @Override
     public HouseholdMember get() {
       return HouseholdMember.builder()
-          .id(2)
-          .householdId(6)
-          .userId(8)
+          .id(4)
+          .householdId(7)
+          .userId(9)
           .build();
     }
   },
@@ -37,9 +47,9 @@ public enum HouseholdMemberTestData {
     @Override
     public HouseholdMember get() {
       return HouseholdMember.builder()
-          .id(2)
-          .householdId(7)
-          .userId(9)
+          .id(5)
+          .householdId(6)
+          .userId(10)
           .build();
     }
   },
@@ -47,9 +57,19 @@ public enum HouseholdMemberTestData {
     @Override
     public HouseholdMember get() {
       return HouseholdMember.builder()
-          .id(5)
-          .householdId(8)
-          .userId(10)
+          .id(6)
+          .householdId(9)
+          .userId(11)
+          .build();
+    }
+  },
+  ACCOUNT_TRANSACTION_INGESTION {
+    @Override
+    public HouseholdMember get() {
+      return HouseholdMember.builder()
+          .id(7)
+          .householdId(10)
+          .userId(12)
           .build();
     }
   };

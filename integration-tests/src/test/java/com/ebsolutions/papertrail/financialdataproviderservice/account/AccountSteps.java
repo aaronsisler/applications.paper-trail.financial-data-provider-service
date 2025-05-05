@@ -5,6 +5,7 @@ import com.ebsolutions.papertrail.financialdataproviderservice.config.TestConsta
 import com.ebsolutions.papertrail.financialdataproviderservice.model.Account;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.HouseholdMember;
 import com.ebsolutions.papertrail.financialdataproviderservice.model.Institution;
+import com.ebsolutions.papertrail.financialdataproviderservice.testdata.AccountTestData;
 import com.ebsolutions.papertrail.financialdataproviderservice.testdata.HouseholdMemberTestData;
 import com.ebsolutions.papertrail.financialdataproviderservice.testdata.HouseholdTestData;
 import com.ebsolutions.papertrail.financialdataproviderservice.testdata.InstitutionTestData;
@@ -30,9 +31,14 @@ public class AccountSteps extends BaseStep {
   private RestClient.ResponseSpec response;
   private HouseholdMember householdMemberOne;
   private HouseholdMember householdMemberTwo;
+
   private Institution institution;
   private Account expectedAccountOne;
   private Account expectedAccountTwo;
+  private Account updatedAccount;
+  private int resultAccountId;
+  private String accountByIdUrl;
+
 
   @And("a user exists in the database related to account creation")
   public void aUserExistsInTheDatabaseRelatedToAccountCreation() {
@@ -162,5 +168,74 @@ public class AccountSteps extends BaseStep {
     Account account = accounts.getFirst();
     AccountTestUtil
         .assertExpectedAgainstCreated(expectedAccountOne, account);
+  }
+
+  @And("the update account id provided exists in the database")
+  public void theUpdateAccountIdProvidedExistsInTheDatabase() {
+    // Nothing to do given test data setup, below for reference
+    Account databaseSetupAccount = AccountTestData.ACCOUNT_UPDATE.get();
+
+    Assertions.assertNotNull(databaseSetupAccount);
+
+    if (databaseSetupAccount.getId() == null) {
+      Assertions.fail("Data setup failed for account");
+    }
+
+    resultAccountId = databaseSetupAccount.getId();
+    accountByIdUrl = TestConstants.ACCOUNTS_URI + "/" + resultAccountId;
+
+    response = ApiCallTestUtil.getThroughApi(restClient, accountByIdUrl);
+
+    Account retrievedCreatedAccount = response.body(Account.class);
+
+    Assertions.assertNotNull(retrievedCreatedAccount);
+
+    AccountTestUtil.assertExpectedAgainstActual(
+        databaseSetupAccount,
+        retrievedCreatedAccount);
+  }
+
+  @And("an update for the account is valid and part of the request body for the update account endpoint")
+  public void anUpdateForTheAccountIsValidAndPartOfTheRequestBodyForTheUpdateAccountEndpoint()
+      throws JsonProcessingException {
+    updatedAccount =
+        Account.builder()
+            .id(resultAccountId)
+            .institutionId(5)
+            .householdMemberId(3)
+            .name("updated_account_update_name")
+            .nickname("updated_account_update_nickname")
+            .build();
+
+    requestContent = objectMapper.writeValueAsString(updatedAccount);
+  }
+
+  @When("the update account endpoint is invoked")
+  public void theUpdateAccountEndpointIsInvoked() {
+    response = ApiCallTestUtil.updateThroughApi(restClient, TestConstants.ACCOUNTS_URI,
+        requestContent);
+  }
+
+  @Then("the updated account is returned from the update account endpoint")
+  public void theUpdatedAccountIsReturnedFromTheUpdateAccountEndpoint() {
+    Account returnedUpdatedAccount = response.body(Account.class);
+
+    Assertions.assertNotNull(returnedUpdatedAccount);
+
+    AccountTestUtil.assertExpectedAgainstActual(
+        updatedAccount,
+        returnedUpdatedAccount);
+  }
+
+  @And("the updated account is correct in the database")
+  public void theUpdatedAccountIsCorrectInTheDatabase() {
+    response = ApiCallTestUtil.getThroughApi(restClient, accountByIdUrl);
+
+    Account retrievedUpdatedAccount = response.body(Account.class);
+
+    Assertions.assertNotNull(retrievedUpdatedAccount);
+
+    AccountTestUtil.assertExpectedAgainstActual(updatedAccount, retrievedUpdatedAccount);
+
   }
 }

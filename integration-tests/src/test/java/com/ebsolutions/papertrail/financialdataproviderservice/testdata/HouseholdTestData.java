@@ -48,11 +48,20 @@ public enum HouseholdTestData {
           .build();
     }
   },
-  ACCOUNT_TRANSACTION_CREATE {
+  ACCOUNT_UPDATE {
     @Override
     public Household get() {
       return Household.builder()
           .id(6)
+          .name("account_update_household")
+          .build();
+    }
+  },
+  ACCOUNT_TRANSACTION_CREATE {
+    @Override
+    public Household get() {
+      return Household.builder()
+          .id(7)
           .name("account_transaction_create_household")
           .build();
     }
@@ -61,7 +70,7 @@ public enum HouseholdTestData {
     @Override
     public Household get() {
       return Household.builder()
-          .id(7)
+          .id(8)
           .name("account_transaction_update_household")
           .build();
     }
@@ -70,8 +79,17 @@ public enum HouseholdTestData {
     @Override
     public Household get() {
       return Household.builder()
-          .id(8)
+          .id(9)
           .name("account_transaction_delete_household")
+          .build();
+    }
+  },
+  ACCOUNT_TRANSACTION_INGESTION {
+    @Override
+    public Household get() {
+      return Household.builder()
+          .id(10)
+          .name("account_transaction_ingestion_household")
           .build();
     }
   };

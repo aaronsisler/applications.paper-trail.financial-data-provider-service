@@ -8,7 +8,7 @@ public enum AccountTransactionTestData {
     public AccountTransaction get() {
       return AccountTransaction.builder()
           .id(1)
-          .accountId(3)
+          .accountId(4)
           .amount(123)
           .description("account_transaction_update_description")
           .build();
@@ -19,7 +19,7 @@ public enum AccountTransactionTestData {
     public AccountTransaction get() {
       return AccountTransaction.builder()
           .id(2)
-          .accountId(4)
+          .accountId(5)
           .amount(456)
           .description("account_transaction_delete_description")
           .build();
